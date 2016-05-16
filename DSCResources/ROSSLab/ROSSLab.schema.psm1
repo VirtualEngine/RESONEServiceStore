@@ -62,6 +62,7 @@ configuration ROSSLab {
     }
 
     if ($Ensure -eq 'Present') {
+        
         ROSSDatabase 'ROSSLabDatabase' {
             DatabaseServer = $DatabaseServer;
             DatabaseName = $DatabaseName;
@@ -87,7 +88,7 @@ configuration ROSSLab {
             DependsOn = '[ROSSDatabase]ROSSLabDatabase';
         }
     
-        ROSSCatalogServices CatalogServices {
+        ROSSCatalogServices 'ROSSLabCatalogServices' {
             DatabaseServer = $DatabaseServer;
             DatabaseName = $DatabaseName;
             Credential = $Credential;
@@ -99,7 +100,7 @@ configuration ROSSLab {
             DependsOn = '[ROSSDatabase]ROSSLabDatabase';
         }
     
-        ROSSWebPortal WebPortal {
+        ROSSWebPortal 'ROSSLabWebPortal' {
             CatalogServicesCredential = $CatalogServicesCredential;
             CatalogServicesHost = 'localhost';
             DefaultDomain = $DefaultDomain;
@@ -111,7 +112,7 @@ configuration ROSSLab {
             Ensure = $Ensure;
         }
     
-        ROSSManagementPortal ManagementPortal {
+        ROSSManagementPortal 'ROSSLabManagementPortal' {
             HostHeader = $HostHeader;
             Port = $Port;
             Path = $Path;
@@ -120,8 +121,80 @@ configuration ROSSLab {
             Ensure = $Ensure;
             DependsOn = '[ROSSDatabase]ROSSLabDatabase';
         }
+        
     }
     elseif ($Ensure -eq 'Absent') {
+        
+        ROSSManagementPortal 'ROSSLabManagementPortal' {
+            HostHeader = $HostHeader;
+            Port = $Port;
+            Path = $Path;
+            Version = $Version;
+            IsLiteralPath = $false;
+            Ensure = $Ensure;
+        }
+        
+        ROSSWebPortal 'ROSSLabWebPortal' {
+            CatalogServicesCredential = $CatalogServicesCredential;
+            CatalogServicesHost = 'localhost';
+            DefaultDomain = $DefaultDomain;
+            HostHeader = $HostHeader;
+            Port = $Port;
+            Path = $Path;
+            Version = $Version;
+            IsLiteralPath = $false;
+            Ensure = $Ensure;
+        }
+        
+        ROSSCatalogServices 'ROSSLabCatalogServices' {
+            DatabaseServer = $DatabaseServer;
+            DatabaseName = $DatabaseName;
+            Credential = $Credential;
+            Path = $Path;
+            Version = $Version;
+            Architecture = $Architecture;
+            IsLiteralPath = $false;
+            Ensure = $Ensure;
+        }
+        
+        ROSSTransactionEngine 'ROSSLabTransactionEngine' {
+            DatabaseServer = $DatabaseServer;
+            DatabaseName = $DatabaseName;
+            Credential = $Credential;
+            Path = $Path;
+            Version = $Version;
+            Architecture = $Architecture;
+            IsLiteralPath = $false;
+            Ensure = $Ensure;
+        }
+        
+         ROSSDatabase 'ROSSLabDatabase' {
+            DatabaseServer = $DatabaseServer;
+            DatabaseName = $DatabaseName;
+            Credential = $Credential;
+            SQLCredential = $SQLCredential;
+            CatalogServicesCredential = $CatalogServicesCredential;
+            Path = $Path;
+            Version = $Version;
+            Architecture = $Architecture;
+            IsLiteralPath = $false;
+            Ensure = $Ensure;
+            DependsOn = '[ROSSCatalogServices]ROSSLabCatalogServices', '[ROSSTransactionEngine]ROSSLabTransactionEngine';
+        }
 
     }
-}
+    
+    xFirewall 'ROALabDispatcherFirewall' {
+        Name = 'RES ITS Catalog Services';
+        Action = 'Allow';
+        Direction = 'Inbound';
+        DisplayName = 'RES ITS Catalog Services';
+        Enabled = $true;
+        Profile = 'Any';
+        Program = 'C:\Program Files\RES Software\IT Store\Catalog Services\resocs.exe'
+        Description = 'RES ONE Automation Dispatcher Service';
+        Ensure = $Ensure;
+        DependsOn = '[ROSSCatalogServices]CatalogServices';
+    }
+
+} #end configuration ROSSLab
