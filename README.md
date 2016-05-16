@@ -4,11 +4,14 @@ RES ONE Service Store DSC Resources
 * **ROSSCatalogServices**: Installs the RES ONE Service Store Catalog Services component
 * **ROSSClient**: Installs the RES ONE Service Store Windows client component
 * **ROSSConsole**: Installs the RES ONE Service Store Setup and Sync tool
-* **ROSSDatabase**: Installs the RES ONE Service Store Setup and Sync tool and creates the RES ONE Service Store database.
+* **ROSSDatabase**: Installs the RES ONE Service Store Setup and Sync tool and creates the RES ONE Service Store database
 * **ROSSLab**: Deploys a single-node RES ONE Service Store lab server environment
 * **ROSSManagementPortal**: Installs the RES ONE Service Store management portal component
 * **ROSSTransactionEngine**: Installs the RES ONE Service Store Transaction Engine component
 * **ROSSWebPortal**: Installs the RES ONE Service Store Web Portal component
+
+## Required Resources
+* **xNetworking**: ROSSLab requires https://github.com/PowerShell/xNetworking to create firewall rules
 
 ROSSCatalogServices
 ===================

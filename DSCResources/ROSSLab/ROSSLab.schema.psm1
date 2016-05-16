@@ -51,7 +51,7 @@ configuration ROSSLab {
         [System.String] $Ensure = 'Present'
     )
 
-    Import-DscResource -ModuleName xPSDesiredStateConfiguration;
+    Import-DscResource -ModuleName xPSDesiredStateConfiguration, xNetworking;
     
     ## Can't import RESONEServiceStore composite resource due to circular references!
     Import-DscResource -Name ROSSDatabase, ROSSTransactionEngine, ROSSCatalogServices, ROSSWebPortal, ROSSManagementPortal;
@@ -184,17 +184,19 @@ configuration ROSSLab {
 
     }
     
-    xFirewall 'ROALabDispatcherFirewall' {
-        Name = 'RES ITS Catalog Services';
+    xFirewall 'ROSSLabCatalogServicesFirewall' {
+        Name = 'RESONEServiceStore-TCP-4733-In';
+        Group = 'RES ONE Service Store';
+        DisplayName = 'RES ONE Service Store (Catalog Services)';
         Action = 'Allow';
         Direction = 'Inbound';
-        DisplayName = 'RES ITS Catalog Services';
         Enabled = $true;
         Profile = 'Any';
-        Program = 'C:\Program Files\RES Software\IT Store\Catalog Services\resocs.exe'
-        Description = 'RES ONE Automation Dispatcher Service';
+        Protocol = 'TCP';
+        LocalPort = 4733;
+        Description = 'RES ONE Service Store Catalog Services Service';
         Ensure = $Ensure;
-        DependsOn = '[ROSSCatalogServices]CatalogServices';
+        DependsOn = '[ROSSCatalogServices]ROSSLabCatalogServices';
     }
 
 } #end configuration ROSSLab
