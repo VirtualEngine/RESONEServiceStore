@@ -6,7 +6,8 @@ configuration ROSSClient {
     param (
         ## RES ONE Service Store Catalog Services password (equivalient to CATALOGSERVICESPASSWORD).
         [Parameter(Mandatory)] [ValidateNotNull()]
-        [System.Management.Automation.PSCredential] $CatalogServicesCredential,
+        [System.Management.Automation.PSCredential]
+        [System.Management.Automation.CredentialAttribute()] $CatalogServicesCredential,
         
         ## RES ONE Service Store Catalog Services host (equivalient to CATALOGSERVICESHOST).
         [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]

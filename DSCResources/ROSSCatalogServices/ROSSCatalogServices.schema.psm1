@@ -14,7 +14,8 @@ configuration ROSSCatalogServices {
         
         ## Microsoft SQL username/password to create (equivalent to DBUSER/DBPASSWORD)
         [Parameter(Mandatory)] [ValidateNotNull()]
-        [System.Management.Automation.PSCredential] $Credential,
+        [System.Management.Automation.PSCredential]
+        [System.Management.Automation.CredentialAttribute()] $Credential,
         
         ## File path containing the RES ONE Service Store MSIs or the literal path to the catalog services MSI.
         [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]

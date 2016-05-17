@@ -18,11 +18,13 @@ configuration RESONEServiceStoreLabExample {
     param (
         ## RES ONE Service Store SQL database/user credential
         [Parameter(Mandatory)]
-        [PSCredential] $Credential,
+        [System.Management.Automation.PSCredential]
+        [System.Management.Automation.CredentialAttribute()] $Credential,
 
         ## Microsoft SQL Server credentials used to create the RES ONE Service Store database/user
         [Parameter(Mandatory)]
-        [PSCredential] $SQLCredential
+        [System.Management.Automation.PSCredential]
+        [System.Management.Automation.CredentialAttribute()] $SQLCredential
     )
 
     Import-DscResource -ModuleName RESONEServiceStore, xWebAdministration;

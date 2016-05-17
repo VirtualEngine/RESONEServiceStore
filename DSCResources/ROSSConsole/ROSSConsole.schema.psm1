@@ -16,11 +16,13 @@ configuration ROSSConsole {
         
         ## Microsoft SQL username/password to create (equivalent to DBUSER/DBPASSWORD).
         [Parameter(Mandatory)]
-        [System.Management.Automation.PSCredential] $Credential,
+        [System.Management.Automation.PSCredential]
+        [System.Management.Automation.CredentialAttribute()] $Credential,
         
         ## RES ONE Service Store Catalog Services password (equivalient to CATALOGSERVICESPASSWORD).
         [Parameter(Mandatory)]
-        [System.Management.Automation.PSCredential] $CatalogServicesCredential,
+        [System.Management.Automation.PSCredential]
+        [System.Management.Automation.CredentialAttribute()] $CatalogServicesCredential,
         
         ## File path containing the RES ONE Service Store MSIs or the literal path to the legacy console/Sync Tool MSI.
         [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
