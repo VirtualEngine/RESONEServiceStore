@@ -38,19 +38,9 @@ configuration ROSSLabHttps {
         ## RES ONE Service Store default (NetBIOS) domain name.
         [Parameter(Mandatory)] [System.String] $DefaultDomain,
         
-        ## Personal information exchange (Pfx) ertificate file path
-        [Parameter(Mandatory)]
-        [System.String] $PfxCertificatePath,
-        
         ## Pfx certificate thumbprint
         [Parameter(Mandatory)]
         [System.String] $PfxCertificateThumbprint,
-        
-        ## Pfx certificate password
-        [Parameter(Mandatory)]
-        [System.Management.Automation.PSCredential]
-        [System.Management.Automation.CredentialAttribute()]
-        $PfxCertificateCredential
         
         ## RES ONE Service Store database name (equivalient to DBNAME).
         [Parameter()] [ValidateNotNullOrEmpty()]
@@ -88,14 +78,6 @@ configuration ROSSLabHttps {
         Ensure                    = $Ensure;
     }
     
-    xPfxImport 'ROSSPfxCertificate' {
-        Thumbprint = $PfxCertificateThumbprint;
-        Location = 'LocalMachine';
-        Store = 'My';
-        Path = $PfxCertificatePath;
-        Credential = $PfxCertificateCredential;
-    }
-    
     if ($Architecture -eq 'x64') {
         $physicalPath = 'C:\Program Files (x86)';
     }
@@ -103,14 +85,14 @@ configuration ROSSLabHttps {
         $physicalPath = 'C:\Program Files';
     }
 
-    xWebSite 'ITStoreWebsite' {
+    xWebSite 'ROSSLabHttpsBinding' {
         Name = 'IT Store';
         PhysicalPath = '{0}\RES Software\IT Store\Web Portal\IT Store' -f $physicalPath;
         BindingInfo = @(
             MSFT_xWebBindingInformation  { Protocol = 'HTTPS'; Port = 443; HostName = $HostHeader; CertificateThumbprint = $PfxCertificateThumbprint; CertificateStoreName = 'My'; }
             MSFT_xWebBindingInformation  { Protocol = 'HTTP'; Port = 80; HostName = $HostHeader; }
         )
-        DependsOn = '[ROSSLab]ROSSLabHttps','[xPfxImport]PfxCertificate';
+        DependsOn = '[ROSSLab]ROSSLabHttps';
     }
 
 
