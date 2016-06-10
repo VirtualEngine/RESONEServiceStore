@@ -5,14 +5,15 @@ RES ONE Service Store DSC Resources
 * **ROSSClient**: Installs the RES ONE Service Store Windows client component
 * **ROSSConsole**: Installs the RES ONE Service Store Setup and Sync tool
 * **ROSSDatabase**: Installs the RES ONE Service Store Setup and Sync tool and creates the RES ONE Service Store database
-* **ROSSLab**: Deploys a single-node RES ONE Service Store lab server environment
-* **ROSSLabHttps**: Deploys a single-node RES ONE Service Store lab server environment with HTTPS bindings
+* **ROSSLab (Composite)**: Deploys a single-node RES ONE Service Store lab server environment
+* **ROSSLabHttps (Composite)**: Deploys a single-node RES ONE Service Store lab server environment with HTTPS bindings
 * **ROSSManagementPortal**: Installs the RES ONE Service Store management portal component
 * **ROSSTransactionEngine**: Installs the RES ONE Service Store Transaction Engine component
 * **ROSSWebPortal**: Installs the RES ONE Service Store Web Portal component
 
 ## Required Resources
-* **xNetworking**: ROSSLab requires https://github.com/PowerShell/xNetworking to create firewall rules
+* **xNetworking**: ROSSLab and ROSSLabHttps require https://github.com/PowerShell/xNetworking to create firewall rules
+* **xWebAdministration**: ROSSLabHttps requires https://github.com/PowerShell/xWebAdministration to create the HTTPS binding
 
 ROSSCatalogServices
 ===================
@@ -27,14 +28,13 @@ ROSSCatalogServices [String] #ResourceName
     Path = [String]
     [ Version = [String] ]
     [ IsLiteralPath = [Boolean] ]
-    [ Architecture = [String] { x64 | x86 } ]
     [ Ensure = [String] { Absent | Present } ]
 }
 
 ```
 
 ROSSClient
-===================
+==========
 Installs the RES ONE Service Store Windows client component.
 ### Syntax
 ```
@@ -45,14 +45,13 @@ ROSSClient [String] #ResourceName
     Path = [String]
     [ Version = [String] ]
     [ IsLiteralPath = [Boolean] ]
-    [ Architecture = [String] { x64 | x86 } ]
     [ Ensure = [String] { Absent | Present } ]
 }
 
 ```
 
 ROSSConsole
-===================
+===========
 Installs the RES ONE Service Store Setup and Sync tool.
 ### Syntax
 ```
@@ -65,7 +64,6 @@ ROSSConsole [String] #ResourceName
     Path = [String]
     [ Version = [String] ]
     [ IsLiteralPath = [Boolean] ]
-    [ Architecture = [String] { x64 | x86 } ]
     [ Ensure = [String] { Absent | Present } ]
 }
 ```
@@ -85,7 +83,6 @@ ROSSDatabase [String] #ResourceName
     Path = [String]
     [ Version = [String] ]
     [ IsLiteralPath = [Boolean] ]
-    [ Architecture = [String] { x64 | x86 } ]
     [ Ensure = [String] { Absent | Present } ]
 }
 ```
@@ -106,14 +103,13 @@ ROSSLab [String] #ResourceName
     HostHeader = [String]
     DefaultDomain = [String]
     [ DatabaseName = [String] ]
-    [ Port = [Int32] ]
-    [ Architecture = [String] { x64 | x86 } ]
+    [ Port = [UInt16] ]
     [ Ensure = [String] { Absent | Present } ]
 }
 ```
 
 ROSSLabHttps
-=======
+============
 Deploys a single-node RES ONE Service Store lab server environment with HTTPS bindings.
 ### Syntax
 ```
@@ -129,8 +125,7 @@ ROSSLabHttps [String] #ResourceName
     DefaultDomain = [String]
     PfxCertificateThumbprint = [String]
     [ DatabaseName = [String] ]
-    [ Port = [Int32] ]
-    [ Architecture = [String] { x64 | x86 } ]
+    [ Port = [UInt16] ]
     [ Ensure = [String] { Absent | Present } ]
 }
 ```
@@ -144,7 +139,7 @@ ROSSManagementPortal [String] #ResourceName
 {
     HostHeader = [String]
     Path = [String]
-    [ Port = [Int32] ]
+    [ Port = [UInt16] ]
     [ Version = [String] ]
     [ IsLiteralPath = [Boolean] ]
     [ Ensure = [String] { Absent | Present } ]
@@ -164,7 +159,6 @@ ROSSTransactionEngine [String] #ResourceName
     Path = [String]
     [ Version = [String] ]
     [ IsLiteralPath = [Boolean] ]
-    [ Architecture = [String] { x64 | x86 } ]
     [ Ensure = [String] { Absent | Present } ]
 }
 ```
@@ -181,7 +175,7 @@ ROSSWebPortal [String] #ResourceName
     CatalogServicesCredential = [PSCredential]
     CatalogServicesHost = [String]
     Path = [String]
-    [ Port = [Int32] ]
+    [ Port = [UInt16] ]
     [ Version = [String] ]
     [ IsLiteralPath = [Boolean] ]
     [ Ensure = [String] { Absent | Present } ]

@@ -1,0 +1,12 @@
+[ClassVersion("1.0.0"), FriendlyName("ROSSManagementPortal")]
+class VE_ROSSManagementPortal : OMI_BaseResource
+{
+    [Key, Description("IIS website host header")] String HostHeader;
+    [Required, Description("File path containing the RES ONE Service Store MSIs or the literal path to the legacy console/Sync Tool MSI")] String Path;
+    [Write, Description("RES ONE Service Store default (NetBIOS) domain name")] String DefaultDomain;
+    [Write, Description("IIS website port binding")] UInt16 Port;
+    [Write, Description("RES ONE Service Store component version to be installed, i.e. 8.0.3.0")] String Version;
+    [Write, Description("Specified path is a literal file reference")] Boolean IsLiteralPath;
+    [Write, ValueMap{"Present", "Absent"},Values{"Present", "Absent"}] String Ensure;
+    [Read, Description("Windows Installer Product Name")] String ProductName;
+};

@@ -3,11 +3,11 @@
         @{
             NodeName = 'localhost';
             PSDSCAllowPlainTextPassword = $true;
-            
+
             ROSSDatabaseServer  = 'controller.lab.local';
             ROSSDatabaseName    = 'RESONEServiceStore';
             ROSSBinariesFolder  = 'C:\SharedData\Software\RES\ONE Service Store 2015\FR2';
-            ROSSBinariesVersion = '8.2.0.0';
+            ROSSBinariesVersion = '8.0';
             ROSSHostHeader      = 'itstore.lab.local';
             ROSSDefaultDomain   = 'LAB';
         }
@@ -30,7 +30,7 @@ configuration RESONEServiceStoreLabExample {
     Import-DscResource -ModuleName RESONEServiceStore, xWebAdministration;
 
     node 'localhost' {
-    
+
         ROSSLab 'ROSSLab' {
             DatabaseServer = $node.ROSSDatabaseServer;
             DatabaseName = $node.ROSSDatabaseName;
