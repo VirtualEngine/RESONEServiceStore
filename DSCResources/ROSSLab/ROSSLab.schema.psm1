@@ -194,4 +194,34 @@ configuration ROSSLab {
         DependsOn   = '[ROSSCatalogServices]ROSSLabCatalogServices';
     }
 
+    xFirewall 'ROSSLabCatalogServicesFirewall8080' {
+        Name        = 'RESONEServiceStore-TCP-8080-In';
+        Group       = 'RES ONE Service Store';
+        DisplayName = 'RES ONE Service Store (RES ONE Workspace)';
+        Action      = 'Allow';
+        Direction   = 'Inbound';
+        Enabled     = $true;
+        Profile     = 'Any';
+        Protocol    = 'TCP';
+        LocalPort   = 8080;
+        Description = 'RES ONE Workspace integration';
+        Ensure      = $Ensure;
+        DependsOn   = '[ROSSCatalogServices]ROSSLabCatalogServices';
+    }
+
+    xFirewall 'ROSSLabCatalogServicesFirewall8081' {
+        Name        = 'RESONEServiceStore-TCP-8081-In';
+        Group       = 'RES ONE Service Store';
+        DisplayName = 'RES ONE Service Store (RES ONE Automation)';
+        Action      = 'Allow';
+        Direction   = 'Inbound';
+        Enabled     = $true;
+        Profile     = 'Any';
+        Protocol    = 'TCP';
+        LocalPort   = 8081;
+        Description = 'RES ONE Automation integration';
+        Ensure      = $Ensure;
+        DependsOn   = '[ROSSCatalogServices]ROSSLabCatalogServices';
+    }
+
 } #end configuration ROSSLab
