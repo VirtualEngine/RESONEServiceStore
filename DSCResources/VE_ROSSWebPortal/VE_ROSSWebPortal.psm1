@@ -129,6 +129,7 @@ function Test-TargetResource {
 
 function Set-TargetResource {
     [CmdletBinding()]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '')]
     param (
         ## RES ONE Service Store default (NetBIOS) domain name.
         [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]

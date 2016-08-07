@@ -111,6 +111,7 @@ function Test-TargetResource {
 
 function Set-TargetResource {
     [CmdletBinding()]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '')]
     param (
         ## IIS website host header, i.e. http://itstore.lab.local.
         [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]

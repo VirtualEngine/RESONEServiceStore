@@ -110,6 +110,7 @@ function Test-TargetResource {
 
 function Set-TargetResource {
     [CmdletBinding()]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '')]
     param (
         ## RES ONE Service Store database server name/instance (equivalient to DBSERVER)
         [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]

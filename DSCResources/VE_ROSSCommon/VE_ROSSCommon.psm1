@@ -199,7 +199,7 @@ function GetProductEntry {
             $installValue = GetRegistryValueIgnoreError @getRegistryValueIgnoreErrorParams -RegistryView [Microsoft.Win32.RegistryView]::Registry64;
         }
 
-        if ($installValue -eq $null) {
+        if ($null -eq $installValue) {
             $installValue = GetRegistryValueIgnoreError @getRegistryValueIgnoreErrorParams -RegistryView [Microsoft.Win32.RegistryView]::Registry32;
         }
 
@@ -237,7 +237,7 @@ function GetRegistryValueIgnoreError {
     try {
         $baseKey = [Microsoft.Win32.RegistryKey]::OpenBaseKey($RegistryHive, $RegistryView);
         $subKey =  $baseKey.OpenSubKey($Key);
-        if($subKey -ne $null) {
+        if ($null -ne $subKey) {
             return $subKey.GetValue($Value);
         }
     }

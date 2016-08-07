@@ -102,6 +102,7 @@ function Test-TargetResource {
 
 function Set-TargetResource {
     [CmdletBinding()]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '')]
     param (
         ## RES ONE Service Store Catalog Services password (equivalient to CATALOGSERVICESPASSWORD).
         [Parameter(Mandatory)] [ValidateNotNull()]
