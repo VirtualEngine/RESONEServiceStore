@@ -1,0 +1,152 @@
+function Resolve-ROSSPackagePath {
+<#
+    .SYNOPSIS
+        Resolves the latest RES ONE Service Store/IT Store installation package.
+#>
+    [CmdletBinding()]
+    param (
+        ## The literal file path or root search path
+        [Parameter(Mandatory)]  [ValidateNotNullOrEmpty()]
+        [System.String] $Path,
+
+        ## Required RES ONE Automation/Automation Manager component
+        [Parameter(Mandatory)] [ValidateSet('Console','CatalogServices','TransactionEngine','ManagementPortal','WebPortal','Client')]
+        [System.String] $Component,
+
+        ## RES ONE Automation component version to be installed, i.e. 7.0.4 or 7.5.3.1
+        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [System.String] $Version,
+
+        ## The specified Path is a literal file reference (bypasses the Version check).
+        [Parameter()]
+        [System.Boolean] $IsLiteralPath
+    )
+
+    if (([System.String]::IsNullOrWhitespace($Version)) -and (-not $IsLiteralPath)) {
+        throw ($localizedData.VersionNumberRequiredError);
+    }
+    elseif ($IsLiteralPath) {
+        if ($Path -notmatch '\.msi$') {
+            throw ($localizedData.SpecifedPathTypeError -f $Path, 'MSI');
+        }
+    }
+    elseif ($Version -notmatch '^\d\.\d\d?(\.\d\d?|\.\d\d?\.\d\d?)?$') {
+         throw ($localizedData.InvalidVersionNumberFormatError -f $Version);
+    }
+
+    if ($IsLiteralPath) {
+        $packagePath = $Path;
+    }
+    else {
+
+        [System.Version] $productVersion = $Version;
+
+        switch ($productVersion.Major) {
+
+            7 {
+                $packageName = 'RES-ITS';
+                $webPortalPackageName = 'Web-Portal';
+                $consolePackageName = 'Console'
+            }
+
+            8 {
+                $packageName = 'RES-ONE-ServiceStore-2015';
+                $webPortalPackageName = 'WebPortal-MobileGateway';
+                $consolePackageName = 'Setup-Sync-Tool';
+            }
+
+            9 {
+                $packageName = 'RES-ONE-ServiceStore-2016';
+                $webPortalPackageName = 'WebPortal-MobileGateway';
+                $consolePackageName = 'Setup-Sync-Tool';
+            }
+
+            Default {
+                throw ($localizedData.UnsupportedVersionError -f $productVersion.ToString());
+            }
+
+        } #end switch version major
+
+        ## Calculate the version search Regex
+        if (($productVersion.Build -eq -1) -and ($productVersion.Revision -eq -1)) {
+            ## We only have 'Major.Minor'
+            $versionRegex = '{0}.{1}.\S+' -f $productVersion.Major, $productVersion.Minor;
+        }
+        elseif ($productVersion.Revision -eq -1) {
+            ## We have 'Major.Minor.Build'
+            $versionRegex = '{0}.{1}.{2}.\S+' -f $productVersion.Major, $productVersion.Minor, $productVersion.Build;
+        }
+        else {
+            ## We have explicit version.
+            $versionRegex = '{0}.{1}.{2}.{3}' -f $productVersion.Major, $productVersion.Minor, $productVersion.Build, $productVersion.Revision;
+        }
+
+        $systemArchitecture = 'x86';
+        if ([System.Environment]::Is64BitOperatingSystem) {
+            $systemArchitecture = 'x64';
+        }
+
+        switch ($Component) {
+
+            'TransactionEngine' {
+                ## RES-ITS-Transaction-Engine(x64)-7.3.0.0.msi
+                ## RES-ONE-ServiceStore-2015-Transaction-Engine(x64)-8.2.2.0.msi
+                ## RES-ONE-ServiceStore-2016-Transaction-Engine(x64)-9.0.1.0.msi
+                $regex = '{0}-Transaction-Engine\({1}\)-{2}.msi' -f $packageName, $systemArchitecture, $versionRegex;
+            }
+
+            'CatalogServices' {
+                ## RES-ITS-Catalog-Services(x64)-7.3.0.0.msi
+                ## RES-ONE-ServiceStore-2015-Catalog-Services(x64)-8.2.2.0.msi
+                ## RES-ONE-ServiceStore-2015-Catalog-Services(x64)-9.0.1.0.msi
+                $regex = '{0}-Catalog-Services\({1}\)-{2}.msi' -f $packageName, $systemArchitecture, $versionRegex;
+            }
+
+            'ManagementPortal' {
+                ## Not applicable to IT Store 2014
+                ## RES-ONE-ServiceStore-2015-Management-Portal-8.2.2.0.msi
+                ## RES-ONE-ServiceStore-2016-Management-Portal-9.0.1.0.msi
+                $regex = '{0}-Management-Portal-{1}.msi' -f $packageName, $versionRegex;
+            }
+
+            'WebPortal' {
+                ## RES-ITS-Web-Portal-7.3.0.0.msi
+                ## RES-ONE-ServiceStore-2015-WebPortal-MobileGateway-8.2.2.0.msi
+                ## RES-ONE-ServiceStore-2016-WebPortal-MobileGateway-9.0.1.0.msi
+                $regex = '{0}-{1}-{2}.msi' -f $packageName, $webPortalPackageName, $versionRegex;
+            }
+
+            'Client' {
+                ## RES-ITS-Client(x64)-7.3.0.0.msi
+                ## RES-ONE-ServiceStore-2015-Client(x64)-8.2.2.0.msi
+                ## RES-ONE-ServiceStore-2016-Client(x64)-9.0.1.0.msi
+                $regex = '{0}-Client\({1}\)-{2}.msi' -f $packageName, $systemArchitecture, $versionRegex;
+            }
+
+            Default {
+                ## RES-ITS-Console(x64)-7.3.0.0.msi
+                ## RES-ONE-ServiceStore-2015-Setup-Sync-Tool(x64)-8.2.2.0.msi
+                ## RES-ONE-ServiceStore-2016-Setup-Sync-Tool(x64)-9.0.1.0.msi
+                $regex = '{0}-{1}\({2}\)-{3}.msi' -f $packageName, $consolePackageName, $systemArchitecture, $versionRegex;
+            }
+
+        } #end switch component
+
+        Write-Verbose -Message ($localizedData.SearchFilePatternMatch -f $regex);
+
+        $packagePath = Get-ChildItem -Path $Path -Recurse |
+            Where-Object { $_.Name -imatch $regex } |
+                Sort-Object -Property Name -Descending |
+                    Select-Object -ExpandProperty FullName -First 1;
+
+        if ((-not $IsLiteralPath) -and (-not [System.String]::IsNullOrEmpty($packagePath))) {
+            Write-Verbose ($localizedData.LocatedPackagePath -f $packagePath);
+            return $packagePath;
+        }
+        elseif ([System.String]::IsNullOrEmpty($packagePath)) {
+            throw  ($localizedData.UnableToLocatePackageError -f $Component);
+        }
+
+    } #end if
+
+} #end function Resolve-ROSSPackagePath

@@ -1,7 +1,5 @@
-# Localized messages
-data LocalizedData
-{
-    # culture="en-US"
+data localizedData {
+    # Localized messages; culture="en-US"
     ConvertFrom-StringData @'
         ResourceIncorrectPropertyState  = Resource property '{0}' is NOT in the desired state. Expected '{1}', actual '{2}'.
         ResourceInDesiredState          = Resource '{0}' is in the desired state.
@@ -42,6 +40,10 @@ function Get-TargetResource {
         [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
+        ## File path to a RES ONE Service Store license file to import.
+        [Parameter()] [ValidateNotNullOrEmpty()]
+        [System.String] $LicensePath,
+
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
         [Parameter()] [ValidateNotNullOrEmpty()]
         [System.String] $Version,
@@ -54,14 +56,14 @@ function Get-TargetResource {
         [System.String] $Ensure = 'Present'
     )
 
-    $setupPath = ResolveROSSPackagePath -Path $Path -Component 'Console' -Version $Version -IsLiteralPath:$IsLiteralPath -Verbose:$Verbose;
-    [System.String] $msiProductName = GetWindowsInstallerPackageProperty -Path $setupPath -Property ProductName;
+    $setupPath = Resolve-ROSSPackagePath -Path $Path -Component 'Console' -Version $Version -IsLiteralPath:$IsLiteralPath -Verbose:$Verbose;
+    [System.String] $msiProductName = Get-WindowsInstallerPackageProperty -Path $setupPath -Property ProductName;
     $productName = $msiProductName.Trim();
 
     $targetResource = @{
         Path = $setupPath;
         ProductName = $productName;
-        Ensure = if (GetProductEntry -Name $productName) { 'Present' } else { 'Absent' };
+        Ensure = if (Get-InstalledProductEntry -Name $productName) { 'Present' } else { 'Absent' };
     }
     return $targetResource;
 
@@ -98,6 +100,10 @@ function Test-TargetResource {
         ## File path containing the RES ONE Service Store MSIs or the literal path to the legacy console/Sync Tool MSI.
         [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
         [System.String] $Path,
+
+        ## File path to a RES ONE Service Store license file to import.
+        [Parameter()] [ValidateNotNullOrEmpty()]
+        [System.String] $LicensePath,
 
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
         [Parameter()] [ValidateNotNullOrEmpty()]
@@ -159,6 +165,10 @@ function Set-TargetResource {
         [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
+        ## File path to a RES ONE Service Store license file to import.
+        [Parameter()] [ValidateNotNullOrEmpty()]
+        [System.String] $LicensePath,
+
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
         [Parameter()] [ValidateNotNullOrEmpty()]
         [System.String] $Version,
@@ -171,7 +181,7 @@ function Set-TargetResource {
         [System.String] $Ensure = 'Present'
     )
 
-    $setupPath = ResolveROSSPackagePath -Path $Path -Component 'Console' -Version $Version -IsLiteralPath:$IsLiteralPath -Verbose:$Verbose;
+    $setupPath = Resolve-ROSSPackagePath -Path $Path -Component 'Console' -Version $Version -IsLiteralPath:$IsLiteralPath -Verbose:$Verbose;
     if ($Ensure -eq 'Present') {
 
         $arguments = @(
@@ -187,10 +197,14 @@ function Set-TargetResource {
             ('CATALOGSERVICESPASSWORD="{0}"' -f $CatalogServicesCredential.GetNetworkCredential().Password)
         )
 
+        if ($PSBoundParameters.ContainsKey('LicensePath')) {
+            $arguments += 'DBIMPORTLICENSE="{0}"' -f $LicensePath;
+        }
+
     }
     elseif ($Ensure -eq 'Absent') {
 
-        [System.String] $msiProductCode = GetWindowsInstallerPackageProperty -Path $setupPath -Property ProductCode;
+        [System.String] $msiProductCode = Get-WindowsInstallerPackageProperty -Path $setupPath -Property ProductCode;
         $arguments = @(
             ('/X{0}' -f $msiProductCode)
         )
@@ -200,7 +214,7 @@ function Set-TargetResource {
     ## Start install/uninstall
     $arguments += '/norestart';
     $arguments += '/qn';
-    StartWaitProcess -FilePath "$env:WINDIR\System32\msiexec.exe" -ArgumentList $arguments -Verbose:$Verbose;
+    Start-WaitProcess -FilePath "$env:WINDIR\System32\msiexec.exe" -ArgumentList $arguments -Verbose:$Verbose;
 
 } #end function Set-TargetResource
 
@@ -208,6 +222,6 @@ function Set-TargetResource {
 ## Import the ROSS common library functions
 $moduleRoot = Split-Path -Path $MyInvocation.MyCommand.Path -Parent;
 $moduleParent = Split-Path -Path $moduleRoot -Parent;
-Import-Module (Join-Path -Path $moduleParent -ChildPath 'VE_ROSSCommon') -Force;
+Import-Module (Join-Path -Path $moduleParent -ChildPath 'ROSSCommon') -Force;
 
 Export-ModuleMember -Function *-TargetResource;
