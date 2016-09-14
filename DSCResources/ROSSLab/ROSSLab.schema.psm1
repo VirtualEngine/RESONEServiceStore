@@ -47,6 +47,17 @@ configuration ROSSLab {
         [Parameter()]
         [System.UInt16] $Port = 80,
 
+        ## File path to RES ONE Service Store building blocks to import.
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String] $BuildingBlockPath,
+
+        ## Credential used to import the RES ONE Service Store building blocks.
+        [Parameter()]
+        [ValidateNotNull()]
+        [System.Management.Automation.PSCredential]
+        [System.Management.Automation.Credential()] $BuildingBlockCredential,
+
         [Parameter()] [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
@@ -118,6 +129,16 @@ configuration ROSSLab {
             IsLiteralPath = $false;
             Ensure        = $Ensure;
             DependsOn     = '[ROSSDatabase]ROSSLabDatabase';
+        }
+
+        if ($PSBoundParameters.ContainsKey('BuildingBlockPath')) {
+
+            ROSSBuildingBlock 'ROSSLabBuildingBlock' {
+                Path = $BuildingBlockPath;
+                Server = $HostHeader;
+                Credential = $BuildingBlockCredential;
+                DependsOn = '[ROSSManagementPortal]ROSSLabManagementPortal';
+            }
         }
 
     }

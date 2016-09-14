@@ -55,6 +55,17 @@ configuration ROSSLabHttps {
         [Parameter()] [ValidateSet('x64','x86')]
         [System.String] $Architecture = 'x64',
 
+        ## File path to RES ONE Service Store building blocks to import.
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String] $BuildingBlockPath,
+
+        ## Credential used to import the RES ONE Service Store building blocks.
+        [Parameter()]
+        [ValidateNotNull()]
+        [System.Management.Automation.PSCredential]
+        [System.Management.Automation.Credential()] $BuildingBlockCredential,
+
         [Parameter()] [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
@@ -64,18 +75,39 @@ configuration ROSSLabHttps {
     ## Can't import RESONEServiceStore composite resource due to circular references!
     Import-DscResource -Name ROSSLab;
 
-    ROSSLab 'ROSSLabHttps' {
-        DatabaseServer            = $DatabaseServer;
-        Credential                = $Credential;
-        SQLCredential             = $SQLCredential;
-        CatalogServicesCredential = $CatalogServicesCredential;
-        Path                      = $Path;
-        Version                   = $Version;
-        HostHeader                = $HostHeader;
-        DefaultDomain             = $DefaultDomain;
-        DatabaseName              = $DatabaseName;
-        Port                      = $Port;
-        Ensure                    = $Ensure;
+    if ($PSBoundParameters.ContainsKey('BuildingBlockPath')) {
+
+        ROSSLab 'ROSSLabHttps' {
+            DatabaseServer            = $DatabaseServer;
+            Credential                = $Credential;
+            SQLCredential             = $SQLCredential;
+            CatalogServicesCredential = $CatalogServicesCredential;
+            Path                      = $Path;
+            Version                   = $Version;
+            HostHeader                = $HostHeader;
+            DefaultDomain             = $DefaultDomain;
+            DatabaseName              = $DatabaseName;
+            Port                      = $Port;
+            BuildingBlockPath         = $BuildingBlockPath;
+            BuildingBlockCredential   = $BuildingBlockCredential;
+            Ensure                    = $Ensure;
+        }
+    }
+    else {
+
+        ROSSLab 'ROSSLabHttps' {
+            DatabaseServer            = $DatabaseServer;
+            Credential                = $Credential;
+            SQLCredential             = $SQLCredential;
+            CatalogServicesCredential = $CatalogServicesCredential;
+            Path                      = $Path;
+            Version                   = $Version;
+            HostHeader                = $HostHeader;
+            DefaultDomain             = $DefaultDomain;
+            DatabaseName              = $DatabaseName;
+            Port                      = $Port;
+            Ensure                    = $Ensure;
+        }
     }
 
     if ($Architecture -eq 'x64') {
