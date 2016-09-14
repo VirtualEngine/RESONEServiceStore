@@ -55,6 +55,11 @@ configuration ROSSLabHttps {
         [Parameter()] [ValidateSet('x64','x86')]
         [System.String] $Architecture = 'x64',
 
+        ## File path to RES ONE Service Store license file.
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String] $LicensePath,
+
         ## File path to RES ONE Service Store building blocks to import.
         [Parameter()]
         [ValidateNotNullOrEmpty()]
@@ -70,12 +75,32 @@ configuration ROSSLabHttps {
         [System.String] $Ensure = 'Present'
     )
 
-    Import-DscResource -ModuleName xPSDesiredStateConfiguration, xCertificate, xWebAdministration;
+    Import-DscResource xWebAdministration;
 
     ## Can't import RESONEServiceStore composite resource due to circular references!
     Import-DscResource -Name ROSSLab;
 
-    if ($PSBoundParameters.ContainsKey('BuildingBlockPath')) {
+    if ($PSBoundParameters.ContainsKey('BuildingBlockPath') -and
+        $PSBoundParameters.ContainsKey('LicensePath')) {
+
+        ROSSLab 'ROSSLabHttps' {
+            DatabaseServer            = $DatabaseServer;
+            Credential                = $Credential;
+            SQLCredential             = $SQLCredential;
+            CatalogServicesCredential = $CatalogServicesCredential;
+            Path                      = $Path;
+            Version                   = $Version;
+            HostHeader                = $HostHeader;
+            DefaultDomain             = $DefaultDomain;
+            DatabaseName              = $DatabaseName;
+            Port                      = $Port;
+            LicensePath               = $LicensePath;
+            BuildingBlockPath         = $BuildingBlockPath;
+            BuildingBlockCredential   = $BuildingBlockCredential;
+            Ensure                    = $Ensure;
+        }
+    }
+    elseif ($PSBoundParameters.ContainsKey('BuildingBlockPath')) {
 
         ROSSLab 'ROSSLabHttps' {
             DatabaseServer            = $DatabaseServer;
@@ -90,6 +115,23 @@ configuration ROSSLabHttps {
             Port                      = $Port;
             BuildingBlockPath         = $BuildingBlockPath;
             BuildingBlockCredential   = $BuildingBlockCredential;
+            Ensure                    = $Ensure;
+        }
+    }
+    elseif ($PSBoundParameters.ContainsKey('LicensePath')) {
+
+        ROSSLab 'ROSSLabHttps' {
+            DatabaseServer            = $DatabaseServer;
+            Credential                = $Credential;
+            SQLCredential             = $SQLCredential;
+            CatalogServicesCredential = $CatalogServicesCredential;
+            Path                      = $Path;
+            Version                   = $Version;
+            HostHeader                = $HostHeader;
+            DefaultDomain             = $DefaultDomain;
+            DatabaseName              = $DatabaseName;
+            Port                      = $Port;
+            LicensePath               = $LicensePath;
             Ensure                    = $Ensure;
         }
     }
@@ -127,5 +169,4 @@ configuration ROSSLabHttps {
         DependsOn = '[ROSSLab]ROSSLabHttps';
     }
 
-
-} #end configuration ROSSLab
+} #end configuration ROSSLabHttps

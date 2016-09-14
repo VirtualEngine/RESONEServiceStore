@@ -47,6 +47,11 @@ configuration ROSSLab {
         [Parameter()]
         [System.UInt16] $Port = 80,
 
+        ## File path to RES ONE Service Store license file.
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String] $LicensePath,
+
         ## File path to RES ONE Service Store building blocks to import.
         [Parameter()]
         [ValidateNotNullOrEmpty()]
@@ -74,16 +79,34 @@ configuration ROSSLab {
 
     if ($Ensure -eq 'Present') {
 
-        ROSSDatabase 'ROSSLabDatabase' {
-            DatabaseServer            = $DatabaseServer;
-            DatabaseName              = $DatabaseName;
-            Credential                = $Credential;
-            SQLCredential             = $SQLCredential;
-            CatalogServicesCredential = $CatalogServicesCredential;
-            Path                      = $Path;
-            Version                   = $Version;
-            IsLiteralPath             = $false;
-            Ensure                    = $Ensure;
+        if ($PSBoundParameters.ContainsKey('LicensePath')) {
+
+            ROSSDatabase 'ROSSLabDatabase' {
+                DatabaseServer            = $DatabaseServer;
+                DatabaseName              = $DatabaseName;
+                Credential                = $Credential;
+                SQLCredential             = $SQLCredential;
+                CatalogServicesCredential = $CatalogServicesCredential;
+                Path                      = $Path;
+                Version                   = $Version;
+                IsLiteralPath             = $false;
+                LicensePath               = $LicensePath;
+                Ensure                    = $Ensure;
+            }
+        }
+        else {
+
+            ROSSDatabase 'ROSSLabDatabase' {
+                DatabaseServer            = $DatabaseServer;
+                DatabaseName              = $DatabaseName;
+                Credential                = $Credential;
+                SQLCredential             = $SQLCredential;
+                CatalogServicesCredential = $CatalogServicesCredential;
+                Path                      = $Path;
+                Version                   = $Version;
+                IsLiteralPath             = $false;
+                Ensure                    = $Ensure;
+            }
         }
 
         ROSSTransactionEngine 'ROSSLabTransactionEngine' {
