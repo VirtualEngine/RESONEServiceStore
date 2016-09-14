@@ -53,6 +53,6 @@ configuration RESONEServiceStoreLabExample {
 
 } #end configuration RESONEServiceStoreLabExample
 
-if (-not $Cred) { $Cred = Get-Credential -UserName 'ROSS' -Message 'RES ONE Service Store SQL account credential'; }
-if (-not $sqlCred) { $sqlCred = Get-Credential -UserName 'sa' -Message 'Microsoft SQL Server account credential'; }
+if (-not $cred) { $cred = Get-Credential -UserName 'RESONEWorkspace' -Message 'RES ONE Service Store SQL account credential'; }
+if (-not $sqlCred) { $sqlCred = Get-Credential -UserName 'sa' -Message 'Existing SQL account for database creation'; }
 RESONEServiceStoreLabExample -OutputPath ~\Documents -ConfigurationData $config -Credential $cred -SQLCredential $sqlCred;

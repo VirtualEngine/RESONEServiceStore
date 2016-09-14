@@ -1,0 +1,10 @@
+[ClassVersion("1.0.0"), FriendlyName("ROSSBuildingBlock")]
+class VE_ROSSBuildingBlock : OMI_BaseResource
+{
+    [Key, Description("RES ONE Service Store building block file path")] String Path;
+    [Key, Description("RES ONE Service Store API hostname/endpoint")] String Server;
+    [Required, Description("RES ONE Service Store API credential"), EmbeddedInstance("MSFT_Credential")] String Credential;
+    [Write, Description("Specifies connecting to the RES ONE Service Store API endpoint using TLS/SSL")] Boolean UseHttps;
+    [Write, Description("Specifies imported service objects should be enabled")] Boolean EnableTransactions;
+    [Write, Description("Specifies imported service objects should not overwrite existing objects")] Boolean NoClobber;
+};

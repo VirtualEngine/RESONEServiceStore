@@ -1,6 +1,7 @@
 RES ONE Service Store DSC Resources
 ===================================
 ## Included Resources
+* **ROSSBuildingBlock**: Imports a RES ONE Service Store building block
 * **ROSSCatalogServices**: Installs the RES ONE Service Store Catalog Services component
 * **ROSSClient**: Installs the RES ONE Service Store Windows client component
 * **ROSSConsole**: Installs the RES ONE Service Store Setup and Sync tool
@@ -14,6 +15,23 @@ RES ONE Service Store DSC Resources
 ## Required Resources
 * **xNetworking**: ROSSLab and ROSSLabHttps require https://github.com/PowerShell/xNetworking to create firewall rules
 * **xWebAdministration**: ROSSLabHttps requires https://github.com/PowerShell/xWebAdministration to create the HTTPS binding
+
+ROSSBuildingBlock
+==================
+Imports a RES ONE Service Store building block.
+### Syntax
+```
+ROSSBuildingBlock [String] #ResourceName
+{
+    Path = [String]
+    Server = [String]
+    Credential = [PSCredential]
+    [ UseHttps = [Boolean] ]
+    [ EnableTransactions = [Boolean] ]
+    [ NoClobber = [Boolean] ]
+    [ Reboot = [Boolean] ]
+}
+```
 
 ROSSCatalogServices
 ===================
@@ -30,7 +48,6 @@ ROSSCatalogServices [String] #ResourceName
     [ IsLiteralPath = [Boolean] ]
     [ Ensure = [String] { Absent | Present } ]
 }
-
 ```
 
 ROSSClient
@@ -47,7 +64,6 @@ ROSSClient [String] #ResourceName
     [ IsLiteralPath = [Boolean] ]
     [ Ensure = [String] { Absent | Present } ]
 }
-
 ```
 
 ROSSConsole
@@ -81,6 +97,7 @@ ROSSDatabase [String] #ResourceName
     SQLCredential = [PSCredential]
     CatalogServicesCredential = [PSCredential]
     Path = [String]
+    [ LicensePath = [String] ]
     [ Version = [String] ]
     [ IsLiteralPath = [Boolean] ]
     [ Ensure = [String] { Absent | Present } ]
@@ -104,6 +121,8 @@ ROSSLab [String] #ResourceName
     DefaultDomain = [String]
     [ DatabaseName = [String] ]
     [ Port = [UInt16] ]
+    [ BuildingBlockPath = [String] ]
+    [ BuildingBlockCredential = [PSCredential] ]
     [ Ensure = [String] { Absent | Present } ]
 }
 ```
@@ -126,6 +145,8 @@ ROSSLabHttps [String] #ResourceName
     PfxCertificateThumbprint = [String]
     [ DatabaseName = [String] ]
     [ Port = [UInt16] ]
+    [ BuildingBlockPath = [String] ]
+    [ BuildingBlockCredential = [PSCredential] ]
     [ Ensure = [String] { Absent | Present } ]
 }
 ```
