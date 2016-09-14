@@ -72,7 +72,7 @@ configuration ROSSLab {
     Import-DscResource -ModuleName xPSDesiredStateConfiguration, xNetworking;
 
     ## Can't import RESONEServiceStore module due to circular references!
-    Import-DscResource -Name ROSSDatabase, ROSSTransactionEngine, ROSSCatalogServices, ROSSWebPortal, ROSSManagementPortal;
+    Import-DscResource -Name ROSSDatabase, ROSSTransactionEngine, ROSSCatalogServices, ROSSWebPortal, ROSSManagementPortal, ROSSBuildingBlock;
 
     ## If path -match '\.msi$', throw.
     if ($Path -match '\.msi$') {
