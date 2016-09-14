@@ -75,6 +75,8 @@ configuration ROSSLabHttps {
         [System.String] $Ensure = 'Present'
     )
 
+    Write-Verbose 'Starting "ROSSLabHttps".';
+
     Import-DscResource xWebAdministration;
 
     ## Can't import RESONEServiceStore composite resource due to circular references!
@@ -83,6 +85,7 @@ configuration ROSSLabHttps {
     if ($PSBoundParameters.ContainsKey('BuildingBlockPath') -and
         $PSBoundParameters.ContainsKey('LicensePath')) {
 
+        Write-Verbose 'Processing "ROSSLabHttps\ROSSLabHttps" with "BuildingBlockPath" and "LicensePath".';
         ROSSLab 'ROSSLabHttps' {
             DatabaseServer            = $DatabaseServer;
             Credential                = $Credential;
@@ -102,6 +105,7 @@ configuration ROSSLabHttps {
     }
     elseif ($PSBoundParameters.ContainsKey('BuildingBlockPath')) {
 
+        Write-Verbose 'Processing "ROSSLabHttps\ROSSLabHttps" with "BuildingBlockPath".';
         ROSSLab 'ROSSLabHttps' {
             DatabaseServer            = $DatabaseServer;
             Credential                = $Credential;
@@ -120,6 +124,7 @@ configuration ROSSLabHttps {
     }
     elseif ($PSBoundParameters.ContainsKey('LicensePath')) {
 
+        Write-Verbose 'Processing "ROSSLabHttps\ROSSLabHttps" with "LicensePath".';
         ROSSLab 'ROSSLabHttps' {
             DatabaseServer            = $DatabaseServer;
             Credential                = $Credential;
@@ -137,6 +142,7 @@ configuration ROSSLabHttps {
     }
     else {
 
+        Write-Verbose 'Processing "ROSSLabHttps\ROSSLabHttps".';
         ROSSLab 'ROSSLabHttps' {
             DatabaseServer            = $DatabaseServer;
             Credential                = $Credential;
@@ -159,6 +165,7 @@ configuration ROSSLabHttps {
         $physicalPath = 'C:\Program Files';
     }
 
+    Write-Verbose 'Processing "ROSSLabHttps\ROSSLabHttpsBinding".';
     xWebSite 'ROSSLabHttpsBinding' {
         Name = 'IT Store';
         PhysicalPath = '{0}\RES Software\IT Store\Web Portal\IT Store' -f $physicalPath;
@@ -168,5 +175,7 @@ configuration ROSSLabHttps {
         )
         DependsOn = '[ROSSLab]ROSSLabHttps';
     }
+
+    Write-Verbose 'Ending "ROSSLabHttps".';
 
 } #end configuration ROSSLabHttps
