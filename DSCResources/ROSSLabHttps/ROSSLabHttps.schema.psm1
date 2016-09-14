@@ -77,7 +77,7 @@ configuration ROSSLabHttps {
 
     Write-Host ' Starting "ROSSLabHttps".' -ForegroundColor Gray;
 
-    Import-DscResource xWebAdministration;
+    Import-DscResource -ModuleName xWebAdministration;
 
     ## Can't import RESONEServiceStore composite resource due to circular references!
     Import-DscResource -Name ROSSLab;
@@ -170,8 +170,18 @@ configuration ROSSLabHttps {
         Name = 'IT Store';
         PhysicalPath = '{0}\RES Software\IT Store\Web Portal\IT Store' -f $physicalPath;
         BindingInfo = @(
-            MSFT_xWebBindingInformation  { Protocol = 'HTTPS'; Port = 443; HostName = $HostHeader; CertificateThumbprint = $PfxCertificateThumbprint; CertificateStoreName = 'My'; }
-            MSFT_xWebBindingInformation  { Protocol = 'HTTP'; Port = 80; HostName = $HostHeader; }
+            MSFT_xWebBindingInformation {
+                Protocol = 'HTTPS';
+                Port = 443;
+                HostName = $HostHeader;
+                CertificateThumbprint = $PfxCertificateThumbprint;
+                CertificateStoreName = 'My';
+            }
+            MSFT_xWebBindingInformation {
+                Protocol = 'HTTP';
+                Port = 80;
+                HostName = $HostHeader;
+            }
         )
         DependsOn = '[ROSSLab]ROSSLabHttps';
     }
