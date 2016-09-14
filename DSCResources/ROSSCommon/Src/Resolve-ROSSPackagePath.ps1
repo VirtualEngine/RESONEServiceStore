@@ -13,7 +13,7 @@ function Resolve-ROSSPackagePath {
         [Parameter(Mandatory)] [ValidateSet('Console','CatalogServices','TransactionEngine','ManagementPortal','WebPortal','Client')]
         [System.String] $Component,
 
-        ## RES ONE Automation component version to be installed, i.e. 7.0.4 or 7.5.3.1
+        ## RES ONE Automation component version to be installed, i.e. 9.0, 8.2 or 8.2.2.0
         [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
         [System.String] $Version,
 

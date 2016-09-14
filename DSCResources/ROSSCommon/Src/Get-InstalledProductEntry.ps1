@@ -44,7 +44,7 @@ function Get-InstalledProductEntry {
 
     if ($InstalledCheckRegKey -and $InstalledCheckRegValueName -and $InstalledCheckRegValueData) {
         $installValue = $null;
-        $Get-RegistryValueIgnoreErrorParams = @{
+        $getRegistryValueIgnoreErrorParams = @{
             RegistryHive = $InstalledCheckRegHive;
             Key = $InstalledCheckRegKey;
             Value = $InstalledCheckRegValueName;
@@ -52,11 +52,11 @@ function Get-InstalledProductEntry {
 
         #if 64bit OS, check 64bit registry view first
         if ([System.Environment]::Is64BitOperatingSystem) {
-            $installValue = Get-RegistryValueIgnoreError @Get-RegistryValueIgnoreErrorParams -RegistryView [Microsoft.Win32.RegistryView]::Registry64;
+            $installValue = Get-RegistryValueIgnoreError @getRegistryValueIgnoreErrorParams -RegistryView [Microsoft.Win32.RegistryView]::Registry64;
         }
 
         if ($null -eq $installValue) {
-            $installValue = Get-RegistryValueIgnoreError @Get-RegistryValueIgnoreErrorParams -RegistryView [Microsoft.Win32.RegistryView]::Registry32;
+            $installValue = Get-RegistryValueIgnoreError @getRegistryValueIgnoreErrorParams -RegistryView [Microsoft.Win32.RegistryView]::Registry32;
         }
 
         if ($installValue) {

@@ -19,7 +19,7 @@ data localizedData {
 }
 
 
-moduleRoot = Split-Path -Path $MyInvocation.MyCommand.Path -Parent;
+$moduleRoot = Split-Path -Path $MyInvocation.MyCommand.Path -Parent;
 $moduleSrcPath = Join-Path -Path $moduleRoot -ChildPath 'Src';
 Get-ChildItem -Path $moduleSrcPath -Include '*.ps1' -Recurse |
     ForEach-Object {
