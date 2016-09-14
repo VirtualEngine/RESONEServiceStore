@@ -75,7 +75,7 @@ configuration ROSSLabHttps {
         [System.String] $Ensure = 'Present'
     )
 
-    Write-Verbose 'Starting "ROSSLabHttps".';
+    Write-Host ' Starting "ROSSLabHttps".' -ForegroundColor Gray;
 
     Import-DscResource xWebAdministration;
 
@@ -85,7 +85,7 @@ configuration ROSSLabHttps {
     if ($PSBoundParameters.ContainsKey('BuildingBlockPath') -and
         $PSBoundParameters.ContainsKey('LicensePath')) {
 
-        Write-Verbose 'Processing "ROSSLabHttps\ROSSLabHttps" with "BuildingBlockPath" and "LicensePath".';
+        Write-Host ' Processing "ROSSLabHttps\ROSSLabHttps" with "BuildingBlockPath" and "LicensePath".' -ForegroundColor Gray;
         ROSSLab 'ROSSLabHttps' {
             DatabaseServer            = $DatabaseServer;
             Credential                = $Credential;
@@ -105,7 +105,7 @@ configuration ROSSLabHttps {
     }
     elseif ($PSBoundParameters.ContainsKey('BuildingBlockPath')) {
 
-        Write-Verbose 'Processing "ROSSLabHttps\ROSSLabHttps" with "BuildingBlockPath".';
+        Write-Host ' Processing "ROSSLabHttps\ROSSLabHttps" with "BuildingBlockPath".' -ForegroundColor Gray;
         ROSSLab 'ROSSLabHttps' {
             DatabaseServer            = $DatabaseServer;
             Credential                = $Credential;
@@ -124,7 +124,7 @@ configuration ROSSLabHttps {
     }
     elseif ($PSBoundParameters.ContainsKey('LicensePath')) {
 
-        Write-Verbose 'Processing "ROSSLabHttps\ROSSLabHttps" with "LicensePath".';
+        Write-Host ' Processing "ROSSLabHttps\ROSSLabHttps" with "LicensePath".' -ForegroundColor Gray;
         ROSSLab 'ROSSLabHttps' {
             DatabaseServer            = $DatabaseServer;
             Credential                = $Credential;
@@ -142,7 +142,7 @@ configuration ROSSLabHttps {
     }
     else {
 
-        Write-Verbose 'Processing "ROSSLabHttps\ROSSLabHttps".';
+        Write-Host ' Processing "ROSSLabHttps\ROSSLabHttps".' -ForegroundColor Gray;
         ROSSLab 'ROSSLabHttps' {
             DatabaseServer            = $DatabaseServer;
             Credential                = $Credential;
@@ -165,7 +165,7 @@ configuration ROSSLabHttps {
         $physicalPath = 'C:\Program Files';
     }
 
-    Write-Verbose 'Processing "ROSSLabHttps\ROSSLabHttpsBinding".';
+    Write-Host ' Processing "ROSSLabHttps\ROSSLabHttpsBinding".' -ForegroundColor Gray;
     xWebSite 'ROSSLabHttpsBinding' {
         Name = 'IT Store';
         PhysicalPath = '{0}\RES Software\IT Store\Web Portal\IT Store' -f $physicalPath;
@@ -176,6 +176,6 @@ configuration ROSSLabHttps {
         DependsOn = '[ROSSLab]ROSSLabHttps';
     }
 
-    Write-Verbose 'Ending "ROSSLabHttps".';
+    Write-Host ' Ending "ROSSLabHttps".' -ForegroundColor Gray;
 
 } #end configuration ROSSLabHttps

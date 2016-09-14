@@ -67,7 +67,7 @@ configuration ROSSLab {
         [System.String] $Ensure = 'Present'
     )
 
-    Write-Verbose 'Starting "ROSSLab".';
+    Write-Host ' Starting "ROSSLab".' -ForegroundColor Gray;
 
     Import-DscResource -ModuleName xPSDesiredStateConfiguration, xNetworking;
 
@@ -83,7 +83,7 @@ configuration ROSSLab {
 
         if ($PSBoundParameters.ContainsKey('LicensePath')) {
 
-            Write-Verbose 'Processing "ROSSLab\ROSSLabDatabase" with "LicensePath".';
+            Write-Host ' Processing "ROSSLab\ROSSLabDatabase" with "LicensePath".' -ForegroundColor Gray;
             ROSSDatabase 'ROSSLabDatabase' {
                 DatabaseServer            = $DatabaseServer;
                 DatabaseName              = $DatabaseName;
@@ -99,7 +99,7 @@ configuration ROSSLab {
         }
         else {
 
-            Write-Verbose 'Processing "ROSSLab\ROSSLabDatabase".';
+            Write-Host ' Processing "ROSSLab\ROSSLabDatabase".' -ForegroundColor Gray;
             ROSSDatabase 'ROSSLabDatabase' {
                 DatabaseServer            = $DatabaseServer;
                 DatabaseName              = $DatabaseName;
@@ -113,7 +113,7 @@ configuration ROSSLab {
             }
         }
 
-        Write-Verbose 'Processing "ROSSLab\ROSSLabTransactionEngine".';
+        Write-Host ' Processing "ROSSLab\ROSSLabTransactionEngine".' -ForegroundColor Gray;
         ROSSTransactionEngine 'ROSSLabTransactionEngine' {
             DatabaseServer = $DatabaseServer;
             DatabaseName   = $DatabaseName;
@@ -125,7 +125,7 @@ configuration ROSSLab {
             DependsOn      = '[ROSSDatabase]ROSSLabDatabase';
         }
 
-        Write-Verbose 'Processing "ROSSLab\ROSSLabCatalogServices".';
+        Write-Host ' Processing "ROSSLab\ROSSLabCatalogServices".' -ForegroundColor Gray;
         ROSSCatalogServices 'ROSSLabCatalogServices' {
             DatabaseServer = $DatabaseServer;
             DatabaseName   = $DatabaseName;
@@ -137,7 +137,7 @@ configuration ROSSLab {
             DependsOn      = '[ROSSDatabase]ROSSLabDatabase';
         }
 
-        Write-Verbose 'Processing "ROSSLab\ROSSLabWebPortal".';
+        Write-Host ' Processing "ROSSLab\ROSSLabWebPortal".' -ForegroundColor Gray;
         ROSSWebPortal 'ROSSLabWebPortal' {
             CatalogServicesCredential = $CatalogServicesCredential;
             CatalogServicesHost       = 'localhost';
@@ -150,7 +150,7 @@ configuration ROSSLab {
             Ensure                    = $Ensure;
         }
 
-        Write-Verbose 'Processing "ROSSLab\ROSSLabManagementPortal".';
+        Write-Host ' Processing "ROSSLab\ROSSLabManagementPortal".' -ForegroundColor Gray;
         ROSSManagementPortal 'ROSSLabManagementPortal' {
             HostHeader    = $HostHeader;
             Port          = $Port;
@@ -164,7 +164,7 @@ configuration ROSSLab {
 
         if ($PSBoundParameters.ContainsKey('BuildingBlockPath')) {
 
-            Write-Verbose 'Processing "ROSSLab\ROSSLabBuildingBlock".';
+            Write-Host ' Processing "ROSSLab\ROSSLabBuildingBlock".' -ForegroundColor Gray;
             ROSSBuildingBlock 'ROSSLabBuildingBlock' {
                 Path = $BuildingBlockPath;
                 Server = $HostHeader;
@@ -176,7 +176,7 @@ configuration ROSSLab {
     }
     elseif ($Ensure -eq 'Absent') {
 
-        Write-Verbose 'Processing "ROSSLab\ROSSLabManagementPortal".';
+        Write-Host ' Processing "ROSSLab\ROSSLabManagementPortal".' -ForegroundColor Gray;
         ROSSManagementPortal 'ROSSLabManagementPortal' {
             HostHeader    = $HostHeader;
             Port          = $Port;
@@ -186,7 +186,7 @@ configuration ROSSLab {
             Ensure        = $Ensure;
         }
 
-        Write-Verbose 'Processing "ROSSLab\ROSSLabWebPortal".';
+        Write-Host ' Processing "ROSSLab\ROSSLabWebPortal".' -ForegroundColor Gray;
         ROSSWebPortal 'ROSSLabWebPortal' {
             CatalogServicesCredential = $CatalogServicesCredential;
             CatalogServicesHost = 'localhost';
@@ -199,7 +199,7 @@ configuration ROSSLab {
             Ensure              = $Ensure;
         }
 
-        Write-Verbose 'Processing "ROSSLab\ROSSLabCatalogServices".';
+        Write-Host ' Processing "ROSSLab\ROSSLabCatalogServices".' -ForegroundColor Gray;
         ROSSCatalogServices 'ROSSLabCatalogServices' {
             DatabaseServer = $DatabaseServer;
             DatabaseName   = $DatabaseName;
@@ -210,7 +210,7 @@ configuration ROSSLab {
             Ensure         = $Ensure;
         }
 
-        Write-Verbose 'Processing "ROSSLab\ROSSLabTransactionEngine".';
+        Write-Host ' Processing "ROSSLab\ROSSLabTransactionEngine".' -ForegroundColor Gray;
         ROSSTransactionEngine 'ROSSLabTransactionEngine' {
             DatabaseServer = $DatabaseServer;
             DatabaseName   = $DatabaseName;
@@ -221,7 +221,7 @@ configuration ROSSLab {
             Ensure         = $Ensure;
         }
 
-                    Write-Verbose 'Processing "ROSSLab\ROSSLabDatabase".';
+                    Write-Host ' Processing "ROSSLab\ROSSLabDatabase".' -ForegroundColor Gray;
         ROSSDatabase 'ROSSLabDatabase' {
             DatabaseServer            = $DatabaseServer;
             DatabaseName              = $DatabaseName;
@@ -237,7 +237,7 @@ configuration ROSSLab {
 
     }
 
-    Write-Verbose 'Processing "ROSSLab\ROSSLabCatalogServicesFirewall".';
+    Write-Host ' Processing "ROSSLab\ROSSLabCatalogServicesFirewall".' -ForegroundColor Gray;
     xFirewall 'ROSSLabCatalogServicesFirewall' {
         Name        = 'RESONEServiceStore-TCP-4733-In';
         Group       = 'RES ONE Service Store';
@@ -253,7 +253,7 @@ configuration ROSSLab {
         DependsOn   = '[ROSSCatalogServices]ROSSLabCatalogServices';
     }
 
-    Write-Verbose 'Processing "ROSSLab\ROSSLabCatalogServicesFirewall8080".';
+    Write-Host ' Processing "ROSSLab\ROSSLabCatalogServicesFirewall8080".' -ForegroundColor Gray;
     xFirewall 'ROSSLabCatalogServicesFirewall8080' {
         Name        = 'RESONEServiceStore-TCP-8080-In';
         Group       = 'RES ONE Service Store';
@@ -269,7 +269,7 @@ configuration ROSSLab {
         DependsOn   = '[ROSSCatalogServices]ROSSLabCatalogServices';
     }
 
-    Write-Verbose 'Processing "ROSSLab\ROSSLabCatalogServicesFirewall8081".';
+    Write-Host ' Processing "ROSSLab\ROSSLabCatalogServicesFirewall8081".' -ForegroundColor Gray;
     xFirewall 'ROSSLabCatalogServicesFirewall8081' {
         Name        = 'RESONEServiceStore-TCP-8081-In';
         Group       = 'RES ONE Service Store';
@@ -285,6 +285,6 @@ configuration ROSSLab {
         DependsOn   = '[ROSSCatalogServices]ROSSLabCatalogServices';
     }
 
-    Write-Verbose 'Ending "ROSSLab".';
+    Write-Host ' Ending "ROSSLab".' -ForegroundColor Gray;
 
 } #end configuration ROSSLab
