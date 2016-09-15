@@ -270,7 +270,7 @@ $moduleRoot = Split-Path -Path $MyInvocation.MyCommand.Path -Parent;
 $moduleDscResourcesRoot = Split-Path -Path $moduleRoot -Parent;
 $baseModuleRoot = Split-Path -Path $moduleDscResourcesRoot -Parent;
 $baseModuleSrcPath = Join-Path -Path $baseModuleRoot -ChildPath 'Src';
-Get-ChildItem -Path baseModuleSrcPath -Include '*.ps1' -Recurse |
+Get-ChildItem -Path $baseModuleSrcPath -Include '*.ps1' -Recurse |
     ForEach-Object {
         Write-Verbose -Message ('Importing library\source file ''{0}''.' -f $_.FullName);
         . $_.FullName;
