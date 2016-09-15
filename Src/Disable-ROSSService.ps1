@@ -47,7 +47,7 @@ function Disable-ROSSService {
         }
         elseif ($PSCmdlet.ParameterSetName -eq 'Name') {
 
-            $InputObject = Find-ROSSService -Session $Session -Name $Name;
+            $InputObject = Get-ROSSService -Session $Session -Name $Name;
         }
 
         foreach ($service in $InputObject) {
