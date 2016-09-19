@@ -51,7 +51,14 @@ function Invoke-ROSSRestMethod {
         [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'LoginObject')]
         [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'LoginHashtable')]
         [ValidateNotNullOrEmpty()]
-        [System.String] $ExpandProperty
+        [System.String] $ExpandProperty,
+
+        # PSCustomObject type name to apply to the object.
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'DefaultObject')]
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'DefaultHashtable')]
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'LoginObject')]
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'LoginHashtable')]
+        [System.String] $TypeName = 'VirtualEngine.ROSS.Object'
     )
     begin {
 
@@ -92,9 +99,12 @@ function Invoke-ROSSRestMethod {
         $response = Invoke-RestMethod @invokeRestMethodParams;
 
         if ($PSBoundParameters.ContainsKey('ExpandProperty')) {
+
             return $response.$ExpandProperty;
         }
         else {
+
+            $response.PSObject.TypeNames.Insert(0, $TypeName);
             return $response;
         }
 
