@@ -4,13 +4,19 @@ data localizedData {
         CannotFindFilePathError        = Cannot find path '{0}' because it does not exist.
         FileAlreadyExistsError         = File or directory '{0}' already exists.
         NoSessionEstablishedError      = No RES ONE Service Store session established or session has expired.
+        InputObjectTypeMismatchError   = InputObject is not a '{0}' type.
+        UnsupportedDbConnectionType    = Unsupported database connection type '{0}'.
+
+        UnsupportedOperationWarning    = The '{0}' cmdlet is an unsupported operation. USE WITH EXTREME CAUTION.
 
         ShouldProcessImport            = Import
         ShouldProcessSet               = Set
         ShouldProcessUpdate            = Update
         ShouldProcessEnable            = Enable
         ShouldProcessDisable           = Disable
+        ShouldProcessDelete            = Delete
         NoMatchingWorkflowActionsFound = No matching workflow actions found on service '{0}'.
+        InvokingSQLQuery               = Invoking SQL query "{0}".
 '@
 }
 
@@ -22,6 +28,39 @@ Get-ChildItem -Path $moduleSrcPath -Include '*.ps1' -Recurse |
         . $_.FullName;
     }
 
+$customProperties = @{
+    ## Custom RES ONE Service Store property map
+
+    'VirtualEngine.ROSS.DataSource' = @{
+        Type = @{
+            DataSourceColumn = 'SpecificFlags';
+            ValueMap = @{ 1 = 'CSV'; 2 = 'ActiveDirectory'; 3 = 'ODBC'; }
+        }
+    }
+
+    'VirtualEngine.ROSS.DataConnection' = @{
+        Type = @{
+            DataSourceColumn = 'Type';
+            ValueMap = @{
+                1 = 'People';
+                2 = 'Organization';
+                3 = 'Classification';
+                4 = 'Attribute';
+            }
+        }
+        Errors = @{
+            DataSourceColumn = 'SyncErrors';
+        }
+        LastSyncDate = @{
+            DataSourceColumn = 'SyncEndDate';
+        }
+    }
+
+    'VirtualEngine.ROSS.Organization' = @{
+
+    }
+
+} #end customProperties
 
 ## Import the \DSCResources\ROSSCommon common library functions
 Import-Module (Join-Path -Path $moduleRoot -ChildPath '\DSCResources\ROSSCommon') -Force -Verbose:$false;

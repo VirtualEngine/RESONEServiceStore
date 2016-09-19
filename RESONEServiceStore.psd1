@@ -6,10 +6,15 @@
     CompanyName          = 'Virtual Engine';
     Copyright            = '(c) 2016 Virtual Engine Limited. All rights reserved.';
     Description          = 'RES ONE Service Store deployment and configuration PowerShell cmdlets and DSC resources. These DSC resources are provided AS IS, and are not supported through any means.';
-    FunctionsToExport    = @('Connect-ROSSSession','Disable-ROSSService','Disable-ROSSServiceWorkflowAction','Enable-ROSSService',
-                                'Enable-ROSSServiceWorkflowAction','Get-ROSSService','Import-ROSSBuildingBlock','Set-ROSSService');
-    DscResourcesToExport = @('ROSSBuildingBlock','ROSSCatalogServices', 'ROSSClient','ROSSConsole','ROSSDatabase','ROSSManagementPortal',
-                                'ROSSTransactionEngine','ROSSWebPortal','ROSSBuildingBlock');
+    AliasesToExport      = @('Get-ROSSOrganisation');
+    FunctionsToExport    = @('Connect-ROSSSession','Disable-ROSSService','Disable-ROSSServiceWorkflowAction',
+                                'Disconnect-ROSSSession','Enable-ROSSService','Enable-ROSSServiceWorkflowAction',
+                                'Export-ROSSBuildingBlock','Get-ROSSService','Import-ROSSBuildingBlock',
+                                'Set-ROSSService','Get-ROSSOrganization','Get-ROSSDataConnection','Get-ROSSDataSource');
+
+    <# Removed for WMF 4 compaitibilty
+    DscResourcesToExport = @('ROSSBuildingBlock','ROSSCatalogServices', 'ROSSClient','ROSSConsole','ROSSDatabase',
+                                'ROSSManagementPortal','ROSSTransactionEngine','ROSSWebPortal','ROSSBuildingBlock'); #>
 
     PrivateData = @{
         PSData = @{
