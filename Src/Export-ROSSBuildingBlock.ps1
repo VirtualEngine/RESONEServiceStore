@@ -75,7 +75,12 @@ function Export-ROSSBuildingBlock {
         }
 
         if ($requestBody.Keys.Count -le 2) {
-            ## No export options provided!
+            ## No export options provided, so add 'em all!
+            $requestBody['rootServiceId'] = [System.Guid]::Empty.ToString();
+            $requestBody['rootOrganizationId'] = [System.Guid]::Empty.ToString();
+            $requestBody['rootDataSourceId'] = [System.Guid]::Empty.ToString();
+            $requestBody['rootDataConnectionId'] = [System.Guid]::Empty.ToString();
+            $requestBody['rootBrandingId'] = [System.Guid]::Empty.ToString();
         }
 
         $invokeROSSRestMethodParams = @{
