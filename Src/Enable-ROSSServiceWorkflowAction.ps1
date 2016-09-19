@@ -93,7 +93,8 @@ function Enable-ROSSServiceWorkflowAction {
                 else {
 
                     $matchingWorkflowActions += $serviceWorkflowActions |
-                        Where-Object { $_.Name -match $workflowActionName -or $_.ActionFriendlyName -match $workflowActionName }
+                        Where-Object { $_.Name -match $workflowActionName -or
+                            $_.ActionFriendlyName -match $workflowActionName }
                 }
             }
 

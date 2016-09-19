@@ -27,32 +27,47 @@ function Get-ROSSService {
     }
     process {
 
-        if ($PSCmdlet.ParameterSetName -ne 'Id') {
+        $typeName = 'VirtualEngine.ROSS.Service';
 
-            ## The RES ONE Service Store API returns a subset of properties when searching
-            ## for services. Therefore, perform the search and retrieve the service Ids
-            $Id = @();
+        try {
 
-            if ($PSCmdlet.ParameterSetName -eq 'All') {
+            if ($PSCmdlet.ParameterSetName -ne 'Id') {
 
-                $uri = Get-ROSSResourceUri -Session $Session -Service -Search;
-                $services = Invoke-ROSSRestMethod -Uri $uri -Method Get -ExpandProperty 'Result';
-                $Id += $services.Id;
-            }
-            elseif ($PSCmdlet.ParameterSetName -eq 'Name') {
+                ## The RES ONE Service Store API returns a subset of properties when searching
+                ## for services. Therefore, perform the search and retrieve the service Ids
+                $Id = @();
 
-                foreach ($serviceName in $name) {
+                if ($PSCmdlet.ParameterSetName -eq 'All') {
 
-                    $uri = Get-ROSSResourceUri -Session $Session -Service -Search -Filter $serviceName;
+                    $uri = Get-ROSSResourceUri -Session $Session -Service -Search;
                     $services = Invoke-ROSSRestMethod -Uri $uri -Method Get -ExpandProperty 'Result';
                     $Id += $services.Id;
                 }
+                elseif ($PSCmdlet.ParameterSetName -eq 'Name') {
+
+                    foreach ($serviceName in $name) {
+
+                        $uri = Get-ROSSResourceUri -Session $Session -Service -Search -Filter $serviceName;
+                        $services = Invoke-ROSSRestMethod -Uri $uri -Method Get -ExpandProperty 'Result';
+                        $Id += $services.Id;
+                    }
+                }
+            }
+
+            foreach ($serviceId in $Id) {
+
+                $invokeROSSRestMethodParams = @{
+                    Session = $Session;
+                    Uri = '{0}/{1}' -f (Get-ROSSResourceUri -Session $Session -Service), $serviceId;
+                    Method = 'Get';
+                    TypeName = $typeName;
+                }
+                Write-Output -InputObject (Invoke-ROSSRestMethod @invokeROSSRestMethodParams);
             }
         }
+        catch {
 
-        foreach ($serviceId in $Id) {
-            $uri = '{0}/{1}' -f (Get-ROSSResourceUri -Session $Session -Service), $serviceId;
-            Write-Output -InputObject (Invoke-ROSSRestMethod -Session $Session -Uri $uri -Method Get);
+            throw $_;
         }
 
     } #end process
