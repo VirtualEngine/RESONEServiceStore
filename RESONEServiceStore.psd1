@@ -7,6 +7,7 @@
     Copyright            = '(c) 2016 Virtual Engine Limited. All rights reserved.';
     Description          = 'RES ONE Service Store deployment and configuration PowerShell cmdlets and DSC resources. These DSC resources are provided AS IS, and are not supported through any means.';
     AliasesToExport      = @('Get-ROSSOrganisation');
+    FormatsToProcess     = @('RESONEServiceStore.Format.ps1xml');
     FunctionsToExport    = @('Connect-ROSSSession','Disable-ROSSService','Disable-ROSSServiceWorkflowAction',
                                 'Disconnect-ROSSSession','Enable-ROSSService','Enable-ROSSServiceWorkflowAction',
                                 'Export-ROSSBuildingBlock','Get-ROSSService','Import-ROSSBuildingBlock',

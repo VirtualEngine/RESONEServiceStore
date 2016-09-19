@@ -47,7 +47,7 @@ function Invoke-ROSSDatabaseQuery {
 
             Default {
 
-                throw ($localizedData.UnsupportedDbConnectionType -f $Connection.GetType().Name;
+                throw ($localizedData.UnsupportedDbConnectionType -f $Connection.GetType().Name);
             }
         }
 
