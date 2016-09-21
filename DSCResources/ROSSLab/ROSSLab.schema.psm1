@@ -63,6 +63,10 @@ configuration ROSSLab {
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.Credential()] $BuildingBlockCredential,
 
+        ## Delete the building block from disk after import.
+        [Parameter()]
+        [System.Boolean] $DeleteBuildingBlock,
+
         [Parameter()] [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
@@ -166,10 +170,11 @@ configuration ROSSLab {
 
             Write-Host ' Processing "ROSSLab\ROSSLabBuildingBlock".' -ForegroundColor Gray;
             ROSSBuildingBlock 'ROSSLabBuildingBlock' {
-                Path = $BuildingBlockPath;
-                Server = $HostHeader;
-                Credential = $BuildingBlockCredential;
-                DependsOn = '[ROSSManagementPortal]ROSSLabManagementPortal';
+                Path           = $BuildingBlockPath;
+                Server         = $HostHeader;
+                Credential     = $BuildingBlockCredential;
+                DeleteFromDisk = $DeleteBuildingBlock;
+                DependsOn      = '[ROSSManagementPortal]ROSSLabManagementPortal';
             }
         }
 

@@ -71,6 +71,10 @@ configuration ROSSLabHttps {
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.Credential()] $BuildingBlockCredential,
 
+        ## Delete the building block from disk after import.
+        [Parameter()]
+        [System.Boolean] $DeleteBuildingBlock,
+
         [Parameter()] [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
@@ -100,6 +104,7 @@ configuration ROSSLabHttps {
             LicensePath               = $LicensePath;
             BuildingBlockPath         = $BuildingBlockPath;
             BuildingBlockCredential   = $BuildingBlockCredential;
+            DeleteBuildingBlock       = $DeleteBuildingBlock;
             Ensure                    = $Ensure;
         }
     }
@@ -167,19 +172,19 @@ configuration ROSSLabHttps {
 
     Write-Host ' Processing "ROSSLabHttps\ROSSLabHttpsBinding".' -ForegroundColor Gray;
     xWebSite 'ROSSLabHttpsBinding' {
-        Name = 'IT Store';
+        Name         = 'IT Store';
         PhysicalPath = '{0}\RES Software\IT Store\Web Portal\IT Store' -f $physicalPath;
-        BindingInfo = @(
+        BindingInfo  = @(
             MSFT_xWebBindingInformation {
-                Protocol = 'HTTPS';
-                Port = 443;
-                HostName = $HostHeader;
+                Protocol              = 'HTTPS';
+                Port                  = 443;
+                HostName              = $HostHeader;
                 CertificateThumbprint = $PfxCertificateThumbprint;
                 CertificateStoreName = 'My';
             }
             MSFT_xWebBindingInformation {
                 Protocol = 'HTTP';
-                Port = 80;
+                Port     = 80;
                 HostName = $HostHeader;
             }
         )

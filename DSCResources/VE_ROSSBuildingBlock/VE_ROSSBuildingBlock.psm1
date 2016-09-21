@@ -8,6 +8,7 @@ data localizedData {
         ResourceInDesiredState         = Resource '{0}' is in the desired state.
         ResourceNotInDesiredState      = Resource '{0}' is NOT in the desired state.
         ImportingBuildingBlock         = Importing building block '{0}'.
+        DeletingBuildingBlock          = Deleting building block '{0}'.
 '@
 }
 
@@ -113,7 +114,11 @@ function Get-TargetResource {
 
         # Specifies imported service objects should not overwrite existing objects
         [Parameter()]
-        [System.Boolean] $NoClobber
+        [System.Boolean] $NoClobber,
+
+        ## Delete the building block from disk after import.
+        [Parameter()]
+        [System.Boolean] $DeleteFromDisk
     )
     process {
 
@@ -153,7 +158,11 @@ function Test-TargetResource {
 
         # Specifies imported service objects should not overwrite existing objects
         [Parameter()]
-        [System.Boolean] $NoClobber
+        [System.Boolean] $NoClobber,
+
+        ## Delete the building block from disk after import.
+        [Parameter()]
+        [System.Boolean] $DeleteFromDisk
     )
     process {
 
@@ -218,7 +227,11 @@ function Set-TargetResource {
 
         # Specifies imported service objects should not overwrite existing objects
         [Parameter()]
-        [System.Boolean] $NoClobber
+        [System.Boolean] $NoClobber,
+
+        ## Delete the building block from disk after import.
+        [Parameter()]
+        [System.Boolean] $DeleteFromDisk
     )
     process {
 
@@ -252,6 +265,10 @@ function Set-TargetResource {
                     ## Update the registry/hash value
                     SetBuildingBlockFileHash -RegistryName $bb.RegistryName -FileHash $bb.FileHash;
 
+                    if ($DeleteFromDisk) {
+                        Write-Verbose -Message ($localizedData.DeletingBuildingBlock -f $bb.Path);
+                        Remove-Item -Path $bb.Path -Force;
+                    }
                 }
                 catch {
 

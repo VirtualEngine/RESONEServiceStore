@@ -29,7 +29,7 @@ ROSSBuildingBlock [String] #ResourceName
     [ UseHttps = [Boolean] ]
     [ EnableTransactions = [Boolean] ]
     [ NoClobber = [Boolean] ]
-    [ Reboot = [Boolean] ]
+    [ DeleteFromDisk = [Boolean] ]
 }
 ```
 
@@ -123,6 +123,7 @@ ROSSLab [String] #ResourceName
     [ Port = [UInt16] ]
     [ BuildingBlockPath = [String] ]
     [ BuildingBlockCredential = [PSCredential] ]
+    [ DeleteBuildingBlock = [Boolean] ]
     [ Ensure = [String] { Absent | Present } ]
 }
 ```
@@ -147,6 +148,7 @@ ROSSLabHttps [String] #ResourceName
     [ Port = [UInt16] ]
     [ BuildingBlockPath = [String] ]
     [ BuildingBlockCredential = [PSCredential] ]
+    [ DeleteBuildingBlock = [Boolean] ]
     [ Ensure = [String] { Absent | Present } ]
 }
 ```

@@ -7,4 +7,5 @@ class VE_ROSSBuildingBlock : OMI_BaseResource
     [Write, Description("Specifies connecting to the RES ONE Service Store API endpoint using TLS/SSL")] Boolean UseHttps;
     [Write, Description("Specifies imported service objects should be enabled")] Boolean EnableTransactions;
     [Write, Description("Specifies imported service objects should not overwrite existing objects")] Boolean NoClobber;
+    [Write, Description("Delete the source building block file after import")] Boolean DeleteFromDisk;
 };
