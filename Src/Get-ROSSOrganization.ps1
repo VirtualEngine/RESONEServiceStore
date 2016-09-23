@@ -13,7 +13,11 @@ function Get-ROSSOrganization {
 
         # RES ONE Service Store organization context name.
         [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName)]
-        [System.String[]] $Name
+        [System.String[]] $Name,
+
+        # Select only root organizational contexts.
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [System.Management.Automation.SwitchParameter] $Root
     )
     begin {
 
@@ -24,7 +28,12 @@ function Get-ROSSOrganization {
         try {
 
             $typeName = 'VirtualEngine.ROSS.Organization';
-            $query = "SELECT * FROM [OR_Objects] WHERE [Type] = 3 AND [RootGuid] = '00000000-0000-0000-0000-000000000000'";
+            $query = "SELECT * FROM [OR_Objects] WHERE [Type] = 3";
+
+            if ($Root) {
+
+                $query = "{0} AND [RootGuid] = '00000000-0000-0000-0000-000000000000'" -f $query;
+            }
 
             if ($PSBoundParameters.ContainsKey('Name')) {
 
