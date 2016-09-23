@@ -42,7 +42,7 @@ function New-ROSSMSSQLDatabaseConnection {
 
             if ($PSCmdlet.ParameterSetName -eq 'SQLAuthentication') {
 
-                $ConnectionString += 'User Id={0};Password={1};' -f $Username, $Password;
+                $ConnectionString += 'User Id={0};Password={1};' -f $Credential.UserName, $Credential.GetNetworkCredential().Password;
             }
             else {
 
