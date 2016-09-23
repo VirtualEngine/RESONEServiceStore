@@ -5,6 +5,7 @@ data localizedData {
         FileAlreadyExistsError         = File or directory '{0}' already exists.
         NoSessionEstablishedError      = No RES ONE Service Store session established or session has expired.
         InputObjectTypeMismatchError   = InputObject is not a '{0}' type.
+        StartDateAfterEndDateError     = Start date cannot be after the end date.
         UnsupportedDbConnectionType    = Unsupported database connection type '{0}'.
 
         UnsupportedOperationWarning    = The '{0}' cmdlet is an unsupported operation. USE WITH EXTREME CAUTION.
@@ -58,6 +59,20 @@ $customProperties = @{
 
     'VirtualEngine.ROSS.Organization' = @{
 
+    }
+
+    'VirtualEngine.ROSS.Service' = @{
+
+    }
+
+    'VirtualEngine.ROSS.Transaction' = @{
+        Delivery = @{
+            DataSourceColumn = 'Direction';
+            ValueMap = @{
+                Provision = 'Deliver';
+                Deprovision = 'Return';
+            }
+        }
     }
 
 } #end customProperties

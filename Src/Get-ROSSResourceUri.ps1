@@ -12,6 +12,8 @@ function Get-ROSSResourceUri {
         [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'Service')]
         [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'SearchService')]
         [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'SearchServiceFilter')]
+        [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'SearchTransaction')]
+        [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'SearchPerson')]
         [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'UploadBuildingBlock')]
         [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'ImportBuildingBlock')]
         [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'ExportBuildingBlock')]
@@ -27,11 +29,20 @@ function Get-ROSSResourceUri {
         # Specifies the search critera on the Service API endpoint
         [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'SearchService')]
         [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'SearchServiceFilter')]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'SearchTransaction')]
         [System.Management.Automation.SwitchParameter] $Search,
 
         # Specifies the search critera on the Service API endpoint
         [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'SearchServiceFilter')]
         [System.String] $Filter,
+
+        # Specifies the search to use the Transaction API endpoint
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'SearchTransaction')]
+        [System.Management.Automation.SwitchParameter] $Transaction,
+
+        # Specifies the search to use the Transaction API endpoint
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'SearchPerson')]
+        [System.Management.Automation.SwitchParameter] $Person,
 
         # Return the Building Clock API endpoint URI
         [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'UploadBuildingBlock')]
@@ -62,6 +73,7 @@ function Get-ROSSResourceUri {
         # Specifies connections to the RES ONE Service Store API should used an encrypted connection
         [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'Authentication')]
         [System.Management.Automation.SwitchParameter] $UseHttps
+
     )
     begin {
 
@@ -114,6 +126,14 @@ function Get-ROSSResourceUri {
 
             ExportBuildingBlock {
                 return "$fqdn/Management/PublicApi/BuildingBlock/Export";
+            }
+
+            SearchTransaction {
+                return "$fqdn/Management/PublicApi/Transaction/Search";
+            }
+
+            SearchPerson {
+                return "$fqdn/Management/PublicApi/Person/Search";
             }
 
         }

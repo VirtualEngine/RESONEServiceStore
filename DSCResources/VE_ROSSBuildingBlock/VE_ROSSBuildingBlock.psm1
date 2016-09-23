@@ -266,6 +266,7 @@ function Set-TargetResource {
                     SetBuildingBlockFileHash -RegistryName $bb.RegistryName -FileHash $bb.FileHash;
 
                     if ($DeleteFromDisk) {
+                        ## TODO: Needs to delete any associated .xbb file too
                         Write-Verbose -Message ($localizedData.DeletingBuildingBlock -f $bb.Path);
                         Remove-Item -Path $bb.Path -Force;
                     }
