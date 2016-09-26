@@ -75,6 +75,10 @@ configuration ROSSLabHttps {
         [Parameter()]
         [System.Boolean] $DeleteBuildingBlock,
 
+        ## Catalog services hostname
+        [Parameter()]
+        [System.String] $CatalogServicesHost = 'localhost',
+
         [Parameter()] [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
@@ -95,6 +99,7 @@ configuration ROSSLabHttps {
             Credential                = $Credential;
             SQLCredential             = $SQLCredential;
             CatalogServicesCredential = $CatalogServicesCredential;
+            CatalogServicesHost       = $CatalogServicesHost;
             Path                      = $Path;
             Version                   = $Version;
             HostHeader                = $HostHeader;
@@ -116,6 +121,7 @@ configuration ROSSLabHttps {
             Credential                = $Credential;
             SQLCredential             = $SQLCredential;
             CatalogServicesCredential = $CatalogServicesCredential;
+            CatalogServicesHost       = $CatalogServicesHost;
             Path                      = $Path;
             Version                   = $Version;
             HostHeader                = $HostHeader;
@@ -135,6 +141,7 @@ configuration ROSSLabHttps {
             Credential                = $Credential;
             SQLCredential             = $SQLCredential;
             CatalogServicesCredential = $CatalogServicesCredential;
+            CatalogServicesHost       = $CatalogServicesHost;
             Path                      = $Path;
             Version                   = $Version;
             HostHeader                = $HostHeader;
@@ -153,6 +160,7 @@ configuration ROSSLabHttps {
             Credential                = $Credential;
             SQLCredential             = $SQLCredential;
             CatalogServicesCredential = $CatalogServicesCredential;
+            CatalogServicesHost       = $CatalogServicesHost;
             Path                      = $Path;
             Version                   = $Version;
             HostHeader                = $HostHeader;

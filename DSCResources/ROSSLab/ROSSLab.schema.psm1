@@ -67,6 +67,10 @@ configuration ROSSLab {
         [Parameter()]
         [System.Boolean] $DeleteBuildingBlock,
 
+        ## Catalog services hostname
+        [Parameter()]
+        [System.String] $CatalogServicesHost = 'localhost',
+
         [Parameter()] [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
@@ -144,7 +148,7 @@ configuration ROSSLab {
         Write-Host ' Processing "ROSSLab\ROSSLabWebPortal".' -ForegroundColor Gray;
         ROSSWebPortal 'ROSSLabWebPortal' {
             CatalogServicesCredential = $CatalogServicesCredential;
-            CatalogServicesHost       = 'localhost';
+            CatalogServicesHost       = $CatalogServicesHost;
             DefaultDomain             = $DefaultDomain;
             HostHeader                = $HostHeader;
             Port                      = $Port;
@@ -194,7 +198,7 @@ configuration ROSSLab {
         Write-Host ' Processing "ROSSLab\ROSSLabWebPortal".' -ForegroundColor Gray;
         ROSSWebPortal 'ROSSLabWebPortal' {
             CatalogServicesCredential = $CatalogServicesCredential;
-            CatalogServicesHost = 'localhost';
+            CatalogServicesHost = $CatalogServicesHost;
             DefaultDomain       = $DefaultDomain;
             HostHeader          = $HostHeader;
             Port                = $Port;
