@@ -16,7 +16,7 @@ function Connect-ROSSSession {
 
         Create a RES ONE Service Store MSSSQL database session to server 'controller.lab.local' using Windows authentication.
     .EXAMPLE
-        Connect-ROSSSession -DatabaseServer 'controller.lab.local' -DatabaseName 'RESONEServiceStore' -Credential 'RESONEServiceStore'
+        Connect-ROSSSession -DatabaseServer 'controller.lab.local' -DatabaseName 'RESONEServiceStore' -Credential 'sa'
 
         Create a RES ONE Service Store MSSSQL database session to server 'controller.lab.local' using SQL authentication.
 #>

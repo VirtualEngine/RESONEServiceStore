@@ -4,6 +4,8 @@ data localizedData {
         CannotFindFilePathError        = Cannot find path '{0}' because it does not exist.
         FileAlreadyExistsError         = File or directory '{0}' already exists.
         NoSessionEstablishedError      = No RES ONE Service Store session established or session has expired.
+        NoApiSessionEstablishedError   = No RES ONE Service Store API session established or session has expired.
+        NoDbSessionEstablishedError    = No RES ONE Service Store database session established or session has expired.
         InputObjectTypeMismatchError   = InputObject is not a '{0}' type.
         StartDateAfterEndDateError     = Start date cannot be after the end date.
         UnsupportedDbConnectionType    = Unsupported database connection type '{0}'.
@@ -35,7 +37,11 @@ $customProperties = @{
     'VirtualEngine.ROSS.DataSource' = @{
         Type = @{
             DataSourceColumn = 'SpecificFlags';
-            ValueMap = @{ 1 = 'CSV'; 2 = 'ActiveDirectory'; 3 = 'ODBC'; }
+            ValueMap = @{
+                1 = 'CSV';
+                2 = 'ActiveDirectory';
+                3 = 'ODBC';
+            }
         }
     }
 
@@ -58,11 +64,15 @@ $customProperties = @{
     }
 
     'VirtualEngine.ROSS.Organization' = @{
-
+        OrganizationId = @{
+            DataSourceColumn = 'Id'; ## for pipeline support
+        }
     }
 
     'VirtualEngine.ROSS.Service' = @{
-
+        ServiceId = @{
+            DataSourceColumn = 'Id'; ## for pipeline support
+        }
     }
 
     'VirtualEngine.ROSS.Transaction' = @{
@@ -72,6 +82,12 @@ $customProperties = @{
                 Provision = 'Deliver';
                 Deprovision = 'Return';
             }
+        }
+    }
+
+    'VirtualEngine.ROSS.Person' = @{
+        PersonId = @{
+            DataSourceColumn = 'Id'; ## for pipeline support
         }
     }
 

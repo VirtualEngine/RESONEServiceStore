@@ -3,7 +3,7 @@ function Remove-ROSSDataSource {
     .SYNOPSIS
         Deletes a RES ONE Service Store Data Source.
     .NOTES
-        This is an unsupported operation and should not be called directly.
+        THIS IS AN UNSUPPORTED DATABASE OPERATION AND THIS METHOD SHOULD NOT BE CALLED DIRECTLY.
 #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High', DefaultParameterSetName = 'InputObject')]
     [OutputType('VirtualEngine.ROSS.DataSource')]

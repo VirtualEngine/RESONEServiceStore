@@ -9,11 +9,11 @@ function Resolve-ROSSPackagePath {
         [Parameter(Mandatory)]  [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
-        ## Required RES ONE Automation/Automation Manager component
+        ## Required RES ONE Service Store component
         [Parameter(Mandatory)] [ValidateSet('Console','CatalogServices','TransactionEngine','ManagementPortal','WebPortal','Client')]
         [System.String] $Component,
 
-        ## RES ONE Automation component version to be installed, i.e. 9.0, 8.2 or 8.2.2.0
+        ## RES ONE Service Store component version to be installed, i.e. 9, 8.2 or 8.2.2.0
         [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
         [System.String] $Version,
 
@@ -30,7 +30,7 @@ function Resolve-ROSSPackagePath {
             throw ($localizedData.SpecifedPathTypeError -f $Path, 'MSI');
         }
     }
-    elseif ($Version -notmatch '^\d\.\d\d?(\.\d\d?|\.\d\d?\.\d\d?)?$') {
+    elseif ($Version -notmatch '^\d\d?(\.\d\d?|\.\d\d?\.\d\d?|\.\d\d?\.\d\d?\.\d\d?)?$') {
          throw ($localizedData.InvalidVersionNumberFormatError -f $Version);
     }
 
@@ -68,7 +68,14 @@ function Resolve-ROSSPackagePath {
         } #end switch version major
 
         ## Calculate the version search Regex
-        if (($productVersion.Build -eq -1) -and ($productVersion.Revision -eq -1)) {
+        if (($productVersion.Minor -eq -1) -and
+            ($productVersion.Build -eq -1) -and
+            ($productVersion.Revision -eq -1)) {
+            ## We only have 'Major'
+            $versionRegex = '{0}.\S+' -f $productVersion.Major;
+        }
+        elseif (($productVersion.Build -eq -1) -and
+                ($productVersion.Revision -eq -1)) {
             ## We only have 'Major.Minor'
             $versionRegex = '{0}.{1}.\S+' -f $productVersion.Major, $productVersion.Minor;
         }

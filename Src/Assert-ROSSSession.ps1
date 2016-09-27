@@ -17,13 +17,16 @@ function Assert-ROSSSession {
     process {
 
         if ($null -eq $Session) {
+
             throw $localizedData.NoSessionEstablishedError;
         }
 
         if ($Database) {
+
             $properties = 'DbServer','DbName','DbConnection';
         }
         else {
+
             $properties = 'Server','AuthorizationToken','UseHttps';
         }
 
@@ -31,7 +34,15 @@ function Assert-ROSSSession {
         foreach ($property in $properties) {
 
             if ($null -eq $Session[$property]) {
-                throw $localizedData.NoSessionEstablishedError;
+
+                if ($Database) {
+
+                    throw $localizedData.NoDbSessionEstablishedError;
+                }
+                else {
+
+                    throw $localizedData.NoApiSessionEstablishedError;
+                }
             }
         }
 
