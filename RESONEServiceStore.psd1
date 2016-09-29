@@ -8,11 +8,25 @@
     Description          = 'RES ONE Service Store deployment and configuration PowerShell cmdlets and DSC resources. These DSC resources are provided AS IS, and are not supported through any means.';
     AliasesToExport      = @('Get-ROSSOrganisation');
     FormatsToProcess     = @('RESONEServiceStore.Format.ps1xml');
-    FunctionsToExport    = @('Connect-ROSSSession','Disable-ROSSService','Disable-ROSSServiceWorkflowAction',
-                                'Disconnect-ROSSSession','Enable-ROSSService','Enable-ROSSServiceWorkflowAction',
-                                'Export-ROSSBuildingBlock','Get-ROSSService','Get-ROSSTransaction',
-                                'Import-ROSSBuildingBlock','Set-ROSSService','Get-ROSSOrganization',
-                                'Get-ROSSDataConnection','Get-ROSSDataSource');
+    FunctionsToExport    = @('Connect-ROSSSession',
+                             'Disable-ROSSPerson',
+                             'Disable-ROSSService',
+                             'Disable-ROSSServiceWorkflowAction',
+                             'Disconnect-ROSSSession',
+                             'Enable-ROSSPerson',
+                             'Enable-ROSSService',
+                             'Enable-ROSSServiceWorkflowAction',
+                             'Export-ROSSBuildingBlock',
+                             'Get-ROSSDataConnection',
+                             'Get-ROSSDataSource',
+                             'Get-ROSSOrganization',
+                             'Get-ROSSPerson',
+                             'Get-ROSSService',
+                             'Get-ROSSTransaction',
+                             'Import-ROSSBuildingBlock',
+                             'Set-ROSSPerson',
+                             'Set-ROSSService'
+                            );
 
     <# Removed for WMF 4 compaitibilty
     DscResourcesToExport = @('ROSSBuildingBlock','ROSSCatalogServices', 'ROSSClient','ROSSConsole','ROSSDatabase',
