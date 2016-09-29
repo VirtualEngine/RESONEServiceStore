@@ -3,9 +3,11 @@ configuration ROSSLabHttps {
     .SYNOPSIS
         Creates the RES ONE Service Store single node lab deployment using HTTPS.
 #>
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '')]
     param (
         ## RES ONE Service Store database server name/instance (equivalient to DBSERVER).
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $DatabaseServer,
 
         ## Microsoft SQL username/password to create (equivalent to DBUSER/DBPASSWORD).
@@ -24,15 +26,18 @@ configuration ROSSLabHttps {
         [System.Management.Automation.CredentialAttribute()] $CatalogServicesCredential,
 
         ## File path containing the RES ONE Service Store MSIs or the literal path to the legacy console/Sync Tool MSI.
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Version,
 
         ## Host header for the RES ONE Service Store
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $HostHeader,
 
         ## RES ONE Service Store default (NetBIOS) domain name.
@@ -44,7 +49,8 @@ configuration ROSSLabHttps {
         [System.String] $PfxCertificateThumbprint,
 
         ## RES ONE Service Store database name (equivalient to DBNAME).
-        [Parameter()] [ValidateNotNullOrEmpty()]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String] $DatabaseName = 'RESONEServiceStore',
 
         ## NOTE: Only HTTP binding is supported by the installer; HTTPS binding will need to be managed by another DSC resource/configuration.
@@ -52,7 +58,8 @@ configuration ROSSLabHttps {
         [System.UInt16] $Port = 80,
 
         ## The target node's architecture.
-        [Parameter()] [ValidateSet('x64','x86')]
+        [Parameter()]
+        [ValidateSet('x64','x86')]
         [System.String] $Architecture = 'x64',
 
         ## File path to RES ONE Service Store license file.
@@ -79,7 +86,8 @@ configuration ROSSLabHttps {
         [Parameter()]
         [System.String] $CatalogServicesHost = 'localhost',
 
-        [Parameter()] [ValidateSet('Present','Absent')]
+        [Parameter()]
+        [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
 
@@ -172,9 +180,11 @@ configuration ROSSLabHttps {
     }
 
     if ($Architecture -eq 'x64') {
+
         $physicalPath = 'C:\Program Files (x86)';
     }
     elseif ($Architecture -eq 'x86') {
+
         $physicalPath = 'C:\Program Files';
     }
 

@@ -35,26 +35,32 @@ function Get-InstalledProductEntry {
         $uninstallKeyWow64 = 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall';
 
         if ($IdentifyingNumber) {
+
             $keyLocation = '{0}\{1}' -f $uninstallKey, $identifyingNumber;
-            $item = Get-Item $keyLocation -ErrorAction SilentlyContinue;
+            $item = Get-Item -Path $keyLocation -ErrorAction SilentlyContinue;
             if (-not $item) {
+
                 $keyLocation = '{0}\{1}' -f $uninstallKeyWow64, $identifyingNumber;
-                $item = Get-Item $keyLocation -ErrorAction SilentlyContinue;
+                $item = Get-Item -Path $keyLocation -ErrorAction SilentlyContinue;
             }
             return $item;
         }
 
-        foreach ($item in (Get-ChildItem -ErrorAction Ignore $uninstallKey, $uninstallKeyWow64)) {
+        foreach ($item in (Get-ChildItem -Path $uninstallKey, $uninstallKeyWow64 -ErrorAction Ignore)) {
+
             $installedProduct = Get-LocalizableRegistryKeyValue -RegistryKey $item -ValueName 'DisplayName';
             if ($installedProduct) {
+
                 $installedProduct = $installedProduct.Trim();
             }
             if ($Name -eq $installedProduct) {
+
                 return $item;
             }
         }
 
-        if ($InstalledCheckRegKey -and $InstalledCheckRegValueName -and $InstalledCheckRegValueData) {
+        if ($InstalledCheckRegKey -and ($InstalledCheckRegValueName -and $InstalledCheckRegValueData)) {
+
             $installValue = $null;
             $getRegistryValueIgnoreErrorParams = @{
                 RegistryHive = $InstalledCheckRegHive;
@@ -64,15 +70,21 @@ function Get-InstalledProductEntry {
 
             #if 64bit OS, check 64bit registry view first
             if ([System.Environment]::Is64BitOperatingSystem) {
-                $installValue = Get-RegistryValueIgnoreError @getRegistryValueIgnoreErrorParams -RegistryView [Microsoft.Win32.RegistryView]::Registry64;
+
+                $getRegistryValueIgnoreErrorParams['RegistryView'] = [Microsoft.Win32.RegistryView]::Registry64;
+                $installValue = Get-RegistryValueIgnoreError @getRegistryValueIgnoreErrorParams;
             }
 
             if ($null -eq $installValue) {
-                $installValue = Get-RegistryValueIgnoreError @getRegistryValueIgnoreErrorParams -RegistryView [Microsoft.Win32.RegistryView]::Registry32;
+
+                $getRegistryValueIgnoreErrorParams['RegistryView'] = [Microsoft.Win32.RegistryView]::Registry32;
+                $installValue = Get-RegistryValueIgnoreError @getRegistryValueIgnoreErrorParams;
             }
 
             if ($installValue) {
-                if ($InstalledCheckRegValueData -and $installValue -eq $InstalledCheckRegValueData) {
+
+                if ($InstalledCheckRegValueData -and ($installValue -eq $InstalledCheckRegValueData)) {
+
                     return @{ Installed = $true; }
                 }
             }

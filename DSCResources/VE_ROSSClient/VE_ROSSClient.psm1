@@ -14,31 +14,44 @@ function Get-TargetResource {
     [OutputType([System.Collections.Hashtable])]
     param (
         ## RES ONE Service Store Catalog Services password (equivalient to CATALOGSERVICESPASSWORD).
-        [Parameter(Mandatory)] [ValidateNotNull()]
+        [Parameter(Mandatory)]
+        [ValidateNotNull()]
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.CredentialAttribute()] $CatalogServicesCredential,
 
         ## RES ONE Service Store Catalog Services host (equivalient to CATALOGSERVICESHOST).
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $CatalogServicesHost,
 
         ## File path containing the RES ONE Service Store MSIs or the literal path to the client MSI.
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
-        [Parameter()] [ValidateNotNullOrEmpty()]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Version,
 
         ## The specified Path is a literal file reference (bypasses the $Version and $Architecture checks).
         [Parameter()]
         [System.Boolean] $IsLiteralPath,
 
-        [Parameter()] [ValidateSet('Present','Absent')]
+        [Parameter()]
+        [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
 
-    $setupPath = Resolve-ROSSPackagePath -Path $Path -Component 'Client' -Version $Version -IsLiteralPath:$IsLiteralPath -Verbose:$Verbose;
+    $resolveROSSPackagePathParams = @{
+        Path = $Path;
+        Component = 'Client';
+        Version = $Version;
+        IsLiteralPath = $IsLiteralPath;
+        Verbose = $Verbose;
+    }
+    $setupPath = Resolve-ROSSPackagePath @resolveROSSPackagePathParams;
+
     [System.String] $msiProductName = Get-WindowsInstallerPackageProperty -Path $setupPath -Property ProductName;
     $productName = $msiProductName.Trim();
 
@@ -57,27 +70,32 @@ function Test-TargetResource {
     [OutputType([System.Boolean])]
     param (
         ## RES ONE Service Store Catalog Services password (equivalient to CATALOGSERVICESPASSWORD).
-        [Parameter(Mandatory)] [ValidateNotNull()]
+        [Parameter(Mandatory)]
+        [ValidateNotNull()]
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.CredentialAttribute()] $CatalogServicesCredential,
 
         ## RES ONE Service Store Catalog Services host (equivalient to CATALOGSERVICESHOST).
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $CatalogServicesHost,
 
         ## File path containing the RES ONE Service Store MSIs or the literal path to the client MSI.
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
-        [Parameter()] [ValidateNotNullOrEmpty()]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Version,
 
         ## The specified Path is a literal file reference (bypasses the $Version and $Architecture checks).
         [Parameter()]
         [System.Boolean] $IsLiteralPath,
 
-        [Parameter()] [ValidateSet('Present','Absent')]
+        [Parameter()]
+        [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
 
@@ -103,31 +121,44 @@ function Set-TargetResource {
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '')]
     param (
         ## RES ONE Service Store Catalog Services password (equivalient to CATALOGSERVICESPASSWORD).
-        [Parameter(Mandatory)] [ValidateNotNull()]
+        [Parameter(Mandatory)]
+        [ValidateNotNull()]
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.CredentialAttribute()] $CatalogServicesCredential,
 
         ## RES ONE Service Store Catalog Services host (equivalient to CATALOGSERVICESHOST).
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $CatalogServicesHost,
 
         ## File path containing the RES ONE Service Store MSIs or the literal path to the client MSI.
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
-        [Parameter()] [ValidateNotNullOrEmpty()]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Version,
 
         ## The specified Path is a literal file reference (bypasses the $Version and $Architecture checks).
         [Parameter()]
         [System.Boolean] $IsLiteralPath,
 
-        [Parameter()] [ValidateSet('Present','Absent')]
+        [Parameter()]
+        [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
 
-    $setupPath = Resolve-ROSSPackagePath -Path $Path -Component 'Client' -Version $Version -IsLiteralPath:$IsLiteralPath -Verbose:$Verbose;
+    $resolveROSSPackagePathParams = @{
+        Path = $Path;
+        Component = 'Client';
+        Version = $Version;
+        IsLiteralPath = $IsLiteralPath;
+        Verbose = $Verbose;
+    }
+    $setupPath = Resolve-ROSSPackagePath @resolveROSSPackagePathParams;
+
     if ($Ensure -eq 'Present') {
 
         $arguments = @(

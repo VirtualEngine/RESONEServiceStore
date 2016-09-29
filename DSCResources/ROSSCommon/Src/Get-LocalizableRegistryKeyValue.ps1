@@ -5,16 +5,17 @@ function Get-LocalizableRegistryKeyValue {
 #>
     [CmdletBinding()]
     param (
-        [Parameter()]
+        [Parameter(Mandatory)]
         [System.Object] $RegistryKey,
 
-        [Parameter()]
+        [Parameter(Mandatory)]
         [System.String] $ValueName
     )
     process {
 
         $result = $RegistryKey.GetValue("{0}_Localized" -f $ValueName);
         if (-not $result) {
+
             $result = $RegistryKey.GetValue($ValueName);
         }
         return $result;

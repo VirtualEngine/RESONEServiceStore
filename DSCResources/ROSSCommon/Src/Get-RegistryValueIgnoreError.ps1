@@ -17,17 +17,23 @@ function Get-RegistryValueIgnoreError {
         [Parameter(Mandatory)]
         [Microsoft.Win32.RegistryView] $RegistryView
     )
+    process {
 
-    try {
-        $baseKey = [Microsoft.Win32.RegistryKey]::OpenBaseKey($RegistryHive, $RegistryView);
-        $subKey =  $baseKey.OpenSubKey($Key);
-        if ($null -ne $subKey) {
-            return $subKey.GetValue($Value);
+        try {
+
+            $baseKey = [Microsoft.Win32.RegistryKey]::OpenBaseKey($RegistryHive, $RegistryView);
+            $subKey =  $baseKey.OpenSubKey($Key);
+            if ($null -ne $subKey) {
+
+                return $subKey.GetValue($Value);
+            }
         }
-    }
-    catch {
-        $exceptionText = ($_ | Out-String).Trim();
-        Write-Verbose "Exception occured in Get-RegistryValueIgnoreError: $exceptionText";
-    }
-    return $null;
+        catch {
+
+            $exceptionText = ($_ | Out-String).Trim();
+            Write-Verbose "Exception occured in Get-RegistryValueIgnoreError: $exceptionText";
+        }
+        return $null;
+
+    } #end process
 } #end function Get-RegistryValueIgnoreError

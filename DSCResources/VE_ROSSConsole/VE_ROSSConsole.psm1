@@ -14,11 +14,13 @@ function Get-TargetResource {
     [OutputType([System.Collections.Hashtable])]
     param (
         ## RES ONE Service Store database server name/instance (equivalient to DBSERVER).
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $DatabaseServer,
 
         ## RES ONE Service Store database name (equivalient to DBNAME).
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $DatabaseName,
 
         ## Microsoft SQL username/password to create (equivalent to DBUSER/DBPASSWORD).
@@ -27,22 +29,33 @@ function Get-TargetResource {
         [System.Management.Automation.CredentialAttribute()] $Credential,
 
         ## File path containing the RES ONE Service Store MSIs or the literal path to the legacy console/Sync Tool MSI.
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
-        [Parameter()] [ValidateNotNullOrEmpty()]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Version,
 
         ## The specified $Path is a literal file reference (bypasses the $Version check).
         [Parameter()]
         [System.Boolean] $IsLiteralPath,
 
-        [Parameter()] [ValidateSet('Present','Absent')]
+        [Parameter()]
+        [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
 
-    $setupPath = Resolve-ROSSPackagePath -Path $Path -Component 'Console' -Version $Version -IsLiteralPath:$IsLiteralPath -Verbose:$Verbose;
+    $resolveROSSPackagePathParams = @{
+        Path = $Path;
+        Component = 'Console';
+        Version = $Version;
+        IsLiteralPath = $IsLiteralPath;
+        Verbose = $Verbose;
+    }
+    $setupPath = Resolve-ROSSPackagePath @resolveROSSPackagePathParams;
+
     [System.String] $msiProductName = Get-WindowsInstallerPackageProperty -Path $setupPath -Property ProductName;
     $productName = $msiProductName.Trim();
 
@@ -61,11 +74,13 @@ function Test-TargetResource {
     [OutputType([System.Boolean])]
     param (
         ## RES ONE Service Store database server name/instance (equivalient to DBSERVER).
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $DatabaseServer,
 
         ## RES ONE Service Store database name (equivalient to DBNAME).
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $DatabaseName,
 
         ## Microsoft SQL username/password to create (equivalent to DBUSER/DBPASSWORD).
@@ -74,18 +89,21 @@ function Test-TargetResource {
         [System.Management.Automation.CredentialAttribute()] $Credential,
 
         ## File path containing the RES ONE Service Store MSIs or the literal path to the legacy console/Sync Tool MSI.
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
-        [Parameter()] [ValidateNotNullOrEmpty()]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Version,
 
         ## The specified $Path is a literal file reference (bypasses the $Version check).
         [Parameter()]
         [System.Boolean] $IsLiteralPath,
 
-        [Parameter()] [ValidateSet('Present','Absent')]
+        [Parameter()]
+        [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
 
@@ -111,11 +129,13 @@ function Set-TargetResource {
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '')]
     param (
         ## RES ONE Service Store database server name/instance (equivalient to DBSERVER).
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $DatabaseServer,
 
         ## RES ONE Service Store database name (equivalient to DBNAME).
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $DatabaseName,
 
         ## Microsoft SQL username/password to create (equivalent to DBUSER/DBPASSWORD).
@@ -124,22 +144,33 @@ function Set-TargetResource {
         [System.Management.Automation.CredentialAttribute()] $Credential,
 
         ## File path containing the RES ONE Service Store MSIs or the literal path to the legacy console/Sync Tool MSI.
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
-        [Parameter()] [ValidateNotNullOrEmpty()]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Version,
 
         ## The specified $Path is a literal file reference (bypasses the $Version check).
         [Parameter()]
         [System.Boolean] $IsLiteralPath,
 
-        [Parameter()] [ValidateSet('Present','Absent')]
+        [Parameter()]
+        [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
 
-    $setupPath = Resolve-ROSSPackagePath -Path $Path -Component 'Console' -Version $Version -IsLiteralPath:$IsLiteralPath -Verbose:$Verbose;
+    $resolveROSSPackagePathParams = @{
+        Path = $Path;
+        Component = 'Console';
+        Version = $Version;
+        IsLiteralPath = $IsLiteralPath;
+        Verbose = $Verbose;
+    }
+    $setupPath = Resolve-ROSSPackagePath @resolveROSSPackagePathParams;
+
     if ($Ensure -eq 'Present') {
 
         $arguments = @(

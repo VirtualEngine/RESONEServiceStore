@@ -6,15 +6,18 @@ function Resolve-ROSSPackagePath {
     [CmdletBinding()]
     param (
         ## The literal file path or root search path
-        [Parameter(Mandatory)]  [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         ## Required RES ONE Service Store component
-        [Parameter(Mandatory)] [ValidateSet('Console','CatalogServices','TransactionEngine','ManagementPortal','WebPortal','Client')]
+        [Parameter(Mandatory)]
+        [ValidateSet('Console','CatalogServices','TransactionEngine','ManagementPortal','WebPortal','Client')]
         [System.String] $Component,
 
         ## RES ONE Service Store component version to be installed, i.e. 9, 8.2 or 8.2.2.0
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Version,
 
         ## The specified Path is a literal file reference (bypasses the Version check).
@@ -23,23 +26,35 @@ function Resolve-ROSSPackagePath {
     )
 
     if (([System.String]::IsNullOrWhitespace($Version)) -and (-not $IsLiteralPath)) {
+
         throw ($localizedData.VersionNumberRequiredError);
     }
     elseif ($IsLiteralPath) {
+
         if ($Path -notmatch '\.msi$') {
+
             throw ($localizedData.SpecifedPathTypeError -f $Path, 'MSI');
         }
     }
     elseif ($Version -notmatch '^\d\d?(\.\d\d?|\.\d\d?\.\d\d?|\.\d\d?\.\d\d?\.\d\d?)?$') {
+
          throw ($localizedData.InvalidVersionNumberFormatError -f $Version);
     }
 
     if ($IsLiteralPath) {
+
         $packagePath = $Path;
     }
     else {
 
-        [System.Version] $productVersion = $Version;
+        ## [System.Version] does not support just a major number and therefore, we have to roll our own..
+        $versionSplit = $Version.Split('.');
+        $productVersion = [PSCustomObject] @{
+            Major = $versionSplit[0] -as [System.Int32];
+            Minor = if ($versionSplit[1]) { $versionSplit[1] -as [System.Int32] } else { -1 }
+            Build = if ($versionSplit[2]) { $versionSplit[2] -as [System.Int32] } else { -1 }
+            Revision = if ($versionSplit[3]) { $versionSplit[3] -as [System.Int32] } else { -1 }
+        }
 
         switch ($productVersion.Major) {
 
@@ -71,25 +86,30 @@ function Resolve-ROSSPackagePath {
         if (($productVersion.Minor -eq -1) -and
             ($productVersion.Build -eq -1) -and
             ($productVersion.Revision -eq -1)) {
+
             ## We only have 'Major'
             $versionRegex = '{0}.\S+' -f $productVersion.Major;
         }
         elseif (($productVersion.Build -eq -1) -and
                 ($productVersion.Revision -eq -1)) {
+
             ## We only have 'Major.Minor'
             $versionRegex = '{0}.{1}.\S+' -f $productVersion.Major, $productVersion.Minor;
         }
         elseif ($productVersion.Revision -eq -1) {
+
             ## We have 'Major.Minor.Build'
             $versionRegex = '{0}.{1}.{2}.\S+' -f $productVersion.Major, $productVersion.Minor, $productVersion.Build;
         }
         else {
+
             ## We have explicit version.
             $versionRegex = '{0}.{1}.{2}.{3}' -f $productVersion.Major, $productVersion.Minor, $productVersion.Build, $productVersion.Revision;
         }
 
         $systemArchitecture = 'x86';
         if ([System.Environment]::Is64BitOperatingSystem) {
+
             $systemArchitecture = 'x64';
         }
 
@@ -147,10 +167,12 @@ function Resolve-ROSSPackagePath {
                     Select-Object -ExpandProperty FullName -First 1;
 
         if ((-not $IsLiteralPath) -and (-not [System.String]::IsNullOrEmpty($packagePath))) {
+
             Write-Verbose ($localizedData.LocatedPackagePath -f $packagePath);
             return $packagePath;
         }
         elseif ([System.String]::IsNullOrEmpty($packagePath)) {
+
             throw  ($localizedData.UnableToLocatePackageError -f $Component);
         }
 

@@ -14,15 +14,18 @@ function Get-TargetResource {
     [OutputType([System.Collections.Hashtable])]
     param (
         ## IIS website host header, i.e. http://itstore.lab.local.
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $HostHeader,
 
         ## File path containing the RES ONE Service Store MSIs or the literal path to the management portal MSI.
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         ## RES ONE Service Store default (NetBIOS) domain name.
-        [Parameter()] [ValidateNotNullOrEmpty()]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String] $DefaultDomain,
 
         ## IIS website port binding.
@@ -31,18 +34,28 @@ function Get-TargetResource {
         [System.UInt16] $Port = 80,
 
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
-        [Parameter()] [ValidateNotNullOrEmpty()]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Version,
 
         ## The specified Path is a literal file reference (bypasses the $Version and $Architecture checks).
         [Parameter()]
         [System.Boolean] $IsLiteralPath,
 
-        [Parameter()] [ValidateSet('Present','Absent')]
+        [Parameter()]
+        [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
 
-    $setupPath = Resolve-ROSSPackagePath -Path $Path -Component 'ManagementPortal' -Version $Version -IsLiteralPath:$IsLiteralPath -Verbose:$Verbose;
+    $resolveROSSPackagePathParams = @{
+        Path = $Path;
+        Component = 'ManagementPortal';
+        Version = $Version;
+        IsLiteralPath = $IsLiteralPath;
+        Verbose = $Verbose;
+    }
+    $setupPath = Resolve-ROSSPackagePath @resolveROSSPackagePathParams;
+
     [System.String] $msiProductName = Get-WindowsInstallerPackageProperty -Path $setupPath -Property ProductName;
     $productName = $msiProductName.Trim();
 
@@ -61,15 +74,18 @@ function Test-TargetResource {
     [OutputType([System.Boolean])]
     param (
         ## IIS website host header, i.e. http://itstore.lab.local.
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $HostHeader,
 
         ## File path containing the RES ONE Service Store MSIs or the literal path to the management portal MSI.
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         ## RES ONE Service Store default (NetBIOS) domain name.
-        [Parameter()] [ValidateNotNullOrEmpty()]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String] $DefaultDomain,
 
         ## IIS website port binding.
@@ -78,14 +94,16 @@ function Test-TargetResource {
         [System.UInt16] $Port = 80,
 
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
-        [Parameter()] [ValidateNotNullOrEmpty()]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Version,
 
         ## The specified Path is a literal file reference (bypasses the $Version and $Architecture checks).
         [Parameter()]
         [System.Boolean] $IsLiteralPath,
 
-        [Parameter()] [ValidateSet('Present','Absent')]
+        [Parameter()]
+        [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
 
@@ -112,15 +130,18 @@ function Set-TargetResource {
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '')]
     param (
         ## IIS website host header, i.e. http://itstore.lab.local.
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $HostHeader,
 
         ## File path containing the RES ONE Service Store MSIs or the literal path to the management portal MSI.
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         ## RES ONE Service Store default (NetBIOS) domain name.
-        [Parameter()] [ValidateNotNullOrEmpty()]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String] $DefaultDomain,
 
         ## IIS website port binding.
@@ -129,18 +150,28 @@ function Set-TargetResource {
         [System.UInt16] $Port = 80,
 
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
-        [Parameter()] [ValidateNotNullOrEmpty()]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Version,
 
         ## The specified Path is a literal file reference (bypasses the $Version and $Architecture checks).
         [Parameter()]
         [System.Boolean] $IsLiteralPath,
 
-        [Parameter()] [ValidateSet('Present','Absent')]
+        [Parameter()]
+        [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
 
-    $setupPath = Resolve-ROSSPackagePath -Path $Path -Component 'ManagementPortal' -Version $Version -IsLiteralPath:$IsLiteralPath -Verbose:$Verbose;
+    $resolveROSSPackagePathParams = @{
+        Path = $Path;
+        Component = 'ManagementPortal';
+        Version = $Version;
+        IsLiteralPath = $IsLiteralPath;
+        Verbose = $Verbose;
+    }
+    $setupPath = Resolve-ROSSPackagePath @resolveROSSPackagePathParams;
+
     if ($Ensure -eq 'Present') {
 
         $arguments = @(

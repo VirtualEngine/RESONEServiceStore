@@ -14,35 +14,49 @@ function Get-TargetResource {
     [OutputType([System.Collections.Hashtable])]
     param (
         ## RES ONE Service Store database server name/instance (equivalient to DBSERVER)
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $DatabaseServer,
 
         ## RES ONE Service Store database name (equivalient to DBNAME)
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $DatabaseName,
 
         ## Microsoft SQL username/password to create (equivalent to DBUSER/DBPASSWORD)
-        [Parameter(Mandatory)] [ValidateNotNull()]
+        [Parameter(Mandatory)]
+        [ValidateNotNull()]
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.CredentialAttribute()] $Credential,
 
         ## File path containing the RES ONE Service Store MSIs or the literal path to the catalog services MSI.
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         ## RES ONE Service Store client version, i.e. 8.0.3.0
-        [Parameter()] [ValidateNotNullOrEmpty()]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Version,
 
         ## The specified Path is a literal file reference (bypasses the $Version and $Architecture checks).
         [Parameter()]
         [System.Management.Automation.SwitchParameter] $IsLiteralPath,
 
-        [Parameter()] [ValidateSet('Present','Absent')]
+        [Parameter()]
+        [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
 
-    $setupPath = Resolve-ROSSPackagePath -Path $Path -Component 'CatalogServices' -Version $Version -IsLiteralPath:$IsLiteralPath -Verbose:$Verbose;
+    $resolveROSSPackagePathParams = @{
+        Path = $Path;
+        Component = 'CatalogServices';
+        Version = $Version;
+        IsLiteralPath = $IsLiteralPath;
+        Verbose = $Verbose;
+    }
+    $setupPath = Resolve-ROSSPackagePath @resolveROSSPackagePathParams;
+
     [System.String] $msiProductName = Get-WindowsInstallerPackageProperty -Path $setupPath -Property ProductName;
     $productName = $msiProductName.Trim();
 
@@ -61,31 +75,37 @@ function Test-TargetResource {
     [OutputType([System.Boolean])]
     param (
         ## RES ONE Service Store database server name/instance (equivalient to DBSERVER)
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $DatabaseServer,
 
         ## RES ONE Service Store database name (equivalient to DBNAME)
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $DatabaseName,
 
         ## Microsoft SQL username/password to create (equivalent to DBUSER/DBPASSWORD)
-        [Parameter(Mandatory)] [ValidateNotNull()]
+        [Parameter(Mandatory)]
+        [ValidateNotNull()]
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.CredentialAttribute()] $Credential,
 
         ## File path containing the RES ONE Service Store MSIs or the literal path to the catalog services MSI.
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         ## RES ONE Service Store client version, i.e. 8.0.3.0
-        [Parameter()] [ValidateNotNullOrEmpty()]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Version,
 
         ## The specified Path is a literal file reference (bypasses the $Version and $Architecture checks).
         [Parameter()]
         [System.Management.Automation.SwitchParameter] $IsLiteralPath,
 
-        [Parameter()] [ValidateSet('Present','Absent')]
+        [Parameter()]
+        [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
 
@@ -111,35 +131,49 @@ function Set-TargetResource {
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '')]
     param (
         ## RES ONE Service Store database server name/instance (equivalient to DBSERVER)
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $DatabaseServer,
 
         ## RES ONE Service Store database name (equivalient to DBNAME)
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $DatabaseName,
 
         ## Microsoft SQL username/password to create (equivalent to DBUSER/DBPASSWORD)
-        [Parameter(Mandatory)] [ValidateNotNull()]
+        [Parameter(Mandatory)]
+        [ValidateNotNull()]
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.CredentialAttribute()] $Credential,
 
         ## File path containing the RES ONE Service Store MSIs or the literal path to the catalog services MSI.
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         ## RES ONE Service Store client version, i.e. 8.0.3.0
-        [Parameter()] [ValidateNotNullOrEmpty()]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Version,
 
         ## The specified Path is a literal file reference (bypasses the $Version and $Architecture checks).
         [Parameter()]
         [System.Management.Automation.SwitchParameter] $IsLiteralPath,
 
-        [Parameter()] [ValidateSet('Present','Absent')]
+        [Parameter()]
+        [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
 
-    $setupPath = Resolve-ROSSPackagePath -Path $Path -Component 'CatalogServices' -Version $Version -IsLiteralPath:$IsLiteralPath -Verbose:$Verbose;
+    $resolveROSSPackagePathParams = @{
+        Path = $Path;
+        Component = 'CatalogServices';
+        Version = $Version;
+        IsLiteralPath = $IsLiteralPath;
+        Verbose = $Verbose;
+    }
+    $setupPath = Resolve-ROSSPackagePath @resolveROSSPackagePathParams;
+
     if ($Ensure -eq 'Present') {
 
         $arguments = @(

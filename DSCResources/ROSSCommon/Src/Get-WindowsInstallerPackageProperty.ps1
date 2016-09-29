@@ -11,7 +11,8 @@ function Get-WindowsInstallerPackageProperty {
     [OutputType([System.String])]
     param (
         [Parameter(Mandatory, Position = 0, ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName='Path')]
-        [ValidateNotNullOrEmpty()] [Alias('PSPath','FullName')]
+        [ValidateNotNullOrEmpty()]
+        [Alias('PSPath','FullName')]
         [System.String] $Path,
 
         [Parameter(Mandatory, Position = 0, ValueFromPipelineByPropertyName, ParameterSetName = 'LiteralPath')]
@@ -25,6 +26,7 @@ function Get-WindowsInstallerPackageProperty {
     begin {
 
         if ($PSCmdlet.ParameterSetName -eq 'Path') {
+
             $LiteralPath += $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Path);
         }
 
@@ -45,7 +47,8 @@ function Get-WindowsInstallerPackageProperty {
 
         }
         catch {
-            throw;
+
+            throw $_;
         }
 
     } #end process

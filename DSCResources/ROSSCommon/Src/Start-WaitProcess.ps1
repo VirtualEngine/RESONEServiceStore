@@ -9,21 +9,25 @@ function Start-WaitProcess {
     [OutputType([System.Int32])]
     param (
         # Path to process to start.
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $FilePath,
 
         # Arguments (if any) to apply to the process.
-        [Parameter()] [AllowNull()]
+        [Parameter()]
+        [AllowNull()]
         [System.String[]] $ArgumentList,
 
         # Credential to start the process as.
-        [Parameter()] [AllowNull()]
+        [Parameter()]
+        [AllowNull()]
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.CredentialAttribute()]
         $Credential,
 
         # Working directory
-        [Parameter()] [ValidateNotNullOrEmpty()]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String] $WorkingDirectory = (Split-Path -Path $FilePath -Parent)
     )
     process {
@@ -37,6 +41,7 @@ function Start-WaitProcess {
         $displayParams = '<None>';
 
         if ($ArgumentList) {
+
             $displayParams = [System.String]::Join(' ', $ArgumentList);
             $startProcessParams['ArgumentList'] = $ArgumentList;
         }
@@ -44,21 +49,25 @@ function Start-WaitProcess {
         Write-Verbose ($localizedData.StartingProcess -f $FilePath, $displayParams);
 
         if ($Credential) {
+
             Write-Verbose ($localizedData.StartingProcessAs -f $Credential.UserName);
             $startProcessParams['Credential'] = $Credential;
         }
 
         if ($PSCmdlet.ShouldProcess($FilePath, 'Start Process')) {
+
             $process = Start-Process @startProcessParams -ErrorAction Stop;
         }
 
         if ($PSCmdlet.ShouldProcess($FilePath, 'Wait Process')) {
+
             Write-Verbose ($localizedData.ProcessLaunched -f $process.Id);
             Write-Verbose ($localizedData.WaitingForProcessToExit -f $process.Id);
             $process.WaitForExit();
             $exitCode = [System.Convert]::ToInt32($process.ExitCode);
             Write-Verbose ($localizedData.ProcessExited -f $process.Id, $exitCode);
         }
+
         return $exitCode;
 
     } #end process
