@@ -100,12 +100,38 @@ function Invoke-ROSSRestMethod {
 
         if ($PSBoundParameters.ContainsKey('ExpandProperty')) {
 
-            return $response.$ExpandProperty;
+            #return $response.$ExpandProperty;
+            $response = $response.$ExpandProperty;
         }
-        else {
 
-            $response.PSObject.TypeNames.Insert(0, $TypeName);
-            return $response;
+        foreach ($object in $response) {
+
+            if ($script:customProperties.ContainsKey($TypeName)) {
+
+                foreach ($propertyName in $script:customProperties[$TypeName].Keys) {
+
+                    $propertyMap = $script:customProperties.$TypeName[$propertyName];
+                    $dataSourcePropertyName = $propertyMap['DataSourceColumn'];
+                    $dataSourcePropertyValue = $object.$dataSourcePropertyName
+
+                    if ($propertyMap.ContainsKey('ValueMap')) {
+
+                    }
+                    else {
+
+                        $addMemberParams = @{
+                            InputObject = $object;
+                            MemberType = 'NoteProperty';
+                            Name = $propertyName;
+                            Value = $dataSourcePropertyValue;
+                        }
+                        Add-Member @addMemberParams;
+                    }
+                }
+            }
+
+            $object.PSObject.TypeNames.Insert(0, $TypeName);
+            Write-Output -InputObject $object;
         }
 
     } #end process

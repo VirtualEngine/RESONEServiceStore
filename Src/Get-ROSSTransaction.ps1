@@ -34,6 +34,10 @@ function Get-ROSSTransaction {
         Get-ROSSTransaction -Id 'fd86f088-5105-4aab-98ed-18e56756aef7'
 
         Returns the a specific RES ONE Service transaction by its Id.
+    .EXAMPLE
+        Get-ROSSOrganization -Path 'Departments\Sales' | Get-ROSSPerson | Get-ROSSTransaction
+
+        Returns all transactions for people classified in the 'Departments\Sales' organizational context
 #>
     [CmdletBinding(DefaultParameterSetName = 'Default')]
     [OutputType([System.Management.Automation.PSCustomObject], ParameterSetName = 'Default')]
