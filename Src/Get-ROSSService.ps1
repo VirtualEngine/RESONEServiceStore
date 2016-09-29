@@ -3,23 +3,32 @@ function Get-ROSSService {
     .SYNOPSIS
         Returns a RES ONE Service Service reference.
 #>
-    [CmdletBinding(DefaultParameterSetName = 'Name')]
+    [CmdletBinding(DefaultParameterSetName = 'ServiceName')]
     param (
         # RES ONE Service Store session connection
         [Parameter(ValueFromPipelineByPropertyName)]
         [System.Collections.Hashtable] $Session = $script:_RESONEServiceStoreSession,
 
         # Specifies the name of the service(s) to return.
-        [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'Name')]
-        [System.String[]] $Name,
-
-        # Specifies returning all services.
-        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'All')]
-        [System.Management.Automation.SwitchParameter] $All,
+        [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'ServiceName')]
+        [System.String[]] $ServiceName,
 
         # Specifies the RES ONE Service Store Service Id(s) to return
-        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'Id')]
-        [System.String[]] $Id
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'ServiceId')]
+        [System.String[]] $ServiceId,
+
+        # Specifies returning all services.
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'ServiceAll')]
+        [System.Management.Automation.SwitchParameter] $All,
+
+        # Search page number to return. By default, search results are paginated and only the first page results are returned.
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [System.Int32] $Page = 1,
+
+        # Specifies the number of results per page. By default, search results are paginated and only the first page results are returned.
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [ValidateRange(1,65535)]
+        [System.Int32] $PageSize = 50
     )
     begin {
 
@@ -31,34 +40,56 @@ function Get-ROSSService {
 
         try {
 
-            if ($PSCmdlet.ParameterSetName -ne 'Id') {
+            if ($PSCmdlet.ParameterSetName -ne 'ServiceId') {
 
                 ## The RES ONE Service Store API returns a subset of properties when searching
                 ## for services. Therefore, perform the search and retrieve the service Ids
-                $Id = @();
+                $ServiceId = @();
 
-                if ($PSCmdlet.ParameterSetName -eq 'All') {
+                if ($PSCmdlet.ParameterSetName -eq 'ServiceAll') {
 
-                    $uri = Get-ROSSResourceUri -Session $Session -Service -Search;
-                    $services = Invoke-ROSSRestMethod -Uri $uri -Method Get -ExpandProperty 'Result';
-                    $Id += $services.Id;
+                    $invokeROSSRestMethodParams = @{
+                        Uri = Get-ROSSResourceUri -Session $Session -Service -Search;
+                        Method = 'Post';
+                        Body = @{
+                            pageNumber = $Page;
+                            pageSize = $PageSize;
+                        }
+                        ExpandProperty = 'Result';
+                    }
+
+                    $services = Invoke-ROSSRestMethod @invokeROSSRestMethodParams;
+                    $ServiceId += $services.Id;
+
                 }
-                elseif ($PSCmdlet.ParameterSetName -eq 'Name') {
+                elseif ($PSCmdlet.ParameterSetName -eq 'ServiceName') {
 
-                    foreach ($serviceName in $name) {
+                    foreach ($name in $ServiceName) {
 
-                        $uri = Get-ROSSResourceUri -Session $Session -Service -Search -Filter $serviceName;
-                        $services = Invoke-ROSSRestMethod -Uri $uri -Method Get -ExpandProperty 'Result';
-                        $Id += $services.Id;
+                        $invokeROSSRestMethodParams = @{
+                            #Uri = Get-ROSSResourceUri -Session $Session -Service -Search -Filter $serviceName;
+                            Uri = Get-ROSSResourceUri -Session $Session -Service -Search;
+                            Method = 'Post';
+                            Body = @{
+                                pageNumber = $Page;
+                                pageSize = $PageSize;
+                                freeTextFilter = $name;
+                            }
+                            ExpandProperty = 'Result';
+                        }
+
+                        $services = Invoke-ROSSRestMethod @invokeROSSRestMethodParams;
+                        $ServiceId += $services.Id;
+
                     }
                 }
             }
 
-            foreach ($serviceId in $Id) {
+            foreach ($id in $ServiceId) {
 
                 $invokeROSSRestMethodParams = @{
                     Session = $Session;
-                    Uri = '{0}/{1}' -f (Get-ROSSResourceUri -Session $Session -Service), $serviceId;
+                    Uri = '{0}/{1}' -f (Get-ROSSResourceUri -Session $Session -Service), $id;
                     Method = 'Get';
                     TypeName = $typeName;
                 }
@@ -72,3 +103,4 @@ function Get-ROSSService {
 
     } #end process
 } #end function Get-ROSSService
+
