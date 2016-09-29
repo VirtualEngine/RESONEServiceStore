@@ -106,7 +106,8 @@ function Invoke-ROSSRestMethod {
 
         foreach ($object in $response) {
 
-            if ($script:customProperties.ContainsKey($TypeName)) {
+            if (($null -ne $script:customProperties) -and
+                ($script:customProperties.ContainsKey($TypeName))) {
 
                 foreach ($propertyName in $script:customProperties[$TypeName].Keys) {
 
