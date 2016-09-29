@@ -104,36 +104,45 @@ function Invoke-ROSSRestMethod {
             $response = $response.$ExpandProperty;
         }
 
+
         foreach ($object in $response) {
 
-            if (($null -ne $script:customProperties) -and
-                ($script:customProperties.ContainsKey($TypeName))) {
+            try {
 
-                foreach ($propertyName in $script:customProperties[$TypeName].Keys) {
+                if (($null -ne $script:customProperties) -and
+                    ($script:customProperties.ContainsKey($TypeName))) {
 
-                    $propertyMap = $script:customProperties.$TypeName[$propertyName];
-                    $dataSourcePropertyName = $propertyMap['DataSourceColumn'];
-                    $dataSourcePropertyValue = $object.$dataSourcePropertyName
+                    foreach ($propertyName in $script:customProperties[$TypeName].Keys) {
 
-                    if ($propertyMap.ContainsKey('ValueMap')) {
+                        $propertyMap = $script:customProperties.$TypeName[$propertyName];
+                        $dataSourcePropertyName = $propertyMap['DataSourceColumn'];
+                        $dataSourcePropertyValue = $object.$dataSourcePropertyName
 
-                    }
-                    else {
+                        if ($propertyMap.ContainsKey('ValueMap')) {
 
-                        $addMemberParams = @{
-                            InputObject = $object;
-                            MemberType = 'NoteProperty';
-                            Name = $propertyName;
-                            Value = $dataSourcePropertyValue;
                         }
-                        Add-Member @addMemberParams;
+                        else {
+
+                            $addMemberParams = @{
+                                InputObject = $object;
+                                MemberType = 'NoteProperty';
+                                Name = $propertyName;
+                                Value = $dataSourcePropertyValue;
+                            }
+                            Add-Member @addMemberParams;
+                        }
                     }
                 }
+
+                $object.PSObject.TypeNames.Insert(0, $TypeName);
+                Write-Output -InputObject $object;
+            }
+            catch {
+
+                throw $_;
             }
 
-            $object.PSObject.TypeNames.Insert(0, $TypeName);
-            Write-Output -InputObject $object;
-        }
+        } #end foreach object
 
     } #end process
 } #end function Invoke-ROSSRestMethod

@@ -72,10 +72,16 @@ function Connect-ROSSSession {
             $uri = Get-ROSSResourceUri -Server $Server -Authentication -UseHttps:$UseHttps;
             $response = Invoke-ROSSRestMethod -Uri $uri -Method Post -Body $body -NoAuthorization;
 
+            if ($response.Success -eq $true) {
 
-            $script:_RESONEServiceStoreSession['Server'] = $Server;
-            $script:_RESONEServiceStoreSession['AuthorizationToken'] = $response.AuthorizationToken;
-            $script:_RESONEServiceStoreSession['UseHttps'] = $UseHttps.ToBool();
+                $script:_RESONEServiceStoreSession['Server'] = $Server;
+                $script:_RESONEServiceStoreSession['AuthorizationToken'] = $response.AuthorizationToken;
+                $script:_RESONEServiceStoreSession['UseHttps'] = $UseHttps.ToBool();
+            }
+            else {
+
+                throw $response.Reason;
+            }
         }
         elseif ($PSCmdlet.ParameterSetName -eq 'Database') {
 

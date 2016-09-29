@@ -70,58 +70,66 @@ function Disable-ROSSServiceWorkflowAction {
     process {
 
         if ($PSBoundParameters.ContainsKey('ServiceName')) {
-            $InputObject = Get-ROSSService -Session $Session -Name $ServiceName;
+            $InputObject = Get-ROSSService -Session $Session -ServiceName $ServiceName;
         }
 
-        foreach ($service in $InputObject) {
+        try {
 
-            if ($Delivery) {
-                $serviceWorkflowActions = $service.Workflow.Delivery.Actions;
-            }
-            elseif ($Return) {
-                $serviceWorkflowActions = $service.Workflow.Return.Actions;
-            }
+            foreach ($service in $InputObject) {
 
-            ## Find all matching workflow action namess
-            $matchingWorkflowActions = @();
-            foreach ($workflowActionName in $Name) {
-                if ($ExcludeFriendlyName) {
+                if ($Delivery) {
+                    $serviceWorkflowActions = $service.Workflow.Delivery.Actions;
+                }
+                elseif ($Return) {
+                    $serviceWorkflowActions = $service.Workflow.Return.Actions;
+                }
 
-                    $matchingWorkflowActions += $serviceWorkflowActions |
-                        Where-Object { $_.Name -match $workflowActionName }
+                ## Find all matching workflow action namess
+                $matchingWorkflowActions = @();
+                foreach ($workflowActionName in $Name) {
+                    if ($ExcludeFriendlyName) {
+
+                        $matchingWorkflowActions += $serviceWorkflowActions |
+                            Where-Object { $_.Name -match $workflowActionName }
+                    }
+                    else {
+
+                        $matchingWorkflowActions += $serviceWorkflowActions |
+                            Where-Object { $_.Name -match $workflowActionName -or
+                                $_.ActionFriendlyName -match $workflowActionName }
+                    }
+                }
+
+                ## Only confirm/process if we have matching action name(s)
+                if ($matchingWorkflowActions.Count -gt 0) {
+
+                    if ($Force -or ($PSCmdlet.ShouldProcess($service.Name, $localizedData.ShouldProcessDisable))) {
+
+                        ## Now disable all matching workflow actions
+                        foreach ($workflowAction in $matchingWorkflowActions) {
+                            $workflowAction.Enabled = $false;
+                        }
+                        $setROSSServiceParams = @{
+                            Session = $Session;
+                            InputObject = $service;
+                            Force = $true;
+                            PassThru = $PassThru;
+                        }
+                        Set-ROSSService @setROSSServiceParams;
+                    }
                 }
                 else {
 
-                    $matchingWorkflowActions += $serviceWorkflowActions |
-                        Where-Object { $_.Name -match $workflowActionName -or
-                            $_.ActionFriendlyName -match $workflowActionName }
+                    ## We have no matching workflow action
+                    Write-Warning -Message ($localizedData.NoMatchingWorkflowActionsFound -f $service.Name);
+
                 }
-            }
+            } #end foreach service
+        }
+        catch {
 
-            ## Only confirm/process if we have matching action name(s)
-            if ($matchingWorkflowActions.Count -gt 0) {
+            throw $_;
+        }
 
-                if ($Force -or ($PSCmdlet.ShouldProcess($service.Name, $localizedData.ShouldProcessDisable))) {
-
-                    ## Now disable all matching workflow actions
-                    foreach ($workflowAction in $matchingWorkflowActions) {
-                        $workflowAction.Enabled = $false;
-                    }
-                    $setROSSServiceParams = @{
-                        Session = $Session;
-                        InputObject = $service;
-                        Force = $true;
-                        PassThru = $PassThru;
-                    }
-                    Set-ROSSService @setROSSServiceParams;
-                }
-            }
-            else {
-
-                ## We have no matching workflow action
-                Write-Warning -Message ($localizedData.NoMatchingWorkflowActionsFound -f $service.Name);
-
-            }
-        } #end foreach service
     } #end process
 } #end function Disable-ROSSServiceWorkflowAction

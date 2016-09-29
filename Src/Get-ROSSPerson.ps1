@@ -11,11 +11,11 @@ function Get-ROSSPerson {
 
         Returns all people in the 'Departments\Sales' organizational context.
     .EXAMPLE
-        Get-ROSSService -Name 'Name Change' | Get-ROSSPerson -Delivered
+        Get-ROSSService -ServiceName 'Name Change' | Get-ROSSPerson -Delivered
 
         Returns all people that have the the 'Name Change' service delivered.
     .EXAMPLE
-        Get-ROSSService -Name 'Name Change' | Get-ROSSPerson -Qualified
+        Get-ROSSService -ServiceName 'Name Change' | Get-ROSSPerson -Qualified
 
         Returns all people qualified for the 'Name Change' service.
 #>
@@ -232,4 +232,4 @@ function Get-ROSSPerson {
         } #end foreach person id
 
     } #end process
-} #end function Get-ROSSService
+} #end function Get-ROSSPerson

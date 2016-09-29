@@ -2,6 +2,28 @@ function Get-ROSSService {
 <#
     .SYNOPSIS
         Returns a RES ONE Service Service reference.
+    .EXAMPLE
+        Get-ROSSService -All
+
+        Returns the first 50 RES ONE Service Store services.
+    .EXAMPLE
+        Get-ROSSService -All -PageSize 100
+
+        Returns the first 100 RES ONE Service Store services.
+    .EXAMPLE
+        Get-ROSSService -All -PageSize 25 -Page 2
+
+        Returns the second set of 25 RES ONE Service Store services.
+    .EXAMPLE
+        Get-ROSSService -ServiceName 'Assign'
+
+        Returns all services with 'Assign Departmental Services' in their name.
+    .EXAMPLE
+        Get-ROSSService -ServiceId 'a13003e7-3c51-4c22-9c9e-0a8210813ed1'
+
+        Returns a single service with the specified identifier.
+    .NOTES
+        The RES ONE Service Store API performs a wildcard search on the service name when specified.
 #>
     [CmdletBinding(DefaultParameterSetName = 'ServiceName')]
     param (

@@ -2,32 +2,40 @@ function Disable-ROSSService {
 <#
     .SYNOPSIS
         Disables RES ONE Service Store service transactions.
+    .EXAMPLE
+        Disable-ROSSService -ServiceName 'Sales'
+
+        Disables all services with a name matching 'Sales'.
+    .EXAMPLE
+        Disable-ROSSService -ServiceId 'a13003e7-3c51-4c22-9c9e-0a8210813ed1'
+
+        Disables the service with the 'a13003e7-3c51-4c22-9c9e-0a8210813ed1' identifier.
     .NOTES
         The RES ONE Service Store API performs a wildcard search on the service name when specified.
 #>
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High', DefaultParameterSetName = 'Name')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High', DefaultParameterSetName = 'ServiceName')]
     param (
         # RES ONE Service Store session connection.
-        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'Id')]
-        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'Name')]
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'ServiceId')]
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'ServiceName')]
         [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'InputObject')]
         [System.Collections.Hashtable] $Session = $Script:_RESONEServiceStoreSession,
 
-        # Specifies the RES ONE Service Store service(s) to disable by Id.
-        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'Id')]
-        [System.String[]] $Id,
-
         # Specifies the RES ONE Service Store service(s) to enable by name.
-        [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'Name')]
-        [System.String[]] $Name,
+        [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'ServiceName')]
+        [System.String[]] $ServiceName,
+
+        # Specifies the RES ONE Service Store service(s) to disable by Id.
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'ServiceId')]
+        [System.String[]] $ServiceId,
 
         # Specifies the RES ONE Service Store service(s) to enable by reference.
         [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'InputObject')]
         [PSCustomObject[]] $InputObject,
 
         # Returns the updated RES ONE Service Store service object to the pipeline.
-        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'Id')]
-        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'Name')]
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'ServiceId')]
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'ServiceName')]
         [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'InputObject')]
         [System.Management.Automation.SwitchParameter] $PassThru,
 
@@ -41,34 +49,42 @@ function Disable-ROSSService {
     }
     process {
 
-        if ($PSCmdlet.ParameterSetName -eq 'Id') {
+        if ($PSCmdlet.ParameterSetName -eq 'ServiceId') {
 
-            $InputObject = Get-ROSSService -Session $Session -Id $Id;
+            $InputObject = Get-ROSSService -Session $Session -ServiceId $ServiceId;
         }
-        elseif ($PSCmdlet.ParameterSetName -eq 'Name') {
+        elseif ($PSCmdlet.ParameterSetName -eq 'ServiceName') {
 
-            $InputObject = Get-ROSSService -Session $Session -Name $Name;
+            $InputObject = Get-ROSSService -Session $Session -ServiceName $ServiceName;
         }
 
         foreach ($service in $InputObject) {
 
-            if ($Force -or ($PSCmdlet.ShouldProcess($service.Name, $localizedData.ShouldProcessDisable))) {
+            try {
 
-                $service.EnableTransactions = $false;
-                $setROSSServiceParams = @{
-                    Session = $Session;
-                    InputObject = $service;
-                    Force = $Force;
-                    Confirm = $false;
-                }
-                Set-ROSSService @setROSSServiceParams;
+                if ($Force -or ($PSCmdlet.ShouldProcess($service.Name, $localizedData.ShouldProcessDisable))) {
 
-                if ($PassThru) {
-                    ## Set-ROSSSession only returns the Service.Id so we'll have to fetch it
-                    Get-ROSSService -Session $Session -Id $service.Id;
+                    $service.EnableTransactions = $false;
+                    $setROSSServiceParams = @{
+                        Session = $Session;
+                        InputObject = $service;
+                        Force = $Force;
+                        Confirm = $false;
+                    }
+                    Set-ROSSService @setROSSServiceParams;
+
+                    if ($PassThru) {
+                        ## Set-ROSSSession only returns the Service.Id so we'll have to fetch it
+                        Write-Output -InputObject (Get-ROSSService -Session $Session -ServiceId $service.Id);
+                    }
                 }
             }
-        }
+            catch {
+
+                throw $_;
+            }
+
+        } #end foreach service
 
     } #end process
 } #end function Disable-ROSSService

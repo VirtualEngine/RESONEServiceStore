@@ -71,60 +71,67 @@ function Get-ROSSOrganization {
 
         foreach ($organization in $organizations) {
 
-            $getChildROSSOrganizationParams = @{
-                Session = $Session;
-                Id = $organization.Children.Id;
-                Match = $Match.ToBool();
-            }
+            try {
 
-            if ($PSBoundParameters.ContainsKey('OrganizationName')) {
-
-                foreach ($name in $OrganizationName) {
-
-                    $isLikeExpression = $false;
-                    if ($name.Contains('*')) {
-                        $isLikeExpression = $true;
-                    }
-
-                    if (($Match -and ($organization.Name -match $name)) -or
-                        ($isLikeExpression -and (-not $Match) -and ($organization.Name -like $name)) -or
-                        ((-not $Match) -and (-not $isLikeExpression) -and ($organization.Name -eq $name))) {
-
-                        Write-Output -InputObject $organization;
-                    }
+                $getChildROSSOrganizationParams = @{
+                    Session = $Session;
+                    Id = $organization.Children.Id;
+                    Match = $Match.ToBool();
                 }
 
-                $getChildROSSOrganizationParams['OrganizationName'] = $name;
+                if ($PSBoundParameters.ContainsKey('OrganizationName')) {
 
-            }
-            elseif ($PSBoundParameters.ContainsKey('Path')) {
+                    foreach ($name in $OrganizationName) {
 
-                foreach ($organizationPath in $Path) {
+                        $isLikeExpression = $false;
+                        if ($name.Contains('*')) {
+                            $isLikeExpression = $true;
+                        }
 
-                    $isLikeExpression = $false;
-                    if ($organizationPath.Contains('*')) {
-                        $isLikeExpression = $true;
+                        if (($Match -and ($organization.Name -match $name)) -or
+                            ($isLikeExpression -and (-not $Match) -and ($organization.Name -like $name)) -or
+                            ((-not $Match) -and (-not $isLikeExpression) -and ($organization.Name -eq $name))) {
+
+                            Write-Output -InputObject $organization;
+                        }
                     }
-                    if (($Match -and ($organization.Path -match $organizationPath)) -or
-                        ($isLikeExpression -and (-not $Match) -and  ($organization.Path -like $organizationPath)) -or
-                        ((-not $Match) -and (-not $isLikeExpression) -and ($organization.Path -eq $organizationPath))) {
 
-                        Write-Output -InputObject $organization;
+                    $getChildROSSOrganizationParams['OrganizationName'] = $name;
+
+                }
+                elseif ($PSBoundParameters.ContainsKey('Path')) {
+
+                    foreach ($organizationPath in $Path) {
+
+                        $isLikeExpression = $false;
+                        if ($organizationPath.Contains('*')) {
+                            $isLikeExpression = $true;
+                        }
+                        if (($Match -and ($organization.Path -match $organizationPath)) -or
+                            ($isLikeExpression -and (-not $Match) -and  ($organization.Path -like $organizationPath)) -or
+                            ((-not $Match) -and (-not $isLikeExpression) -and ($organization.Path -eq $organizationPath))) {
+
+                            Write-Output -InputObject $organization;
+                        }
                     }
+
+                    $getChildROSSOrganizationParams['Path'] = $Path;
+
+                }
+                else {
+
+                    Write-Output -InputObject $organization;
                 }
 
-                $getChildROSSOrganizationParams['Path'] = $Path;
+                ## Recursively search child organizational contexts
+                if ($organization.Children) {
 
+                    Get-ROSSOrganization @getChildROSSOrganizationParams;
+                }
             }
-            else {
+            catch {
 
-                Write-Output -InputObject $organization;
-            }
-
-            ## Recursively search child organizational contexts
-            if ($organization.Children) {
-
-                Get-ROSSOrganization @getChildROSSOrganizationParams;
+                throw $_;
             }
 
         } #end foreach organization context

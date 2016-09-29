@@ -54,41 +54,48 @@ function Invoke-ROSSDatabaseQuery {
         $dataSet = New-Object System.Data.DataSet;
         [ref]$null = $sqlDataAdapter.Fill($dataSet);
 
-        $dataSet.Tables[0] | ForEach-Object {
+        try {
 
-            $datarow = $_;
-            if ($datarow) {
+            $dataSet.Tables[0] | ForEach-Object {
 
-                $datarowPropertyNames = Get-Member -InputObject $datarow -MemberType Property |
-                                            Select-Object -ExpandProperty Name;
+                $datarow = $_;
+                if ($datarow) {
 
-                $datarowObjectProperties = @{ }
-                foreach ($datarowPropertyName in $datarowPropertyNames) {
+                    $datarowPropertyNames = Get-Member -InputObject $datarow -MemberType Property |
+                                                Select-Object -ExpandProperty Name;
 
-                    $datarowObjectProperties[$datarowPropertyName] = $datarow.Item($datarowPropertyName);
-                }
+                    $datarowObjectProperties = @{ }
+                    foreach ($datarowPropertyName in $datarowPropertyNames) {
 
-                ## Add the calculated properties
-                if ($PSBoundParameters.ContainsKey('PropertyMap')) {
+                        $datarowObjectProperties[$datarowPropertyName] = $datarow.Item($datarowPropertyName);
+                    }
 
-                    foreach ($propertyName in $PropertyMap.Keys) {
+                    ## Add the calculated properties
+                    if ($PSBoundParameters.ContainsKey('PropertyMap')) {
 
-                        $customProperty = $PropertyMap[$propertyName];
-                        $propertyValue = $datarow.Item($customProperty['DataSourceColumn']);
-                        $datarowObjectProperties[$propertyName] = $propertyValue;
-                        if ($null -ne $customProperty.ValueMap) {
-                            $datarowObjectProperties[$propertyName] = $customProperty.ValueMap[$propertyValue];
+                        foreach ($propertyName in $PropertyMap.Keys) {
+
+                            $customProperty = $PropertyMap[$propertyName];
+                            $propertyValue = $datarow.Item($customProperty['DataSourceColumn']);
+                            $datarowObjectProperties[$propertyName] = $propertyValue;
+                            if ($null -ne $customProperty.ValueMap) {
+                                $datarowObjectProperties[$propertyName] = $customProperty.ValueMap[$propertyValue];
+                            }
                         }
                     }
-                }
 
-                ## Add the custom type name
-                $datarowObject = [PSCustomObject] $datarowObjectProperties;
-                $datarowObject.PSObject.TypeNames.Insert(0, $TypeName);
-                Write-Output -InputObject $datarowObject;
+                    ## Add the custom type name
+                    $datarowObject = [PSCustomObject] $datarowObjectProperties;
+                    $datarowObject.PSObject.TypeNames.Insert(0, $TypeName);
+                    Write-Output -InputObject $datarowObject;
 
-            } #end if datarow
-        };
+                } #end if datarow
+            }
+        }
+        catch {
+
+            throw $_;
+        }
 
     } #end process
 } #end function Invoke-ROSSDatabaseQuery

@@ -48,20 +48,10 @@ function Get-ROSSTransaction {
         [Parameter(ValueFromPipelineByPropertyName)]
         [System.Collections.Hashtable] $Session = $script:_RESONEServiceStoreSession,
 
-        # Specifies the name of the service(s) to return.
-        #[Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'ServiceName')]
-        #[Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'ServiceNameDate')]
-        #[System.String] $ServiceName,
-
         # Specifies returning transactions related to a specific RES ONE Service Store service Id.
         [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'Default')]
         [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'Count')]
         [System.String] $ServiceId,
-
-        # Specifies the name of the person(s) to return.
-        #[Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'PersonName')]
-        #[Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'PersonNameDate')]
-        #[System.String] $PersonName,
 
         # Specifies returning transactions related to a specific RES ONE Service Store person Id.
         [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'Default')]
@@ -180,18 +170,26 @@ function Get-ROSSTransaction {
         }
         else {
 
-            Invoke-ROSSRestMethod @invokeROSSRestMethodParams -ExpandProperty 'Result' | ForEach-Object {
+            try {
 
-                $PSItem.PSObject.TypeNames.Insert(0, $TypeName);
+                Invoke-ROSSRestMethod @invokeROSSRestMethodParams -ExpandProperty 'Result' |
+                    ForEach-Object {
 
-                $startDateTime = $PSItem.UtcStartDate -as [System.DateTime];
-                $endDateTime = $PSItem.UtcEndDate -as [System.DateTime];
-                $deliveryAction = if ($PSItem.Direction -eq 'Provision') { 'Deliver' } else { 'Return ' }
-                Add-Member -InputObject $PSItem -MemberType NoteProperty -Name Action -Value $deliveryAction;
-                Add-Member -InputObject $PSItem -MemberType NoteProperty -Name StartDate -Value $startDateTime;
-                Add-Member -InputObject $PSItem -MemberType NoteProperty -Name EndDate -Value $endDateTime;
+                        $PSItem.PSObject.TypeNames.Insert(0, $TypeName);
 
-                Write-Output -InputObject $PSItem;
+                        $startDateTime = $PSItem.UtcStartDate -as [System.DateTime];
+                        $endDateTime = $PSItem.UtcEndDate -as [System.DateTime];
+                        $deliveryAction = if ($PSItem.Direction -eq 'Provision') { 'Deliver' } else { 'Return ' }
+                        Add-Member -InputObject $PSItem -MemberType NoteProperty -Name Action -Value $deliveryAction;
+                        Add-Member -InputObject $PSItem -MemberType NoteProperty -Name StartDate -Value $startDateTime;
+                        Add-Member -InputObject $PSItem -MemberType NoteProperty -Name EndDate -Value $endDateTime;
+
+                        Write-Output -InputObject $PSItem;
+                    }
+            }
+            catch {
+
+                throw $_;
             }
         }
 

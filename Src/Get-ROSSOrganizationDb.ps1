@@ -4,7 +4,6 @@ function Get-ROSSOrganizationDb {
         Queries the RES ONE Service Store database for Organizational Contexts.
 #>
     [CmdletBinding()]
-    [Alias('Get-ROSSOrganisation')]
     [OutputType('VirtualEngine.ROSS.Organization')]
     param (
         # RES ONE Service Store session connection.

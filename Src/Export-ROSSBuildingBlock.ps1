@@ -104,24 +104,31 @@ function Export-ROSSBuildingBlock {
 
         foreach ($filePath in $paths) {
 
-            if ($NoClobber -and (Test-Path -Path $filePath -PathType Leaf)) {
+            try {
 
-                $exceptionMessage = $localizedData.FileAlreadyExistsError -f $filePath;
-                $exception = New-Object System.IO.IOException $exceptionMessage;
-                $category = [System.Management.Automation.ErrorCategory]::OpenError;
-                $errorRecord = New-Object System.Management.Automation.ErrorRecord $exception, 'FileExists', $category, $filePath;
-                $psCmdlet.WriteError($errorRecord);
-                continue;
+                if ($NoClobber -and (Test-Path -Path $filePath -PathType Leaf)) {
 
-            }
-            else {
+                    $exceptionMessage = $localizedData.FileAlreadyExistsError -f $filePath;
+                    $exception = New-Object System.IO.IOException $exceptionMessage;
+                    $category = [System.Management.Automation.ErrorCategory]::OpenError;
+                    $errorRecord = New-Object System.Management.Automation.ErrorRecord $exception, 'FileExists', $category, $filePath;
+                    $psCmdlet.WriteError($errorRecord);
+                    continue;
 
-                [System.IO.File]::WriteAllBytes($filePath, $buildingBlockBytes);
-
-                if ($PassThru) {
-                    $buildingBlockItem = Get-Item -Path $filePath;
-                    Write-Output -InputObject $buildingBlockItem;
                 }
+                else {
+
+                    [System.IO.File]::WriteAllBytes($filePath, $buildingBlockBytes);
+
+                    if ($PassThru) {
+                        $buildingBlockItem = Get-Item -Path $filePath;
+                        Write-Output -InputObject $buildingBlockItem;
+                    }
+                }
+            }
+            catch {
+
+                throw $_;
             }
 
         } #end foreach file path

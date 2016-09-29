@@ -2,6 +2,12 @@ function Set-ROSSService {
 <#
     .SYNOPSIS
         Updates a RES ONE Service Store service by reference.
+    .EXAMPLE
+        $service = Get-ROSSService -ServiceName 'My Hidden Service'
+        $service.ShowInStore = $false
+        $service | Set-ROSSService
+
+        Hides a service named 'My Hidden Service' from the RES ONE Service Store web portal.
 #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
@@ -29,22 +35,29 @@ function Set-ROSSService {
 
         foreach ($service in $InputObject) {
 
-            if ($Force -or ($PSCmdlet.ShouldProcess($service.Name, $localizedData.ShouldProcessSet))) {
+            try {
 
-                $uri = '{0}/{1}' -f (Get-ROSSResourceUri -Session $Session -Service), $service.Id;
+                if ($Force -or ($PSCmdlet.ShouldProcess($service.Name, $localizedData.ShouldProcessSet))) {
 
-                $invokeROSSRestMethodParams = @{
-                    Session = $Session;
-                    Uri = $Uri;
-                    Method = 'Put';
-                    InputObject = $service;
+                    $uri = '{0}/{1}' -f (Get-ROSSResourceUri -Session $Session -Service), $service.Id;
+
+                    $invokeROSSRestMethodParams = @{
+                        Session = $Session;
+                        Uri = $Uri;
+                        Method = 'Put';
+                        InputObject = $service;
+                    }
+                    $response = Invoke-ROSSRestMethod @invokeROSSRestMethodParams;
+
+                    if ($PassThru) {
+                        Write-Output -InputObject $response;
+                    }
+
                 }
-                $response = Invoke-ROSSRestMethod @invokeROSSRestMethodParams;
+            }
+            catch {
 
-                if ($PassThru) {
-                    Write-Output -InputObject $response;
-                }
-
+                throw $_;
             }
 
         } #end foreach service
