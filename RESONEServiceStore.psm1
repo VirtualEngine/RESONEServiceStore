@@ -31,7 +31,7 @@ Get-ChildItem -Path $moduleSrcPath -Include '*.ps1' -Recurse |
         . $_.FullName;
     }
 
-$customProperties = @{
+$script:customProperties = @{
     ## Custom RES ONE Service Store property map
 
     'VirtualEngine.ROSS.DataSource' = @{

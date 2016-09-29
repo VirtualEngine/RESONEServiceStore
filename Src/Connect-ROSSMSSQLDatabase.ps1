@@ -1,4 +1,4 @@
-function New-ROSSMSSQLDatabaseConnection {
+function Connect-ROSSMSSQLDatabase {
 <#
     .SYNOPSIS
         Creates a new RES ONE Service Store Microsoft SQL Server connection using either Windows or SQL authentication.
@@ -54,4 +54,4 @@ function New-ROSSMSSQLDatabaseConnection {
         New-Object -TypeName System.Data.SqlClient.SqlConnection -Property @{ 'ConnectionString' = $ConnectionString };
 
     } #end process
-} #end function New-ROSSMSSQLDatabaseConnection
+} #end function Connect-ROSSMSSQLDatabase

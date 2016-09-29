@@ -85,7 +85,7 @@ function Connect-ROSSSession {
             [ref] $null = $PSBoundParameters.Remove('PassThru');
             if ($Provider -eq 'MSSQL') {
 
-                $script:_RESONEServiceStoreSession['DbConnection'] = New-ROSSMSSQLDatabaseConnection @PSBoundParameters;
+                $script:_RESONEServiceStoreSession['DbConnection'] = Connect-ROSSMSSQLDatabase @PSBoundParameters;
             }
         }
 

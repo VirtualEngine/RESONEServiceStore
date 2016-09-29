@@ -32,7 +32,6 @@ function Set-ROSSService {
             if ($Force -or ($PSCmdlet.ShouldProcess($service.Name, $localizedData.ShouldProcessSet))) {
 
                 $uri = '{0}/{1}' -f (Get-ROSSResourceUri -Session $Session -Service), $service.Id;
-                $body = ConvertTo-Json -InputObject $service -Depth 100 -Compress;
 
                 $invokeROSSRestMethodParams = @{
                     Session = $Session;

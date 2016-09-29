@@ -59,7 +59,8 @@ function Invoke-ROSSDatabaseQuery {
             $datarow = $_;
             if ($datarow) {
 
-                $datarowPropertyNames = Get-Member -InputObject $datarow -MemberType Property | Select -ExpandProperty Name;
+                $datarowPropertyNames = Get-Member -InputObject $datarow -MemberType Property |
+                                            Select-Object -ExpandProperty Name;
 
                 $datarowObjectProperties = @{ }
                 foreach ($datarowPropertyName in $datarowPropertyNames) {

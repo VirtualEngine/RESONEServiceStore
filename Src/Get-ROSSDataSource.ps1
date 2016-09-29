@@ -32,9 +32,9 @@ function Get-ROSSDataSource {
 
             if ($PSBoundParameters.ContainsKey('Type')) {
 
-                $dataConnectionType = $customProperties[$typeName].Type.ValueMap.Keys |
+                $dataConnectionType = $script:customProperties[$typeName].Type.ValueMap.Keys |
                     ForEach-Object {
-                        if ($customProperties[$typeName].Type.ValueMap[$_] -eq $Type) { $_ }
+                        if ($script:customProperties[$typeName].Type.ValueMap[$_] -eq $Type) { $_ }
                     }
                 $query = '{0} AND SPECIFICFLAGS = {1}' -f $query, $dataConnectionType;
             }
@@ -42,7 +42,7 @@ function Get-ROSSDataSource {
             $invokeROSSDatabaseQueryParams = @{
                 Connection = $Session.DbConnection;
                 TypeName = $typeName;
-                PropertyMap = $customProperties[$typeName];
+                PropertyMap = $script:customProperties[$typeName];
             }
 
             if ($PSBoundParameters.ContainsKey('Name')) {
