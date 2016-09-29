@@ -1,9 +1,9 @@
 function Get-ROSSOrganization {
 <#
     .SYNOPSIS
-        Queries the RES ONE Service Store database for Organizational Contexts.
+        Returns a RES ONE Service organizational context reference.
 #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'OrganizationName')]
     [Alias('Get-ROSSOrganisation')]
     [OutputType('VirtualEngine.ROSS.Organization')]
     param (
@@ -11,58 +11,123 @@ function Get-ROSSOrganization {
         [Parameter()]
         [System.Collections.Hashtable] $Session = $script:_RESONEServiceStoreSession,
 
-        # RES ONE Service Store organization context name.
-        [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName)]
-        [System.String[]] $Name,
+        # Specifies RES ONE Service Store organization context by name. Supports wildcard characters.
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'OrganizationName')]
+        [System.String[]] $OrganizationName,
 
-        # Select only root organizational contexts.
-        [Parameter(ValueFromPipelineByPropertyName)]
-        [System.Management.Automation.SwitchParameter] $Root
+        # Specifies RES ONE Service Store organization context by path. Supports wildcard characters.
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'Path')]
+        [System.String[]] $Path,
+
+        # Specifies RES ONE Service Store organization context by Id.
+        [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'OrganizationId')]
+        [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'OrganizationName')]
+        [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'Path')]
+        [System.String[]] $Id,
+
+        # Perform a regular expression match on name or path parameter.
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'OrganzationName')]
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'Path')]
+        [System.Management.Automation.SwitchParameter] $Match
     )
     begin {
 
-        Assert-ROSSSession -Session $Session -Database;
+        Assert-ROSSSession -Session $Session;
     }
     process {
 
-        try {
+        $typeName = 'VirtualEngine.ROSS.Organization';
+        $organizations = @();
 
-            $typeName = 'VirtualEngine.ROSS.Organization';
-            $query = "SELECT * FROM [OR_Objects] WHERE [Type] = 3";
+        if ($PSBoundParameters.ContainsKey('Id')) {
 
-            if ($Root) {
-
-                $query = "{0} AND [RootGuid] = '00000000-0000-0000-0000-000000000000'" -f $query;
+            $rossOrganizationEndpointUri = Get-ROSSResourceUri -Session $Session -Organization;
+            $invokeROSSRestMethodParams = @{
+                Session = $Session;
+                Method = 'Get';
+                TypeName = $typeName;
             }
 
-            if ($PSBoundParameters.ContainsKey('Name')) {
+            foreach ($organizationId in $Id) {
 
-                foreach ($organizationName in $Name) {
+                $invokeROSSRestMethodParams['Uri'] = '{0}/{1}' -f $rossOrganizationEndpointUri, $organizationId;
+                $organizations += Invoke-ROSSRestMethod @invokeROSSRestMethodParams;
+            }
 
-                    $nameQuery = "{0} AND Name = '{1}'" -f $query, $organizationName;
-                    $invokeROSSDatabaseQueryParams = @{
-                        Connection = $Session.DbConnection;
-                        Query = $nameQuery;
-                        TypeName = $typeName;
+        }
+        else {
+
+            ## Retrieve the root organizational contexts
+            $invokeROSSRestMethodParams = @{
+                Session = $Session;
+                Uri = Get-ROSSResourceUri -Session $Session -Organization -List;
+                Method = 'Get';
+                TypeName = $typeName;
+                ExpandProperty = 'Children';
+            }
+            $organizations = Invoke-ROSSRestMethod @invokeROSSRestMethodParams;
+
+        }
+
+        foreach ($organization in $organizations) {
+
+            $getChildROSSOrganizationParams = @{
+                Session = $Session;
+                Id = $organization.Children.Id;
+                Match = $Match.ToBool();
+            }
+
+            if ($PSBoundParameters.ContainsKey('OrganizationName')) {
+
+                foreach ($name in $OrganizationName) {
+
+                    $isLikeExpression = $false;
+                    if ($name.Contains('*')) {
+                        $isLikeExpression = $true;
                     }
-                    Write-Output -InputObject (Invoke-ROSSDatabaseQuery @invokeROSSDatabaseQueryParams);
+
+                    if (($Match -and ($organization.Name -match $name)) -or
+                        ($isLikeExpression -and (-not $Match) -and ($organization.Name -like $name)) -or
+                        ((-not $Match) -and (-not $isLikeExpression) -and ($organization.Name -eq $name))) {
+
+                        Write-Output -InputObject $organization;
+                    }
                 }
+
+                $getChildROSSOrganizationParams['OrganizationName'] = $name;
+
+            }
+            elseif ($PSBoundParameters.ContainsKey('Path')) {
+
+                foreach ($organizationPath in $Path) {
+
+                    $isLikeExpression = $false;
+                    if ($organizationPath.Contains('*')) {
+                        $isLikeExpression = $true;
+                    }
+                    if (($Match -and ($organization.Path -match $organizationPath)) -or
+                        ($isLikeExpression -and (-not $Match) -and  ($organization.Path -like $organizationPath)) -or
+                        ((-not $Match) -and (-not $isLikeExpression) -and ($organization.Path -eq $organizationPath))) {
+
+                        Write-Output -InputObject $organization;
+                    }
+                }
+
+                $getChildROSSOrganizationParams['Path'] = $Path;
+
             }
             else {
 
-                $invokeROSSDatabaseQueryParams = @{
-                    Connection = $Session.DbConnection;
-                    Query = $query;
-                    TypeName = $typeName;
-                }
-                Write-Output -InputObject (Invoke-ROSSDatabaseQuery @invokeROSSDatabaseQueryParams);
+                Write-Output -InputObject $organization;
             }
 
-        }
-        catch {
+            ## Recursively search child organizational contexts
+            if ($organization.Children) {
 
-            throw $_;
-        }
+                Get-ROSSOrganization @getChildROSSOrganizationParams;
+            }
+
+        } #end foreach organization context
 
     } #end process
 } #end function Get-ROSSOrganization
