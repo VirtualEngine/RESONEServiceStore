@@ -9,14 +9,18 @@
             <TableControl>
                 <TableHeaders>
                     <TableColumnHeader>
-                        <Width>37</Width>
+                        <Width>30</Width>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Width>37</Width>
+                        <Width>30</Width>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Width>45</Width>
-
+                        <Label>IsVisible</Label>
+                        <Width>10</Width>
+                        <Alignment>right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Width>50</Width>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
@@ -26,7 +30,10 @@
                                 <PropertyName>Name</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Guid</PropertyName>
+                                <PropertyName>Path</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>IsVisibleToClients</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Description</PropertyName>
@@ -204,7 +211,7 @@
                         <Width>9</Width>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Direction</Label>
+                        <Label>Workflow</Label>
                         <Width>9</Width>
                     </TableColumnHeader>
                     <TableColumnHeader>
@@ -244,6 +251,63 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>DurationSeconds</PropertyName>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
+        <View>
+            <Name>VirtualEngine.ROSS.Person</Name>
+            <ViewSelectedBy>
+                <TypeName>VirtualEngine.ROSS.Person</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Width>30</Width>
+                    </TableColumnHeader>
+                     <TableColumnHeader>
+                        <Label>Source</Label>
+                        <Width>25</Width>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Width>10</Width>
+                        <Alignment>right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Width>10</Width>
+                        <Alignment>right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Width>19</Width>
+                        <Alignment>right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Width>18</Width>
+                        <Alignment>right</Alignment>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <PropertyName>Name</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>SourceName</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Active</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>IsLicensed</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>IsMarkedForDeletion</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>IsReadyForDeletion</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
