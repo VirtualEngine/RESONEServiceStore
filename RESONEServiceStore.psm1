@@ -18,6 +18,7 @@ data localizedData {
         ShouldProcessEnable            = Enable
         ShouldProcessDisable           = Disable
         ShouldProcessDelete            = Delete
+        ShouldProcessNew               = New
         NoMatchingWorkflowActionsFound = No matching workflow actions found on service '{0}'.
         InvokingSQLQuery               = Invoking SQL query "{0}".
 '@

@@ -1,6 +1,6 @@
 @{
     RootModule           = 'RESONEServiceStore.psm1';
-    ModuleVersion        = '2.2.1';
+    ModuleVersion        = '2.3.0';
     GUID                 = '324e5c64-114f-4879-81e6-63238edcddea';
     Author               = 'Iain Brighton';
     CompanyName          = 'Virtual Engine';
@@ -24,6 +24,7 @@
                              'Get-ROSSService',
                              'Get-ROSSTransaction',
                              'Import-ROSSBuildingBlock',
+                             'New-ROSSPerson',
                              'Set-ROSSPerson',
                              'Set-ROSSService'
                             );
