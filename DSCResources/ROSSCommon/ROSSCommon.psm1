@@ -15,6 +15,7 @@ data localizedData {
         InvalidVersionNumberFormatError = The specified version '{0}' does not match '1.2', '1.2.3' or '1.2.3.4' format.
         UnsupportedVersionError         = Version '{0}' is not supported/untested :(
         UnableToLocatePackageError      = Unable to locate '{0}' package.
+        InvalidComponentVersionError    = Component '{0}' is not supported in this version. Version {1} is required.
 '@
 }
 
