@@ -53,12 +53,17 @@ function Connect-ROSSSession {
         ## Return the session hashtable to the pipeline
         [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'RestApi')]
         [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'Database')]
-        [System.Management.Automation.SwitchParameter] $PassThru
+        [System.Management.Automation.SwitchParameter] $PassThru,
+
+        ## Use RES ONE Identity Director API endpoint
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'RestApi')]
+        [System.Management.Automation.SwitchParameter] $IdentityDirector
     )
     process {
 
         if ($null -eq $script:_RESONEServiceStoreSession) {
-            $script:_RESONEServiceStoreSession = @{};
+
+            $script:_RESONEServiceStoreSession = @{ }
         }
 
         if ($PSCmdlet.ParameterSetName -eq 'RestApi') {
@@ -69,7 +74,7 @@ function Connect-ROSSSession {
                 logintype = 'windows';
             }
 
-            $uri = Get-ROSSResourceUri -Server $Server -Authentication -UseHttps:$UseHttps;
+            $uri = Get-ROSSResourceUri -Server $Server -Authentication -UseHttps:$UseHttps -IdentityDirector:$IdentityDirector;
             $response = Invoke-ROSSRestMethod -Uri $uri -Method Post -Body $body -NoAuthorization;
 
             if ($response.Success -eq $true) {
@@ -77,6 +82,7 @@ function Connect-ROSSSession {
                 $script:_RESONEServiceStoreSession['Server'] = $Server;
                 $script:_RESONEServiceStoreSession['AuthorizationToken'] = $response.AuthorizationToken;
                 $script:_RESONEServiceStoreSession['UseHttps'] = $UseHttps.ToBool();
+                $script:_RESONEServiceStoreSession['IsIdentityDirector'] = $IdentityDirector.ToBool();
             }
             else {
 

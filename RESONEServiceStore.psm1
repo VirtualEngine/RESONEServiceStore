@@ -1,26 +1,26 @@
 data localizedData {
     # Localized messages; culture="en-US"
     ConvertFrom-StringData @'
-        CannotFindFilePathError        = Cannot find path '{0}' because it does not exist.
-        FileAlreadyExistsError         = File or directory '{0}' already exists.
-        NoSessionEstablishedError      = No RES ONE Service Store session established or session has expired.
-        NoApiSessionEstablishedError   = No RES ONE Service Store API session established or session has expired.
-        NoDbSessionEstablishedError    = No RES ONE Service Store database session established or session has expired.
-        InputObjectTypeMismatchError   = InputObject is not a '{0}' type.
-        StartDateAfterEndDateError     = Start date cannot be after the end date.
-        UnsupportedDbConnectionType    = Unsupported database connection type '{0}'.
+        CannotFindFilePathError          = Cannot find path '{0}' because it does not exist.
+        FileAlreadyExistsError           = File or directory '{0}' already exists.
+        NoSessionEstablishedError        = No RES ONE Service Store session established or session has expired.
+        NoDbSessionEstablishedError      = No RES ONE Service Store database session established or session has expired.
+        NoApiSessionEstablishedError     = No RES ONE Service Store API session established or session has expired.
+        StartDateAfterEndDateError       = Start date cannot be after the end date.
+        InputObjectTypeMismatchError     = InputObject is not a '{0}' type.
+        UnsupportedDbConnectionTypeError = Unsupported database connection type '{0}'.
 
-        UnsupportedOperationWarning    = The '{0}' cmdlet is an unsupported operation. USE WITH EXTREME CAUTION.
+        UnsupportedOperationWarning      = The '{0}' cmdlet is an unsupported operation. USE WITH EXTREME CAUTION.
 
-        ShouldProcessImport            = Import
-        ShouldProcessSet               = Set
-        ShouldProcessUpdate            = Update
-        ShouldProcessEnable            = Enable
-        ShouldProcessDisable           = Disable
-        ShouldProcessDelete            = Delete
-        ShouldProcessNew               = New
-        NoMatchingWorkflowActionsFound = No matching workflow actions found on service '{0}'.
-        InvokingSQLQuery               = Invoking SQL query "{0}".
+        ShouldProcessImport              = Import
+        ShouldProcessSet                 = Set
+        ShouldProcessUpdate              = Update
+        ShouldProcessEnable              = Enable
+        ShouldProcessDisable             = Disable
+        ShouldProcessDelete              = Delete
+        ShouldProcessNew                 = New
+        NoMatchingWorkflowActionsFound   = No matching workflow actions found on service '{0}'.
+        InvokingSQLQuery                 = Invoking SQL query "{0}".
 '@
 }
 

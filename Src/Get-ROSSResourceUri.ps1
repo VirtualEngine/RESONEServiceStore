@@ -85,6 +85,10 @@ function Get-ROSSResourceUri {
         [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'Authentication')]
         [System.Management.Automation.SwitchParameter] $Authentication,
 
+        # Connect to the IdentityDirector API endpoint
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'Authentication')]
+        [System.Management.Automation.SwitchParameter] $IdentityDirector,
+
         # Specifies the server hostname hosting the RES ONE Service Store API to perform the authentication action against
         [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'Authentication')]
         [System.String] $Server,
@@ -101,6 +105,7 @@ function Get-ROSSResourceUri {
             $Session = @{
                 Server = $Server;
                 UseHttps = $UseHttps.ToBool();
+                IsIdentityDirector = $IdentityDirector.ToBool();
             }
         }
         else {
@@ -110,68 +115,96 @@ function Get-ROSSResourceUri {
     }
     process {
 
-        $fqdn = 'http://{0}' -f $Session.Server;
+        if ($Session.IsIdentityDirector) {
+            
+            $apiEndpoint = '{0}/IdentityDirector' -f $Session.Server;
+        }
+        else {
+            
+            $apiEndpoint = '{0}/Management' -f $Session.Server;
+        }
+
         if ($Session.UseHttps) {
-            $fqdn = 'https://{0}' -f $Session.Server;
+
+            $fqdn = 'https://{0}' -f $apiEndpoint;
+        }
+        else {
+
+            $fqdn = 'http://{0}' -f $apiEndpoint;
         }
 
         switch ($PSCmdlet.ParameterSetName) {
 
             Authentication {
-                return "$fqdn/Management/PublicApi/Authentication/Login";
+
+                $apiUri = 'PublicApi/Authentication/Login';
             }
 
             Service {
-                return "$fqdn/Management/PublicApi/Service";
+
+                $apiUri = 'PublicApi/Service';
             }
 
             SearchService {
-                return "$fqdn/Management/PublicApi/Service/Search";
+
+                $apiUri = 'PublicApi/Service/Search';
             }
 
             SearchServiceFilter {
+
                 $escapedFilter = [System.Uri]::EscapeUriString($Filter);
-                return "$fqdn/Management/PublicApi/Service/Search?request.freeTextFilter=$escapedFilter";
+                $apiUri = 'PublicApi/Service/Search?request.freeTextFilter={0}' -f $escapedFilter;
             }
 
             ImportBuildingBlock {
-                return "$fqdn/Management/PublicApi/BuildingBlock/Import";
+
+                $apiUri = 'PublicApi/BuildingBlock/Import';
             }
 
             UploadBuildingBlock {
+
                  $escapedFilename = [System.Uri]::EscapeUriString($Upload);
-                 return "$fqdn/Management/PublicApi/BuildingBlock/Upload?fileName=$escapedFilename";
+                 $apiUri = 'PublicApi/BuildingBlock/Upload?fileName={0}' -f $escapedFilename;
             }
 
             ExportBuildingBlock {
-                return "$fqdn/Management/PublicApi/BuildingBlock/Export";
+
+                $apiUri = 'PublicApi/BuildingBlock/Export';
             }
 
             SearchTransaction {
-                return "$fqdn/Management/PublicApi/Transaction/Search";
+
+                $apiUri = 'PublicApi/Transaction/Search';
             }
 
             Person {
-                return "$fqdn/Management/PublicApi/Person";
+
+                $apiUri = 'PublicApi/Person';
             }
 
             SearchPerson {
-                return "$fqdn/Management/PublicApi/Person/Search";
+
+                $apiUri = 'PublicApi/Person/Search';
             }
 
             NewPerson {
-                return "$fqdn/Management/PublicApi/Person/New";
+
+                $apiUri = 'PublicApi/Person/New';
             }
 
             Organization {
-                return "$fqdn/Management/PublicApi/Organization";
+
+                $apiUri = 'PublicApi/Organization';
             }
 
             ListOrganization {
-                return "$fqdn/Management/PublicApi/Organization/List";
+
+                $apiUri = 'PublicApi/Organization/List';
             }
 
         }
+
+        return ('{0}/{1}' -f $fqdn, $apiUri);
 
     } #end process
 } #end function Get-ROSSResourceUri
