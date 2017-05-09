@@ -63,8 +63,8 @@ function Get-ROSSDataSource {
         }
         catch {
 
-            throw $_;
+            throw;
         }
 
     } #end process
-} #end function Get-ROSSDataSource
+} #end function

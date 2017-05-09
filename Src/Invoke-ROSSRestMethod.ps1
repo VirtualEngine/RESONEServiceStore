@@ -139,10 +139,10 @@ function Invoke-ROSSRestMethod {
             }
             catch {
 
-                throw $_;
+                throw;
             }
 
         } #end foreach object
 
     } #end process
-} #end function Invoke-ROSSRestMethod
+} #end function

@@ -85,11 +85,11 @@ function Remove-ROSSDataSource {
                 }
                 catch {
 
-                    throw $_;
+                    throw;
                 }
             }
 
         } #end foreach datasource
 
     } #end process
-} #end function Remove-ROSSDataSource
+} #end function

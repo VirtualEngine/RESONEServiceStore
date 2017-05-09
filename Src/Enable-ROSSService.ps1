@@ -82,8 +82,8 @@ function Enable-ROSSService {
         }
         catch {
 
-            throw $_;
+            throw;
         }
 
     } #end process
-} #end function Enable-ROSSService
+} #end function

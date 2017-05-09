@@ -120,9 +120,9 @@ function Get-ROSSService {
         }
         catch {
 
-            throw $_;
+            throw;
         }
 
     } #end process
-} #end function Get-ROSSService
+} #end function
 

@@ -127,10 +127,10 @@ function Enable-ROSSServiceWorkflowAction {
             }
             catch {
 
-                throw $_;
+                throw;
             }
 
         } #end foreach service
 
     } #end process
-} #end function Enable-ROSSServiceWorkflowAction
+} #end function

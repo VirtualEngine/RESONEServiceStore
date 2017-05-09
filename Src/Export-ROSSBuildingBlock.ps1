@@ -128,10 +128,10 @@ function Export-ROSSBuildingBlock {
             }
             catch {
 
-                throw $_;
+                throw;
             }
 
         } #end foreach file path
 
     } #end process
-} #end function Export-ROSSBuildingBlock
+} #end function

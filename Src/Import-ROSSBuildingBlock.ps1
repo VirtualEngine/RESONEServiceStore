@@ -127,10 +127,10 @@ function Import-ROSSBuildingBlock {
                 }
                 catch {
 
-                    throw $_;
+                    throw;
                 }
 
             } #end if should process
         } #end foreach file path
     } #end process
-} #end function Import-ROSSBuildingBlock
+} #end function

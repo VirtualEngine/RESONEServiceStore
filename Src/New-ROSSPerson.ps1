@@ -3,13 +3,13 @@ function New-ROSSPerson {
     .SYNOPSIS
         Creates a new RES ONE Service Store person.
     .EXAMPLE
-        $person = New-ROSSPerson -PersonName 'Joe Bloggs'
+        $person = New-ROSSPerson -PersonName 'Joe Bloggs' -Active
 
-        Creates a new RES ONE Service Store person called 'Joe Bloggs'
+        Creates a new active/licensed RES ONE Service Store person called 'Joe Bloggs'
     .EXAMPLE
-        $person = New-ROSSPerson -PersonName 'Joe Bloggs'
+        'Joe Bloggs' | New-ROSSPerson
 
-        Creates a new RES ONE Service Store person called 'John Smith'
+        Creates a new inactive/unlicensed RES ONE Service Store person called 'John Smith'
 
 #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
@@ -67,10 +67,10 @@ function New-ROSSPerson {
             }
             catch {
 
-                throw $_;
+                throw;
             }
 
         } #end foreach person
 
     } #end process
-} #end function New-ROSSPerson
+} #end function

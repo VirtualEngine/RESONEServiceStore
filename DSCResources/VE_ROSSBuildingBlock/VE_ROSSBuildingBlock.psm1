@@ -273,7 +273,7 @@ function Set-TargetResource {
                 }
                 catch {
 
-                    throw $_
+                    throw;
                 }
             }
 

@@ -48,7 +48,7 @@ function Get-WindowsInstallerPackageProperty {
         }
         catch {
 
-            throw $_;
+            throw;
         }
 
     } #end process

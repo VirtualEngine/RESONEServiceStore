@@ -225,11 +225,11 @@ function Get-ROSSPerson {
                 }
                 catch {
 
-                    throw $_;
+                    throw;
                 }
 
             }
         } #end foreach person id
 
     } #end process
-} #end function Get-ROSSPerson
+} #end function

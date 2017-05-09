@@ -73,8 +73,8 @@ function Get-ROSSDataConnection {
         }
         catch {
 
-            throw $_;
+            throw;
         }
 
     } #end process
-} #end function Get-ROSSDataConnection
+} #end function

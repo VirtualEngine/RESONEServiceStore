@@ -189,9 +189,9 @@ function Get-ROSSTransaction {
             }
             catch {
 
-                throw $_;
+                throw;
             }
         }
 
     } #end process
-} #end function Get-ROSSTransaction
+} #end function

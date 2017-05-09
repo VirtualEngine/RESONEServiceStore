@@ -128,8 +128,8 @@ function Disable-ROSSServiceWorkflowAction {
         }
         catch {
 
-            throw $_;
+            throw;
         }
 
     } #end process
-} #end function Disable-ROSSServiceWorkflowAction
+} #end function

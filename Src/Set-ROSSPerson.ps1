@@ -57,10 +57,10 @@ function Set-ROSSPerson {
             }
             catch {
 
-                throw $_;
+                throw;
             }
 
         } #end foreach person
 
     } #end process
-} #end function Set-ROSSService
+} #end function

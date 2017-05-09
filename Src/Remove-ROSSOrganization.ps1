@@ -100,11 +100,11 @@ function Remove-ROSSOrganization {
                 }
                 catch {
 
-                    throw $_;
+                    throw;
                 }
             }
 
         } #end foreach organization
 
     } #end process
-} #end function Remove-ROSSOrganization
+} #end function

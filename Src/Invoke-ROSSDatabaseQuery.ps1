@@ -94,8 +94,8 @@ function Invoke-ROSSDatabaseQuery {
         }
         catch {
 
-            throw $_;
+            throw;
         }
 
     } #end process
-} #end function Invoke-ROSSDatabaseQuery
+} #end function

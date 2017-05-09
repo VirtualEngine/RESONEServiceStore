@@ -131,10 +131,10 @@ function Get-ROSSOrganization {
             }
             catch {
 
-                throw $_;
+                throw;
             }
 
         } #end foreach organization context
 
     } #end process
-} #end function Get-ROSSOrganization
+} #end function

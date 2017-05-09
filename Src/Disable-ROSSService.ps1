@@ -81,10 +81,10 @@ function Disable-ROSSService {
             }
             catch {
 
-                throw $_;
+                throw;
             }
 
         } #end foreach service
 
     } #end process
-} #end function Disable-ROSSService
+} #end function

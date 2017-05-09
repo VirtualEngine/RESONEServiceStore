@@ -60,8 +60,8 @@ function Get-ROSSOrganizationDb {
         }
         catch {
 
-            throw $_;
+            throw;
         }
 
     } #end process
-} #end function Get-ROSSOrganizationDb
+} #end function

@@ -79,8 +79,8 @@ function Enable-ROSSPerson {
         }
         catch {
 
-            throw $_;
+            throw;
         }
 
     } #end process
-} #end function Enable-ROSSPerson
+} #end function
