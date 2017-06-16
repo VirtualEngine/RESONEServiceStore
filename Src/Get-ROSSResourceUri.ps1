@@ -12,6 +12,7 @@ function Get-ROSSResourceUri {
         [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'Service')]
         [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'SearchService')]
         [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'SearchServiceFilter')]
+        [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'NewService')]
         [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'SearchTransaction')]
         [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'Person')]
         [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'SearchPerson')]
@@ -27,16 +28,18 @@ function Get-ROSSResourceUri {
         [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'Service')]
         [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'SearchService')]
         [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'SearchServiceFilter')]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'NewService')]
         [System.Management.Automation.SwitchParameter] $Service,
-
+        
         # Return the Person API endpoint URI
         [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'Person')]
         [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'SearchPerson')]
         [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'NewPerson')]
         [System.Management.Automation.SwitchParameter] $Person,
 
-        # Specifies the New action on the Person API endpoint
+        # Specifies the New action on API endpoint
         [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'NewPerson')]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'NewService')]
         [System.Management.Automation.SwitchParameter] $New,
 
         # Specifies the search critera on the API endpoint
@@ -143,6 +146,11 @@ function Get-ROSSResourceUri {
             Service {
 
                 $apiUri = 'PublicApi/Service';
+            }
+
+            NewService {
+
+                $apiUri = 'PublicApi/Service/NewService';
             }
 
             SearchService {

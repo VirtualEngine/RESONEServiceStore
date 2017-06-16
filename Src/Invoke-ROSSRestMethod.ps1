@@ -97,13 +97,12 @@ function Invoke-ROSSRestMethod {
         }
 
         $response = Invoke-RestMethod @invokeRestMethodParams;
+        Write-Debug -Message ("Invoke-RestMethod response object type '{0}'" -f $response.GetType());
 
         if ($PSBoundParameters.ContainsKey('ExpandProperty')) {
 
-            #return $response.$ExpandProperty;
             $response = $response.$ExpandProperty;
         }
-
 
         foreach ($object in $response) {
 

@@ -3,7 +3,7 @@ class VE_ROSSDatabase : OMI_BaseResource
 {
     [Key, Description("RES ONE Service Store database server name/instance name")] String DatabaseServer;
     [Key, Description("RES ONE Service Store database name")] String DatabaseName;
-    [Required, Description("File path containing the RES ONE Service Store MSIs or the literal path to the legacy console/Sync Tool MSI")] String Path;
+    [Required, Description("File path containing the RES ONE Service Store MSIs or the literal path to the installer")] String Path;
     [Required, Description("New Microsoft SQL username/password to create"), EmbeddedInstance("MSFT_Credential")] String Credential;
     [Required, Description("Existing Microsoft SQL database credentials used to create the database"), EmbeddedInstance("MSFT_Credential")] String SQLCredential;
     [Required, Description("New RES ONE Service Store Catalog Services password"), EmbeddedInstance("MSFT_Credential")] String CatalogServicesCredential;

@@ -3,7 +3,7 @@ class VE_ROSSClient : OMI_BaseResource
 {
     [Required, Description("RES ONE Service Store Catalog Services password"), EmbeddedInstance("MSFT_Credential")] String CatalogServicesCredential;
     [Key, Description("RES ONE Service Store Catalog Services host")] String CatalogServicesHost;
-    [Required, Description("File path containing the RES ONE Service Store MSIs or the literal path to the legacy console/Sync Tool MSI")] String Path;
+    [Required, Description("File path containing the RES ONE Service Store MSIs or the literal path to the installer")] String Path;
     [Write, Description("RES ONE Service Store component version to be installed, i.e. 8.0.3.0")] String Version;
     [Write, Description("Specified path is a literal file reference")] Boolean IsLiteralPath;
     [Write, ValueMap{"Present", "Absent"},Values{"Present", "Absent"}] String Ensure;

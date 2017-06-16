@@ -237,7 +237,7 @@ configuration ROSSLab {
             Ensure         = $Ensure;
         }
 
-                    Write-Host ' Processing "ROSSLab\ROSSLabDatabase".' -ForegroundColor Gray;
+        Write-Host ' Processing "ROSSLab\ROSSLabDatabase".' -ForegroundColor Gray;
         ROSSDatabase 'ROSSLabDatabase' {
             DatabaseServer            = $DatabaseServer;
             DatabaseName              = $DatabaseName;

@@ -3,7 +3,7 @@ class VE_ROSSCatalogServices : OMI_BaseResource
 {
     [Key, Description("RES ONE Service Store database server name/instance name")] String DatabaseServer;
     [Key, Description("RES ONE Service Store database name")] String DatabaseName;
-    [Required, Description("File path containing the RES ONE Service Store MSIs or the literal path to the legacy console/Sync Tool MSI")] String Path;
+    [Required, Description("File path containing the RES ONE Service Store MSIs or the literal path to the installer")] String Path;
     [Required, Description("Microsoft SQL username/password to create"), EmbeddedInstance("MSFT_Credential")] String Credential;
     [Write, Description("RES ONE Service Store component version to be installed, i.e. 8.0.3.0")] String Version;
     [Write, Description("Specified path is a literal file reference")] Boolean IsLiteralPath;
