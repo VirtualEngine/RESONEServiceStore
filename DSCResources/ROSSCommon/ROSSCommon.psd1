@@ -7,8 +7,14 @@
     Copyright         = '(c) 2016 Virtual Engine Limited. All rights reserved.'
     Description       = 'RES ONE Service Store common DSC resources library'
     PowerShellVersion = '4.0'
-    FunctionsToExport = '*'
-    CmdletsToExport   = '*'
-    VariablesToExport = '*'
-    AliasesToExport   = '*'
+    FunctionsToExport = @(
+                            'Assert-ParameterCollection',
+                            'ConvertTo-PSCustomObjectVersion',
+                            'Get-InstalledProductEntry',
+                            'Get-LocalizableRegistryKeyValue',
+                            'Get-RegistryValueIgnoreError',
+                            'Get-WindowsInstallerPackageProperty',,
+                            'Resolve-ROSSPackagePath',
+                            'Start-WaitProcess'
+                        )
 }

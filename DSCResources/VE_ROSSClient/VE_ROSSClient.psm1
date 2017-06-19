@@ -4,7 +4,6 @@ data localizedData {
         ResourceIncorrectPropertyState  = Resource property '{0}' is NOT in the desired state. Expected '{1}', actual '{2}'.
         ResourceInDesiredState          = Resource '{0}' is in the desired state.
         ResourceNotInDesiredState       = Resource '{0}' is NOT in the desired state.
-        DiscoveredSiteId                = Discovered Site Id '{0}'.
 '@
 }
 
@@ -15,18 +14,15 @@ function Get-TargetResource {
     param (
         ## RES ONE Service Store Catalog Services password (equivalient to CATALOGSERVICESPASSWORD).
         [Parameter(Mandatory)]
-        [ValidateNotNull()]
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.CredentialAttribute()] $CatalogServicesCredential,
 
         ## RES ONE Service Store Catalog Services host (equivalient to CATALOGSERVICESHOST).
         [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
         [System.String] $CatalogServicesHost,
 
         ## File path containing the RES ONE Service Store MSIs or the literal path to the client MSI.
         [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
@@ -71,18 +67,15 @@ function Test-TargetResource {
     param (
         ## RES ONE Service Store Catalog Services password (equivalient to CATALOGSERVICESPASSWORD).
         [Parameter(Mandatory)]
-        [ValidateNotNull()]
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.CredentialAttribute()] $CatalogServicesCredential,
 
         ## RES ONE Service Store Catalog Services host (equivalient to CATALOGSERVICESHOST).
         [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
         [System.String] $CatalogServicesHost,
 
         ## File path containing the RES ONE Service Store MSIs or the literal path to the client MSI.
         [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
@@ -122,18 +115,15 @@ function Set-TargetResource {
     param (
         ## RES ONE Service Store Catalog Services password (equivalient to CATALOGSERVICESPASSWORD).
         [Parameter(Mandatory)]
-        [ValidateNotNull()]
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.CredentialAttribute()] $CatalogServicesCredential,
 
         ## RES ONE Service Store Catalog Services host (equivalient to CATALOGSERVICESHOST).
         [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
         [System.String] $CatalogServicesHost,
 
         ## File path containing the RES ONE Service Store MSIs or the literal path to the client MSI.
         [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0

@@ -4,7 +4,6 @@ data localizedData {
         ResourceIncorrectPropertyState  = Resource property '{0}' is NOT in the desired state. Expected '{1}', actual '{2}'.
         ResourceInDesiredState          = Resource '{0}' is in the desired state.
         ResourceNotInDesiredState       = Resource '{0}' is NOT in the desired state.
-        DiscoveredSiteId                = Discovered Site Id '{0}'.
 '@
 }
 
@@ -15,23 +14,19 @@ function Get-TargetResource {
     param (
         ## RES ONE Service Store database server name/instance (equivalient to DBSERVER).
         [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
         [System.String] $DatabaseServer,
 
         ## RES ONE Service Store database name (equivalient to DBNAME).
         [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
         [System.String] $DatabaseName,
 
         ## Microsoft SQL username/password to create (equivalent to DBUSER/DBPASSWORD).
         [Parameter(Mandatory)]
-        [ValidateNotNull()]
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.CredentialAttribute()] $Credential,
 
         ## File path containing the RES ONE Service Store MSIs or the literal path to the transaction engine MSI.
         [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
@@ -76,12 +71,10 @@ function Test-TargetResource {
     param (
         ## RES ONE Service Store database server name/instance (equivalient to DBSERVER).
         [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
         [System.String] $DatabaseServer,
 
         ## RES ONE Service Store database name (equivalient to DBNAME).
         [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
         [System.String] $DatabaseName,
 
         ## Microsoft SQL username/password to create (equivalent to DBUSER/DBPASSWORD).
@@ -91,7 +84,6 @@ function Test-TargetResource {
 
         ## File path containing the RES ONE Service Store MSIs or the literal path to the legacy console/Sync Tool MSI.
         [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
@@ -131,12 +123,10 @@ function Set-TargetResource {
     param (
         ## RES ONE Service Store database server name/instance (equivalient to DBSERVER).
         [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
         [System.String] $DatabaseServer,
 
         ## RES ONE Service Store database name (equivalient to DBNAME).
         [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
         [System.String] $DatabaseName,
 
         ## Microsoft SQL username/password to create (equivalent to DBUSER/DBPASSWORD).
@@ -146,7 +136,6 @@ function Set-TargetResource {
 
         ## File path containing the RES ONE Service Store MSIs or the literal path to the legacy console/Sync Tool MSI.
         [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
