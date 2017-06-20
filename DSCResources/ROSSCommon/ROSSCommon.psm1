@@ -16,6 +16,8 @@ data localizedData {
         UnsupportedVersionError         = Version '{0}' is not supported/untested :(
         UnableToLocatePackageError      = Unable to locate '{0}' package.
         InvalidComponentVersionError    = Component '{0}' is not supported in this version. Version {1} is required.
+        MissingRequiredParametersError  = Missing required parameter(s) '{0}'.
+        InvalidParametersSpecifiedError = Invalid parameter(s) specified '{0}'.
 '@
 }
 

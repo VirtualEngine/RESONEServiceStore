@@ -9,12 +9,14 @@
     PowerShellVersion = '4.0'
     FunctionsToExport = @(
                             'Assert-ParameterCollection',
+                            'Assert-RequiredParameterCollection',
                             'ConvertTo-PSCustomObjectVersion',
                             'Get-InstalledProductEntry',
                             'Get-LocalizableRegistryKeyValue',
                             'Get-RegistryValueIgnoreError',
                             'Get-WindowsInstallerPackageProperty',,
                             'Resolve-ROSSPackagePath',
-                            'Start-WaitProcess'
+                            'Start-WaitProcess',
+                            'Test-ParameterCollection'
                         )
 }
