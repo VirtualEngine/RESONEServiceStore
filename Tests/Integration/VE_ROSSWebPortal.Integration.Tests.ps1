@@ -35,7 +35,7 @@ try
                     -ConfigurationData $ConfigData `
                     -Path $TestDrive `
                     -HostHeader 'res.integration.test'
-            } | Should not throw
+            } | Should Not throw
         }
         #endregion
 

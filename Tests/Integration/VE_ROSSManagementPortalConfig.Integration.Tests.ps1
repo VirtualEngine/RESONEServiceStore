@@ -33,9 +33,15 @@ try
                 & "$($script:DSCResourceName)_Config" `
                     -OutputPath $TestDrive `
                     -ConfigurationData $ConfigData `
-                    -Path $TestDrive `
-                    -HostHeader 'res.integration.test' `
-                    -CertificateThumbprint '11A481C68E7F061BC85629A3E819CDF35B88DA20'
+                    -Path "$TestDrive\rossmanagementportal.config"
+                Start-DscConfiguration -Path $TestDrive `
+                    -ComputerName localhost -Wait -Verbose -Force
+            } | Should Not throw
+        }
+
+        It 'Should be able to call Get-DscConfiguration without throwing' {
+            {
+                Get-DscConfiguration -Verbose -ErrorAction Stop
             } | Should Not throw
         }
         #endregion
