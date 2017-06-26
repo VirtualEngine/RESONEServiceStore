@@ -17,6 +17,8 @@
                             'Get-WindowsInstallerPackageProperty',
                             'Resolve-ROSSPackagePath',
                             'Save-ROSSManagementPortalConfiguration',
+                            'Save-ROSSMobileGatewayConfiguration',
+                            'Save-ROSSWebPortalConfiguration',
                             'Start-WaitProcess',
                             'Test-ParameterCollection'
                         )

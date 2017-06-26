@@ -60,7 +60,7 @@ function New-ROSSPerson {
                         Method = 'Post';
                         InputObject = $person;
                     }
-                    $response = Invoke-ROSSRestMethod @invokeROSSRestMethodParams;
+                    [ref] $null = Invoke-ROSSRestMethod @invokeROSSRestMethodParams;
                 
                     Write-Output -InputObject $person;
                 }
