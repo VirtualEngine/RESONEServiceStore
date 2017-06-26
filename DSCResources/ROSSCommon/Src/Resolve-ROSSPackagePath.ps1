@@ -1,7 +1,7 @@
 function Resolve-ROSSPackagePath {
 <#
     .SYNOPSIS
-        Resolves the latest RES ONE Service Store/IT Store installation package.
+        Resolves the latest RES ONE Identity Director/Service Store/IT Store installation package.
 #>
     [CmdletBinding()]
     param (
@@ -90,10 +90,11 @@ function Resolve-ROSSPackagePath {
                 $packageName = 'RES ONE Identity Director';
                 $webPortalPackageName = 'Web Portal';
                 $mobileGatewayPackageName = 'Mobile Gateway';
-                $consolePackageName = 'Setup Sync-Tool';
+                $consolePackageName = 'Setup Sync Tool';
             }
 
             Default {
+
                 throw ($localizedData.UnsupportedVersionError -f $productVersion.ToString());
             }
 
@@ -133,43 +134,34 @@ function Resolve-ROSSPackagePath {
         switch ($Component) {
 
             'TransactionEngine' {
-                if ($productVersion.Major -ge 10) {
 
-                    ## RES ONE Identity Director Transaction Engine (x64) 10.0.0.0.msi
-                    $regex = '{0} Transaction Engine \({1}\) {2}.msi' -f $packageName, $systemArchitecture, $versionRegex;
-                }
-                else {
-
-                    ## RES-ITS-Transaction-Engine(x64)-7.3.0.0.msi
-                    ## RES-ONE-ServiceStore-2015-Transaction-Engine(x64)-8.2.2.0.msi
-                    ## RES-ONE-ServiceStore-2016-Transaction-Engine(x64)-9.0.1.0.msi
-                    $regex = '{0}-Transaction-Engine\({1}\)-{2}.msi' -f $packageName, $systemArchitecture, $versionRegex;
-                }
+                ## RES-ITS-Transaction-Engine(x64)-7.3.0.0.msi
+                ## RES-ONE-ServiceStore-2015-Transaction-Engine(x64)-8.2.2.0.msi
+                ## RES-ONE-ServiceStore-2016-Transaction-Engine(x64)-9.0.1.0.msi
+                ## RES ONE Identity Director Transaction Engine (x64) 10.0.0.0.msi
+                $regex = '{0}-Transaction-Engine\({1}\)-{2}.msi' -f $packageName, $systemArchitecture, $versionRegex;
             }
 
             'CatalogServices' {
-                if ($productVersion.Major -ge 10) {
 
-                    ## RES ONE Identity Director Catalog Services (x64) 10.0.0.0.msi
-                    $regex = '{0} Catalog Services \({1}\) {2}.msi' -f $packageName, $systemArchitecture, $versionRegex;
-                }
-                else {
-
-                    ## RES-ITS-Catalog-Services(x64)-7.3.0.0.msi
-                    ## RES-ONE-ServiceStore-2015-Catalog-Services(x64)-8.2.2.0.msi
-                    ## RES-ONE-ServiceStore-2015-Catalog-Services(x64)-9.0.1.0.msi
-                    $regex = '{0}-Catalog-Services\({1}\)-{2}.msi' -f $packageName, $systemArchitecture, $versionRegex;
-                }
+                ## RES-ITS-Catalog-Services(x64)-7.3.0.0.msi
+                ## RES-ONE-ServiceStore-2015-Catalog-Services(x64)-8.2.2.0.msi
+                ## RES-ONE-ServiceStore-2015-Catalog-Services(x64)-9.0.1.0.msi
+                ## RES ONE Identity Director Catalog Services (x64) 10.0.0.0.msi
+                $regex = '{0}-Catalog-Services\({1}\)-{2}.msi' -f $packageName, $systemArchitecture, $versionRegex;
             }
 
             'ManagementPortal' {
+
                 ## Not applicable to IT Store 2014
                 ## RES-ONE-ServiceStore-2015-Management-Portal-8.2.2.0.msi
                 ## RES-ONE-ServiceStore-2016-Management-Portal-9.0.1.0.msi
+                ## RES ONE Identity Director Management Portal 10.0.0.0.msi
                 $regex = '{0}-Management-Portal-{1}.msi' -f $packageName, $versionRegex;
             }
 
             'WebPortal' {
+
                 ## RES-ITS-Web-Portal-7.3.0.0.msi
                 ## RES-ONE-ServiceStore-2015-WebPortal-MobileGateway-8.2.2.0.msi
                 ## RES-ONE-ServiceStore-2016-WebPortal-MobileGateway-9.0.1.0.msi
@@ -177,47 +169,38 @@ function Resolve-ROSSPackagePath {
             }
 
             'Client' {
-                if ($productVersion.Major -ge 10) {
 
-                    ## RES ONE Identity Director Client (x86) 10.0.0.0.msi
-                    $regex = '{0} Client \({1}\) {2}.msi' -f $packageName, $systemArchitecture, $versionRegex;
-                }
-                else {
-
-                    ## RES-ITS-Client(x64)-7.3.0.0.msi
-                    ## RES-ONE-ServiceStore-2015-Client(x64)-8.2.2.0.msi
-                    ## RES-ONE-ServiceStore-2016-Client(x64)-9.0.1.0.msi
-                    $regex = '{0}-Client\({1}\)-{2}.msi' -f $packageName, $systemArchitecture, $versionRegex;
-                }
+                ## RES-ITS-Client(x64)-7.3.0.0.msi
+                ## RES-ONE-ServiceStore-2015-Client(x64)-8.2.2.0.msi
+                ## RES-ONE-ServiceStore-2016-Client(x64)-9.0.1.0.msi
+                ## RES ONE Identity Director Client (x86) 10.0.0.0.msi
+                $regex = '{0}-Client\({1}\)-{2}.msi' -f $packageName, $systemArchitecture, $versionRegex;
             }
 
             'MobileGateway' {
+                
                 ## Version 10 only!
                 ## RES ONE Identity Director Mobile Gateway 10.0.0.0.msi
-                $regex = '{0} Mobile Gateway {1}' -f $packageName, $versionRegex;
+                $regex = '{0} {1} {2}' -f $packageName, $mobileGatewayPackageName, $versionRegex;
             }
 
             Default {
-                if ($productVersion.Major -ge 10) {
 
-                    ## RES ONE Identity Director Setup Sync Tool (x64) 10.0.0.0.msi
-                    $regex = '{0} {1} \({2}\) {3}.msi' -f $packageName, $consolePackageName, $systemArchitecture, $versionRegex;
-                }
-                else {
-
-                    ## RES-ITS-Console(x64)-7.3.0.0.msi
-                    ## RES-ONE-ServiceStore-2015-Setup-Sync-Tool(x64)-8.2.2.0.msi
-                    ## RES-ONE-ServiceStore-2016-Setup-Sync-Tool(x64)-9.0.1.0.msi
-                    $regex = '{0}-{1}\({2}\)-{3}.msi' -f $packageName, $consolePackageName, $systemArchitecture, $versionRegex;
-                }
+                ## RES-ITS-Console(x64)-7.3.0.0.msi
+                ## RES-ONE-ServiceStore-2015-Setup-Sync-Tool(x64)-8.2.2.0.msi
+                ## RES-ONE-ServiceStore-2016-Setup-Sync-Tool(x64)-9.0.1.0.msi
+                ## RES ONE Identity Director Setup Sync Tool (x64) 10.0.0.0.msi
+                $regex = '{0}-{1}\({2}\)-{3}.msi' -f $packageName, $consolePackageName, $systemArchitecture, $versionRegex;
             }
 
         } #end switch component
 
         if ($productVersion.Major -ge 10) {
 
-            ## Version 10 product have no hypens, only spaces..
-            $regex = $regex.Replace('-',' ');
+            ## Version 10 products have no hypens, only spaces..
+            ## Version 10 products have a space before the architecture..
+            $regex = $regex.Replace('-',' ').Replace('\(', ' \(');
+
         }
 
         Write-Verbose -Message ($localizedData.SearchFilePatternMatch -f $regex);

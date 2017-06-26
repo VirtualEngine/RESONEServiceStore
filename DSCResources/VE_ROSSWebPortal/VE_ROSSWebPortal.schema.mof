@@ -1,11 +1,12 @@
 [ClassVersion("1.0.0"), FriendlyName("ROSSWebPortal")]
 class VE_ROSSWebPortal : OMI_BaseResource
 {
-    [Key, Description("IIS website host header")] String HostHeader;
-    [Required, Description("RES ONE Service Store default (NetBIOS) domain name")] String DefaultDomain;
-    [Required, Description("RES ONE Service Store Catalog Services password"), EmbeddedInstance("MSFT_Credential")] String CatalogServicesCredential;
+    [Key, Description("IIS website host header, i.e. http://itstore.lab.local (v9.1 and ealier) or res.lab.local (v10 and later)")] String HostHeader;
     [Required, Description("File path containing the RES ONE Service Store MSIs or the literal path to the installer")] String Path;
-    [Required, Description("RES ONE Service Store Catalog Services hostname")] String CatalogServicesHost;
+    [Write, Description("RES ONE Service Store default (NetBIOS) domain name (v9.1 and earlier)")] String DefaultDomain;
+    [Write, Description("RES ONE Service Store Catalog Services password (v9.1 and earlier)."), EmbeddedInstance("MSFT_Credential")] String CatalogServicesCredential;
+    [Write, Description("RES ONE Service Store Catalog Services hostname (v9.1 and earlier)")] String CatalogServicesHost;
+    [Write, Description("Installed certificate thumbprint to bind to the IIS site (v10 and later)")] String CertificateThumbprint;
     [Write, Description("IIS website port binding")] UInt16 Port;
     [Write, Description("RES ONE Service Store component version to be installed, i.e. 8.0.3.0")] String Version;
     [Write, Description("Specified path is a literal file reference")] Boolean IsLiteralPath;

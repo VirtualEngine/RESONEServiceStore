@@ -1,0 +1,12 @@
+[ClassVersion("1.0.0"), FriendlyName("ROSSMobileGateway")]
+class VE_ROSSMobileGateway : OMI_BaseResource
+{
+    [Key, Description("IIS website host header/hostname")] String HostHeader;
+    [Required, Description("File path containing the RES ONE Automation MSIs or the literal path to the installer")] String Path;
+    [Required, Description("TLS/SSL certificate thumbprint")] String CertificateThumbprint;
+    [Write, Description("IIS website port binding")] UInt16 Port;
+    [Write, Description("RES ONE Automation component version to be installed, i.e. 8.0.3.0")] String Version;
+    [Write, Description("Specified path is a literal file reference")] Boolean IsLiteralPath;
+    [Write, ValueMap{"Present", "Absent"},Values{"Present", "Absent"}] String Ensure;
+    [Read, Description("Windows Installer Product Name")] String ProductName;
+};

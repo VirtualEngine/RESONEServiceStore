@@ -4,46 +4,53 @@ data localizedData {
         ResourceIncorrectPropertyState  = Resource property '{0}' is NOT in the desired state. Expected '{1}', actual '{2}'.
         ResourceInDesiredState          = Resource '{0}' is in the desired state.
         ResourceNotInDesiredState       = Resource '{0}' is NOT in the desired state.
-        DiscoveredSiteId                = Discovered Site Id '{0}'.
 '@
 }
 
 
-function Get-TargetResource {
+function Assert-TargetResourceParameter {
+<#
+    .SYNOPSIS
+        Ensures parameters match product version-specific parameters.
+#>
     [CmdletBinding()]
-    [OutputType([System.Collections.Hashtable])]
     param (
-        ## RES ONE Service Store default (NetBIOS) domain name.
+        ## File path containing the RES ONE Service Store Catalog Services MSIs or the literal path to the web portal MSI.
         [Parameter(Mandatory)]
+        [System.String] $Path,
+
+        ## IIS website host header, i.e. http://itstore.lab.local (v9.1 and ealier) or res.lab.local (v10 and later).
+        ## NOTE: equivalent to the ITSTOREHOSTNAME and HOST_SSL parameters.
+        [Parameter(Mandatory)]
+        [System.String] $HostHeader,
+        
+        ## RES ONE Service Store default (NetBIOS) domain name (v9.1 and earlier).
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String] $DefaultDomain,
 
-        ## IIS website host header, i.e. http://itstore.lab.local.
-        [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
-        [System.String] $HostHeader,
-
-        ## RES ONE Service Store Catalog Services password (equivalient to CATALOGSERVICESPASSWORD).
-        [Parameter(Mandatory)]
+        ## RES ONE Service Store Catalog Services password (v9.1 and earlier).
+        ## NOTE: equivalient to CATALOGSERVICESPASSWORD parameter.
+        [Parameter()]
         [ValidateNotNull()]
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.CredentialAttribute()] $CatalogServicesCredential,
 
-        ## RES ONE Service Store Catalog Services host (equivalient to CATALOGSERVICESHOST).
-        [Parameter(Mandatory)]
+        ## RES ONE Service Store Catalog Services hostname (v9.1 and earlier).
+        ## NOTE: equivalient to the CATALOGSERVICESHOST parameter.
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String] $CatalogServicesHost,
 
-        ## File path containing the RES ONE Service Store Catalog Services MSIs or the literal path to the web portal MSI.
-        [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
-        [System.String] $Path,
+        ## Installed certificate thumbprint to bind to the IIS site (v10 and later).
+        ## NOTE: equivalient to the SSL_CERTIFICATE_THUMBPRINT parameter.
+        [Parameter()]
+        [System.String] $CertificateThumbprint,
 
         ## IIS website port binding.
-        ## NOTE: Only HTTP binding is supported by the installer; HTTPS binding will need to be managed by another DSC resource/configuration.
+        ## NOTE: equivalient to the ITSTOREPORT pr PORT_SSL parameter.
         [Parameter()]
-        [ValidateNotNull()]
-        [System.UInt16] $Port = 80,
+        [System.UInt16] $Port,
 
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
         [Parameter()]
@@ -59,6 +66,90 @@ function Get-TargetResource {
         [System.String] $Ensure = 'Present'
     )
 
+    $productVersion = ConvertTo-PSCustomObjectVersion -Version $Version;
+    switch ($productVersion.Major) {
+
+        9 {
+            $assertParameterCollectionParams = @{
+                ParameterCollection = $PSBoundParameters;
+                RequiredParameterName = 'DefaultDomain','CatalogServicesCredential','CatalogServicesHost';
+                InvalidParameterName = 'CertificateThumbprint';
+                AppendString = '(version 9)';
+            }
+            Assert-ParameterCollection @assertParameterCollectionParams;
+        }
+
+        10 {
+            $assertParameterCollectionParams = @{
+                ParameterCollection = $PSBoundParameters;
+                RequiredParameterName = 'CertificateThumbprint';
+                InvalidParameterName = 'DefaultDomain','CatalogServicesCredential','CatalogServicesHost';
+                AppendString = '(version 10)';
+            }
+            Assert-ParameterCollection @assertParameterCollectionParams;
+        }
+    }
+
+} #end function
+
+
+function Get-TargetResource {
+    [CmdletBinding()]
+    [OutputType([System.Collections.Hashtable])]
+    param (
+        ## File path containing the RES ONE Service Store Catalog Services MSIs or the literal path to the web portal MSI.
+        [Parameter(Mandatory)]
+        [System.String] $Path,
+
+        ## IIS website host header, i.e. http://itstore.lab.local (v9.1 and ealier) or res.lab.local (v10 and later).
+        ## NOTE: equivalent to the ITSTOREHOSTNAME and HOST_SSL parameters.
+        [Parameter(Mandatory)]
+        [System.String] $HostHeader,
+        
+        ## RES ONE Service Store default (NetBIOS) domain name (v9.1 and earlier).
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String] $DefaultDomain,
+
+        ## RES ONE Service Store Catalog Services password (v9.1 and earlier).
+        ## NOTE: equivalient to CATALOGSERVICESPASSWORD parameter.
+        [Parameter()]
+        [ValidateNotNull()]
+        [System.Management.Automation.PSCredential]
+        [System.Management.Automation.CredentialAttribute()] $CatalogServicesCredential,
+
+        ## RES ONE Service Store Catalog Services hostname (v9.1 and earlier).
+        ## NOTE: equivalient to the CATALOGSERVICESHOST parameter.
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String] $CatalogServicesHost,
+
+        ## Installed certificate thumbprint to bind to the IIS site (v10 and later).
+        ## NOTE: equivalient to the SSL_CERTIFICATE_THUMBPRINT parameter.
+        [Parameter()]
+        [System.String] $CertificateThumbprint,
+
+        ## IIS website port binding.
+        ## NOTE: equivalient to the ITSTOREPORT pr PORT_SSL parameter.
+        [Parameter()]
+        [System.UInt16] $Port,
+
+        ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String] $Version,
+
+        ## The specified $Path is a literal file reference (bypasses the $Version check).
+        [Parameter()]
+        [System.Boolean] $IsLiteralPath,
+
+        [Parameter()]
+        [ValidateSet('Present','Absent')]
+        [System.String] $Ensure = 'Present'
+    )
+
+    Assert-TargetResourceParameter @PSBoundParameters;
+
     $resolveROSSPackagePathParams = @{
         Path = $Path;
         Component = 'WebPortal';
@@ -72,50 +163,56 @@ function Get-TargetResource {
     $productName = $msiProductName.Trim();
 
     $targetResource = @{
+        HostHeader = $HostHeader;
         Path = $setupPath;
         ProductName = $productName;
         Ensure = if (Get-InstalledProductEntry -Name $productName) { 'Present' } else { 'Absent' };
     }
     return $targetResource;
 
-} #end function Get-TargetResource
+} #end function
 
 
 function Test-TargetResource {
     [CmdletBinding()]
     [OutputType([System.Boolean])]
     param (
-        ## RES ONE Service Store default (NetBIOS) domain name.
+        ## File path containing the RES ONE Service Store Catalog Services MSIs or the literal path to the web portal MSI.
         [Parameter(Mandatory)]
+        [System.String] $Path,
+
+        ## IIS website host header, i.e. http://itstore.lab.local (v9.1 and ealier) or res.lab.local (v10 and later).
+        ## NOTE: equivalent to the ITSTOREHOSTNAME and HOST_SSL parameters.
+        [Parameter(Mandatory)]
+        [System.String] $HostHeader,
+        
+        ## RES ONE Service Store default (NetBIOS) domain name (v9.1 and earlier).
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String] $DefaultDomain,
 
-        ## IIS website host header, i.e. http://itstore.lab.local.
-        [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
-        [System.String] $HostHeader,
-
-        ## RES ONE Service Store Catalog Services password (equivalient to CATALOGSERVICESPASSWORD).
-        [Parameter(Mandatory)]
+        ## RES ONE Service Store Catalog Services password (v9.1 and earlier).
+        ## NOTE: equivalient to CATALOGSERVICESPASSWORD parameter.
+        [Parameter()]
         [ValidateNotNull()]
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.CredentialAttribute()] $CatalogServicesCredential,
 
-        ## RES ONE Service Store Catalog Services host (equivalient to CATALOGSERVICESHOST).
-        [Parameter(Mandatory)]
+        ## RES ONE Service Store Catalog Services hostname (v9.1 and earlier).
+        ## NOTE: equivalient to the CATALOGSERVICESHOST parameter.
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String] $CatalogServicesHost,
 
-        ## File path containing the RES ONE Service Store Catalog Services MSIs or the literal path to the web portal MSI.
-        [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
-        [System.String] $Path,
+        ## Installed certificate thumbprint to bind to the IIS site (v10 and later).
+        ## NOTE: equivalient to the SSL_CERTIFICATE_THUMBPRINT parameter.
+        [Parameter()]
+        [System.String] $CertificateThumbprint,
 
         ## IIS website port binding.
-        ## NOTE: Only HTTP binding is supported by the installer; HTTPS binding will need to be managed by another DSC resource/configuration.
+        ## NOTE: equivalient to the ITSTOREPORT pr PORT_SSL parameter.
         [Parameter()]
-        [ValidateNotNull()]
-        [System.UInt16] $Port = 80,
+        [System.UInt16] $Port,
 
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
         [Parameter()]
@@ -132,6 +229,7 @@ function Test-TargetResource {
     )
 
     $targetResource = Get-TargetResource @PSBoundParameters;
+    
     if ($Ensure -ne $targetResource.Ensure) {
 
         Write-Verbose -Message ($localizedData.ResourceIncorrectPropertyState -f 'Ensure', $Ensure, $targetResource.Ensure);
@@ -146,44 +244,49 @@ function Test-TargetResource {
 
     }
 
-} #end function Test-TargetResource
+} #end function
 
 
 function Set-TargetResource {
     [CmdletBinding()]
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '')]
     param (
-        ## RES ONE Service Store default (NetBIOS) domain name.
+        ## File path containing the RES ONE Service Store Catalog Services MSIs or the literal path to the web portal MSI.
         [Parameter(Mandatory)]
+        [System.String] $Path,
+
+        ## IIS website host header, i.e. http://itstore.lab.local (v9.1 and ealier) or res.lab.local (v10 and later).
+        ## NOTE: equivalent to the ITSTOREHOSTNAME and HOST_SSL parameters.
+        [Parameter(Mandatory)]
+        [System.String] $HostHeader,
+        
+        ## RES ONE Service Store default (NetBIOS) domain name (v9.1 and earlier).
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String] $DefaultDomain,
 
-        ## IIS website host header, i.e. http://itstore.lab.local.
-        [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
-        [System.String] $HostHeader,
-
-        ## RES ONE Service Store Catalog Services password (equivalient to CATALOGSERVICESPASSWORD).
-        [Parameter(Mandatory)]
+        ## RES ONE Service Store Catalog Services password (v9.1 and earlier).
+        ## NOTE: equivalient to CATALOGSERVICESPASSWORD parameter.
+        [Parameter()]
         [ValidateNotNull()]
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.CredentialAttribute()] $CatalogServicesCredential,
 
-        ## RES ONE Service Store Catalog Services host (equivalient to CATALOGSERVICESHOST).
-        [Parameter(Mandatory)]
+        ## RES ONE Service Store Catalog Services hostname (v9.1 and earlier).
+        ## NOTE: equivalient to the CATALOGSERVICESHOST parameter.
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String] $CatalogServicesHost,
 
-        ## File path containing the RES ONE Service Store Catalog Services MSIs or the literal path to the web portal MSI.
-        [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
-        [System.String] $Path,
+        ## Installed certificate thumbprint to bind to the IIS site (v10 and later).
+        ## NOTE: equivalient to the SSL_CERTIFICATE_THUMBPRINT parameter.
+        [Parameter()]
+        [System.String] $CertificateThumbprint,
 
         ## IIS website port binding.
-        ## NOTE: Only HTTP binding is supported by the installer; HTTPS binding will need to be managed by another DSC resource/configuration.
+        ## NOTE: equivalient to the ITSTOREPORT pr PORT_SSL parameter.
         [Parameter()]
-        [ValidateNotNull()]
-        [System.UInt16] $Port = 80,
+        [System.UInt16] $Port,
 
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0
         [Parameter()]
@@ -210,15 +313,37 @@ function Set-TargetResource {
 
     if ($Ensure -eq 'Present') {
 
-        $arguments = @(
-            ('/i "{0}"' -f $setupPath),
-            ('DEFAULTDOMAIN="{0}"' -f $DefaultDomain),
-            ('ITSTOREHOSTNAME="{0}"' -f $HostHeader),
-            ('ITSTOREPORT="{0}"' -f $Port),
-            ('CATALOGSERVICESHOST="{0}"' -f $CatalogServicesHost),
-            ('CATALOGSERVICESPASSWORD="{0}"' -f $CatalogServicesCredential.GetNetworkCredential().Password)
-        )
+        $productVersion = ConvertTo-PSCustomObjectVersion -Version $Version;
+        if ($productVersion.Major -ge 10) {
 
+            $arguments = @(
+                ('/i "{0}"' -f $setupPath),
+                ('HOST_SSL="{0}"' -f $HostHeader),
+                ('SSL_CERTIFICATE_THUMBPRINT="{0}"' -f $CertificateThumbprint)
+            )
+
+            if ($PSBoundParameters.ContainsKey('Port')) {
+
+                $arguments += 'PORT_SSL="{0}"' -f $Port;
+            }
+
+        }
+        else {
+
+            $arguments = @(
+                ('/i "{0}"' -f $setupPath),
+                ('DEFAULTDOMAIN="{0}"' -f $DefaultDomain),
+                ('ITSTOREHOSTNAME="{0}"' -f $HostHeader),
+                ('CATALOGSERVICESHOST="{0}"' -f $CatalogServicesHost),
+                ('CATALOGSERVICESPASSWORD="{0}"' -f $CatalogServicesCredential.GetNetworkCredential().Password)
+            )
+
+            if ($PSBoundParameters.ContainsKey('Port')) {
+
+                $arguments += 'ITSTOREPORT="{0}"' -f $Port;
+            }
+                
+        }
     }
     elseif ($Ensure -eq 'Absent') {
 
@@ -234,7 +359,7 @@ function Set-TargetResource {
     $arguments += '/qn';
     Start-WaitProcess -FilePath "$env:WINDIR\System32\msiexec.exe" -ArgumentList $arguments -Verbose:$Verbose;
 
-} #end function Set-TargetResource
+} #end function
 
 
 ## Import the ROSS common library functions

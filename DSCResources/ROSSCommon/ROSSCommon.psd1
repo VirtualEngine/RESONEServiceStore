@@ -14,8 +14,9 @@
                             'Get-InstalledProductEntry',
                             'Get-LocalizableRegistryKeyValue',
                             'Get-RegistryValueIgnoreError',
-                            'Get-WindowsInstallerPackageProperty',,
+                            'Get-WindowsInstallerPackageProperty',
                             'Resolve-ROSSPackagePath',
+                            'Save-ROSSManagementPortalConfiguration',
                             'Start-WaitProcess',
                             'Test-ParameterCollection'
                         )
