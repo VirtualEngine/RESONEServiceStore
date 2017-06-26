@@ -1,0 +1,13 @@
+[ClassVersion("1.0.0"), FriendlyName("ROSSManagementPortalConfig")]
+class VE_ROSSManagementPortalConfig : OMI_BaseResource
+{
+    [Key, Description("RES ONE Service Store web management portal configuration file path")] String Path;
+    [Required, Description("RES ONE Service Store database server/instance name")] String DatabaseServer;
+    [Required, Description("RES ONE Service Store database name")] String DatabaseName;
+    [Write, Description("RES ONE Service Store database Microsoft SQL username/password"), EmbeddedInstance("MSFT_Credential")] String Credential;
+    [Write, Description("RES ONE Identity Broker Uri")] String IdentityBrokerUrl;
+    [Write, Description("RES ONE Identity Director Management Portal Application/Callback Uri")] String ApplicationUrl;
+    [Write, Description("RES ONE Identity Broker Client ID")] String ClientId;
+    [Write, Description("RES ONE Identity Broker Client shared secret"), EmbeddedInstance("MSFT_Credential")] String ClientSecret;
+    [Write, ValueMap{"Present", "Absent"},Values{"Present", "Absent"}] String Ensure;
+};
