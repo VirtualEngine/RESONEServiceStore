@@ -1,0 +1,9 @@
+[ClassVersion("1.0.0"), FriendlyName("ROSSMobileGatewayConfig")]
+class VE_ROSSMobileGatewayConfig : OMI_BaseResource
+{
+    [Key, Description("RES ONE Service Store mobile gateway configuration file path")] String Path;
+    [Required, Description("RES ONE Service Store database server/instance name")] String DatabaseServer;
+    [Required, Description("RES ONE Service Store database name")] String DatabaseName;
+    [Write, Description("RES ONE Service Store database Microsoft SQL username/password"), EmbeddedInstance("MSFT_Credential")] String Credential;
+    [Write, ValueMap{"Present", "Absent"},Values{"Present", "Absent"}] String Ensure;
+};
