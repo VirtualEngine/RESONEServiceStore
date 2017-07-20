@@ -15,7 +15,7 @@ Properties {
     $thumbprint = '76BF0DF07634549D8134763F2776598E15BD1D42';
     $timeStampServer = 'http://timestamp.verisign.com/scripts/timestamp.dll';
     $exclude = @('.git*','.vscode','Build','Default.ps1','DSCResource.Tests');
-    $signExclude = @('Examples','DSCResources');
+    $signExclude = @('Examples','DSCResources','Tests');
 }
 
 Task Default -Depends Build;

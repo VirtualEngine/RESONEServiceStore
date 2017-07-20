@@ -1,6 +1,6 @@
 @{
     RootModule           = 'RESONEServiceStore.psm1';
-    ModuleVersion        = '3.0.0';
+    ModuleVersion        = '3.0.1';
     GUID                 = '324e5c64-114f-4879-81e6-63238edcddea';
     Author               = 'Iain Brighton';
     CompanyName          = 'Virtual Engine';
@@ -35,7 +35,17 @@
 
     PrivateData = @{
         PSData = @{
-            Tags       = @('VirtualEngine','RES','ONE','ServiceStore','ITStore','DSC');
+            Tags       = @(
+                            'VirtualEngine',
+                            'RES',
+                            'ONE',
+                            'ServiceStore',
+                            'ITStore',
+                            'DSC',
+                            'IdentityDirector',
+                            'Identity',
+                            'Director'
+                         );
             LicenseUri = 'https://github.com/VirtualEngine/RESONEServiceStore/blob/master/LICENSE';
             ProjectUri = 'https://github.com/VirtualEngine/RESONEServiceStore';
         } # End of PSData hashtable
