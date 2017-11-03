@@ -201,6 +201,8 @@ function Resolve-ROSSPackagePath {
             ## Version 10 products have a space before the architecture..
             $regex = $regex.Replace('-',' ').Replace('\(', ' \(');
 
+            ## Identity Director 10.2.0.0 dropped the 'RES ONE' prefix so make it optional
+            $regex = $regex.Replace('RES ONE ','(RES ONE )?');
         }
 
         Write-Verbose -Message ($localizedData.SearchFilePatternMatch -f $regex);

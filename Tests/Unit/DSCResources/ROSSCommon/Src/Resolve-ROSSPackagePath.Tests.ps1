@@ -9,6 +9,19 @@ Describe 'RESONEServiceStore\ROSSCommon\Resolve-ROSSPackagePath' {
         $architecture = 'x64';
     }
 
+    It 'Should resolve Ivanti v10.2.0.0 installer' {
+
+        ## Must come first as packages are sorted in descending order and the Ivanti installers
+        ## end up below the ones prefixed with 'RES-ONE' or 'RES ONE' :|
+        
+        $v102TransactionEngineMsi = "Identity Director Transaction Engine ($architecture) 10.2.0.0.msi";
+        New-Item -Path $TestDrive -Name $v102TransactionEngineMsi -ItemType File -Force -ErrorAction SilentlyContinue;
+
+        $result = Resolve-ROSSPackagePath -Path $TestDrive -Component TransactionEngine -Version 10;
+
+        $result.EndsWith($v102TransactionEngineMsi) | Should Be $true;
+    }
+
     It 'Should resolve v9.1 Setup/Sync Tool' {
         
         $v91SetupMsi = "RES-ONE-ServiceStore-2016-Setup-Sync-Tool($architecture)-9.1.0.0.msi";
@@ -131,5 +144,7 @@ Describe 'RESONEServiceStore\ROSSCommon\Resolve-ROSSPackagePath' {
 
         $result.EndsWith($v10MobileGatewayMsi) | Should Be $true;
     }
+    
+    
 
 } #end describe

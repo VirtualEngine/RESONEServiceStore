@@ -1,6 +1,8 @@
 RES ONE Service Store DSC Resources
 ===================================
-## Included Resources
+
+## Included Resources ##
+
 * **ROSSBuildingBlock**: Imports a RES ONE Service Store building block
 * **ROSSCatalogServices**: Installs the RES ONE Service Store Catalog Services component
 * **ROSSClient**: Installs the RES ONE Service Store Windows client component
@@ -17,7 +19,7 @@ RES ONE Service Store DSC Resources
 * **ROSSWebPortalConfig**: Deploys a RES ONE Service Store IIS web portal configuration file (v10 and later)
 * **ROIDLab (Composite)**: Deploys a single-node RES ONE Identity Director lab server environment
 
-## Required Resources
+## Required Resources ##
 
 * **xNetworking**: ROSSLab, ROSSLabHttps and ROIDLab require https://github.com/PowerShell/xNetworking to create firewall rules
 * **xWebAdministration**: ROSSLabHttps requires https://github.com/PowerShell/xWebAdministration to create the HTTPS binding
@@ -27,7 +29,7 @@ ROSSBuildingBlock
 
 Imports a RES ONE Service Store building block.
 
-### Syntax
+### Syntax ###
 
 ```
 ROSSBuildingBlock [String] #ResourceName
@@ -47,7 +49,7 @@ ROSSCatalogServices
 
 Installs the RES ONE Service Store Catalog Services component.
 
-### Syntax
+### Syntax ###
 
 ```
 ROSSCatalogServices [String] #ResourceName
@@ -67,7 +69,7 @@ ROSSClient
 
 Installs the RES ONE Service Store Windows client component.
 
-### Syntax
+### Syntax ###
 
 ```
 ROSSClient [String] #ResourceName
@@ -86,7 +88,7 @@ ROSSConsole
 
 Installs the RES ONE Service Store Setup and Sync tool.
 
-### Syntax
+### Syntax ###
 
 ```
 ROSSConsole [String] #ResourceName
@@ -107,7 +109,7 @@ ROSSDatabase
 
 Installs the RES ONE Service Store Setup and Sync tool and creates the RES ONE Service Store database.
 
-### Syntax
+### Syntax ###
 
 ```
 ROSSDatabase [String] #ResourceName
@@ -130,7 +132,7 @@ ROSSLab
 
 Deploys a single-node RES ONE Service Store lab server environment.
 
-### Syntax
+### Syntax ###
 
 ```
 ROSSLab [String] #ResourceName
@@ -158,7 +160,7 @@ ROSSLabHttps
 
 Deploys a single-node RES ONE Service Store lab server environment with HTTPS bindings.
 
-### Syntax
+### Syntax ###
 
 ```
 ROSSLabHttps [String] #ResourceName
@@ -187,7 +189,7 @@ ROSSManagementPortal
 
 Installs the RES ONE Service Store management portal component.
 
-### Syntax
+### Syntax ###
 
 ```
 ROSSManagementPortal [String] #ResourceName
@@ -203,7 +205,7 @@ ROSSManagementPortal [String] #ResourceName
 }
 ```
 
-### Properties
+### Properties ###
 
 * **HostHeader**: IIS website host header, i.e. http://itstore.lab.local (v9.1 and ealier) or res.lab.local (v10 and later).
 * **Path**: File path containing the RES ONE Service Store MSIs or the literal path to the installer.
@@ -219,7 +221,7 @@ ROSSManagementPortalConfig
 
 Deploys a RES ONE Service Store IIS configuration management portal file.
 
-### Syntax
+### Syntax ###
 
 ```
 ROSSManagementPortalConfig [String] #ResourceName
@@ -236,7 +238,7 @@ ROSSManagementPortalConfig [String] #ResourceName
 }
 ```
 
-### Properties
+### Properties ###
 
 * **DatabaseServer**: RES ONE Service Store database server/instance name.
 * **DatabaseName**: RES ONE Service Store database name.
@@ -253,7 +255,7 @@ ROSSMobileGateway
 
 Installs the RES ONE Identity Director (v10 and later) mobile gateway portal component.
 
-### Syntax
+### Syntax ###
 
 ```
 ROSSMobileGateway [String] #ResourceName
@@ -268,7 +270,7 @@ ROSSMobileGateway [String] #ResourceName
 }
 ```
 
-### Properties
+### Properties ###
 
 * **HostHeader**: IIS website host header/hostname.
 * **Path**: File path containing the RES ONE Automation MSIs or the literal path to the installer.
@@ -283,7 +285,7 @@ ROSSMobileGatewayConfig
 
 Deploys a RES ONE Service Store IIS mobile gateway configuration file (v10 and later).
 
-### Syntax
+### Syntax ###
 
 ```
 ROSSMobileGatewayConfig [String] #ResourceName
@@ -296,7 +298,7 @@ ROSSMobileGatewayConfig [String] #ResourceName
 }
 ```
 
-### Properties
+### Properties ###
 
 * **DatabaseServer**: RES ONE Service Store database server/instance name.
 * **DatabaseName**: RES ONE Service Store database name.
@@ -310,7 +312,7 @@ ROSSTransactionEngine
 
 Installs the RES ONE Service Store Transaction Engine component.
 
-### Syntax
+### Syntax ###
 
 ```
 ROSSTransactionEngine [String] #ResourceName
@@ -330,7 +332,7 @@ ROSSWebPortal
 
 Installs the RES ONE Service Store Web Portal component.
 
-### Syntax
+### Syntax ###
 
 ```
 ROSSWebPortal [String] #ResourceName
@@ -348,7 +350,7 @@ ROSSWebPortal [String] #ResourceName
 }
 ```
 
-### Properties
+### Properties ###
 
 * **Path**: File path containing the RES ONE Service Store MSIs or the literal path to the installer.
 * **HostHeader**: IIS website host header, i.e. http://itstore.lab.local (v9.1 and ealier) or res.lab.local (v10 and later).
@@ -365,7 +367,7 @@ ROSSWebPortalConfig
 
 Deploys a RES ONE Service Store IIS web portal configuration file (v10 and later).
 
-### Syntax
+### Syntax ###
 
 ```
 ROSSWebPortalConfig [String] #ResourceName
@@ -382,7 +384,7 @@ ROSSWebPortalConfig [String] #ResourceName
 }
 ```
 
-### Properties
+### Properties ###
 
 * **DatabaseServer**: RES ONE Service Store database server/instance name.
 * **DatabaseName**: RES ONE Service Store database name.
@@ -399,7 +401,7 @@ ROIDLab
 
 Deploys a single-node RES ONE Identity Director lab server environment with HTTPS.
 
-### Syntax
+### Syntax ###
 
 ```
 ROIDLab [String] #ResourceName
@@ -421,9 +423,13 @@ ROIDLab [String] #ResourceName
 }
 ```
 
-# Versions
+# Versions #
 
-## 3.0.0
+## 3.1.0 ##
+
+* Adds Ivanti release v10.2 support
+
+## 3.0.0 ##
 
 * Adds v10 support
 * Removes mandatory DefaultDomain, CatalogServicesCredential and CatalogServicesHost parametmeters from *ROSSWebPortal* for v9 and v10 cross compatibility.
