@@ -135,7 +135,7 @@ function Set-TargetResource {
         [System.Management.Automation.CredentialAttribute()] $Credential,
 
         ## File path containing the RES ONE Service Store MSIs or the literal path to the legacy console/Sync Tool MSI.
-        [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
         [System.String] $Path,
 
         ## RES ONE Service Store component version to be installed, i.e. 8.0.3.0

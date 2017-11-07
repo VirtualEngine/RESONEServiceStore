@@ -91,6 +91,19 @@ configuration ROSSLabHttps {
         [System.String] $Ensure = 'Present'
     )
 
+    ## [System.Version] does not support just a major number and therefore, we have to roll our own..
+    $versionSplit = $Version.Split('.');
+    $productVersion = [PSCustomObject] @{
+        Major = $versionSplit[0] -as [System.Int32];
+        Minor = if ($versionSplit[1]) { $versionSplit[1] -as [System.Int32] } else { -1 }
+        Build = if ($versionSplit[2]) { $versionSplit[2] -as [System.Int32] } else { -1 }
+        Revision = if ($versionSplit[3]) { $versionSplit[3] -as [System.Int32] } else { -1 }
+    }
+    if ($productVersion.Major -gt 9) {
+        
+        throw ("Unsupported version '{0}'. ROSSLabHttps requires version 9 or earlier." -f $Version);
+    }
+        
     Write-Host ' Starting "ROSSLabHttps".' -ForegroundColor Gray;
 
     Import-DscResource -ModuleName xWebAdministration;

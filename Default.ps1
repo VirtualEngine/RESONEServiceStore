@@ -12,7 +12,7 @@ Properties {
     $buildDir = 'Build';
     $buildPath = (Join-Path -Path $basePath -ChildPath $buildDir);
     $releasePath = (Join-Path -Path $buildPath -ChildPath $moduleName);
-    $thumbprint = '76BF0DF07634549D8134763F2776598E15BD1D42';
+    $thumbprint = '3DACD0F2D1E60EB33EC774B9CFC89A4BEE9037AF';
     $timeStampServer = 'http://timestamp.verisign.com/scripts/timestamp.dll';
     $exclude = @('.git*','.vscode','Build','Default.ps1','DSCResource.Tests');
     $signExclude = @('Examples','DSCResources','Tests');
