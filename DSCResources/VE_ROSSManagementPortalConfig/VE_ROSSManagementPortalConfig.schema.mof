@@ -10,5 +10,5 @@ class VE_ROSSManagementPortalConfig : OMI_BaseResource
     [Write, Description("RES ONE Identity Broker Client ID")] String ClientId;
     [Write, Description("RES ONE Identity Broker Client shared secret"), EmbeddedInstance("MSFT_Credential")] String ClientSecret;
     [Write, ValueMap{"Present", "Absent"},Values{"Present", "Absent"}] String Ensure;
-    [Write, Description("Configures the RES ONE Identity Directory REST API endpoint")] [Boolean] EnableApiEndpoint;
+    [Write, Description("Configures the RES ONE Identity Directory REST API endpoint")] Boolean EnableApiEndpoint;
 };

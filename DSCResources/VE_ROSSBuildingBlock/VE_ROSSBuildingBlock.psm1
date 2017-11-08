@@ -118,7 +118,11 @@ function Get-TargetResource {
 
         ## Delete the building block from disk after import.
         [Parameter()]
-        [System.Boolean] $DeleteFromDisk
+        [System.Boolean] $DeleteFromDisk,
+        
+        ## Use RES ONE Identity Director Api Endpoint
+        [Parameter()]
+        [System.Boolean] $IdentityDirector
     )
     process {
 
@@ -162,7 +166,11 @@ function Test-TargetResource {
 
         ## Delete the building block from disk after import.
         [Parameter()]
-        [System.Boolean] $DeleteFromDisk
+        [System.Boolean] $DeleteFromDisk,
+        
+        ## Use RES ONE Identity Director Api Endpoint
+        [Parameter()]
+        [System.Boolean] $IdentityDirector
     )
     process {
 
@@ -231,7 +239,11 @@ function Set-TargetResource {
 
         ## Delete the building block from disk after import.
         [Parameter()]
-        [System.Boolean] $DeleteFromDisk
+        [System.Boolean] $DeleteFromDisk,
+        
+        ## Use RES ONE Identity Director Api Endpoint
+        [Parameter()]
+        [System.Boolean] $IdentityDirector
     )
     process {
 
@@ -250,6 +262,7 @@ function Set-TargetResource {
                         Server = $Server;
                         Credential = $Credential;
                         UseHttps = $UseHttps;
+                        IdentityDirector = $IdentityDirector;
                     }
                     $session = Connect-ROSSSession @connectROSSSessionParams -PassThru;
 
