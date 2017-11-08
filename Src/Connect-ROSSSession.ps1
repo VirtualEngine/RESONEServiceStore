@@ -74,14 +74,21 @@ function Connect-ROSSSession {
                 logintype = 'windows';
             }
 
-            $uri = Get-ROSSResourceUri -Server $Server -Authentication -UseHttps:$UseHttps -IdentityDirector:$IdentityDirector;
+            $isHttps = $UseHttps.ToBool();
+            if (($PSBoundParameters.ContainsKey('IdentityDirector')) -and (-not ($PSBoundParameters.ContainsKey('UseHttps')))) {
+                
+                Write-Warning -Message $localizedData.DefaultHttpsConnectionWarning;
+                $isHttps = $true;
+            }
+
+            $uri = Get-ROSSResourceUri -Server $Server -Authentication -UseHttps:$isHttps -IdentityDirector:$IdentityDirector;
             $response = Invoke-ROSSRestMethod -Uri $uri -Method Post -Body $body -NoAuthorization;
 
             if ($response.Success -eq $true) {
 
                 $script:_RESONEServiceStoreSession['Server'] = $Server;
                 $script:_RESONEServiceStoreSession['AuthorizationToken'] = $response.AuthorizationToken;
-                $script:_RESONEServiceStoreSession['UseHttps'] = $UseHttps.ToBool();
+                $script:_RESONEServiceStoreSession['UseHttps'] = $isHttps;
                 $script:_RESONEServiceStoreSession['IsIdentityDirector'] = $IdentityDirector.ToBool();
             }
             else {

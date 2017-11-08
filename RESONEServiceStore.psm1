@@ -11,6 +11,7 @@ data localizedData {
         UnsupportedDbConnectionTypeError = Unsupported database connection type '{0}'.
 
         UnsupportedOperationWarning      = The '{0}' cmdlet is an unsupported operation. USE WITH EXTREME CAUTION.
+        DefaultHttpsConnectionWarning    = Defaulting to HTTPS connection for Identity Director connections.
 
         ShouldProcessImport              = Import
         ShouldProcessSet                 = Set
