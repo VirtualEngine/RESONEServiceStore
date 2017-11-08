@@ -35,7 +35,11 @@ function Save-ROSSManagementPortalConfiguration {
 
         ## RES ONE Identity Broker client shared secret.
         [Parameter(Mandatory, ParameterSetName = 'IdentityBroker')]
-        [System.Management.Automation.PSCredential] $ClientSecret
+        [System.Management.Automation.PSCredential] $ClientSecret,
+
+        ## Controls REST API endpoint
+        [Parameter()]
+        [System.Boolean] $EnableApiEndpoint = $true
     )
 
     $webConsoleConfigTemplate = @'
@@ -45,6 +49,7 @@ function Save-ROSSManagementPortalConfiguration {
     <#ManagementServicePlaceholder#>
   </managementService>
   <#AuthenticationPlaceholder#>
+  <api enabled="<#ApiEndpointPlaceholder#>" /> 
 </webConsoleConfiguration>
 '@
 
@@ -85,21 +90,23 @@ $webConsoleWindowsAuthenticationTemplate = @'
     $managementService = $managementService.Replace('<#DatabaseServer#>', $DatabaseServer);
     $managementService = $managementService.Replace('<#DatabaseName#>', $DatabaseName);
     $webConsoleConfig = $webConsoleConfigTemplate.Replace('<#ManagementServicePlaceholder#>', $managementService);
-
+    
     if ($PSCmdlet.ParameterSetName -eq 'IdentityBroker') {
-
+        
         $identityServer = $webConsoleSqlAuthenticationTemplate;
         $identityServer = $identityServer.Replace('<#ServerUrl#>', $IdentityBrokerUrl);
         $identityServer = $identityServer.Replace('<#ApplicationUrl#>', $ApplicationUrl);
         $identityServer = $identityServer.Replace('<#ClientId#>', $ClientId);
         $identityServer = $identityServer.Replace('<#ClientSecret#>', $ClientSecret.GetNetworkCredential().Password);
-
+        
         $webConsoleConfig = $webConsoleConfig.Replace('<#AuthenticationPlaceholder#>', $identityServer);
     }
     else {
-
+        
         $webConsoleConfig = $webConsoleConfig.Replace('<#AuthenticationPlaceholder#>', $webConsoleWindowsAuthenticationTemplate);
     }
+    
+    $webConsoleConfig = $webConsoleConfig.Replace('<#ApiEndpointPlaceholder#>', $EnableApiEndpoint.ToString().ToLower());
 
     Set-Content -Value $webConsoleConfig -Path $Path -Encoding UTF8;
 

@@ -114,7 +114,11 @@ function Get-TargetResource {
 
         [Parameter()]
         [ValidateSet('Present','Absent')]
-        [System.String] $Ensure = 'Present'
+        [System.String] $Ensure = 'Present',
+        
+        ## Controls REST API endpoint
+        [Parameter()]
+        [System.Boolean] $EnableApiEndpoint = $true
     )
 
     Assert-TargetResourceParameter @PSBoundParameters;
@@ -182,7 +186,11 @@ function Test-TargetResource {
 
         [Parameter()]
         [ValidateSet('Present','Absent')]
-        [System.String] $Ensure = 'Present'
+        [System.String] $Ensure = 'Present',
+        
+        ## Controls REST API endpoint
+        [Parameter()]
+        [System.Boolean] $EnableApiEndpoint = $true
     )
 
     $targetResource = Get-TargetResource @PSBoundParameters;
@@ -267,7 +275,11 @@ function Set-TargetResource {
 
         [Parameter()]
         [ValidateSet('Present','Absent')]
-        [System.String] $Ensure = 'Present'
+        [System.String] $Ensure = 'Present',
+        
+        ## Controls REST API endpoint
+        [Parameter()]
+        [System.Boolean] $EnableApiEndpoint = $true
     )
 
     Assert-TargetResourceParameter @PSBoundParameters;
