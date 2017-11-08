@@ -81,6 +81,10 @@ configuration ROIDLab {
         [Parameter()]
         [System.String] $WebPortalConfigPath = 'C:\Program Files (x86)\RES Software\IT Store\Web Portal\Config\WebPortal.config',
 
+        ## Mobile Gateway configuration file path
+        [Parameter()]
+        [System.String] $MobileGatewayConfigPath ='C:\Program Files (x86)\RES Software\IT Store\MobileGateway\Config\Service.config',
+
         [Parameter()]
         [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
@@ -228,7 +232,7 @@ configuration ROIDLab {
             DatabaseServer = $DatabaseServer;
             DatabaseName   = $DatabaseName;
             Credential     = $Credential;
-            Path           = $ManagementPortalConfigPath;
+            Path           = $MobileGatewayConfigPath;
             DependsOn      = '[ROSSMobileGateway]ROIDLabMobileGateway';
         }
 
